@@ -1,8 +1,0 @@
-dataSource:
-   driver: org.postgresql.Driver
-   dialect: org.hibernate.dialect.PostgreSQLDialect
-   url: jdbc:postgresql://localhost:5432/broker
-   userName: postgres
-   password: RGV2NGd1YW1wcmk=
-   schemaStrategy: create
-   showSql: true

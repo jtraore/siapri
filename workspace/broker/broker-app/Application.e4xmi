@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<application:Application xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:application="http://www.eclipse.org/ui/2010/UIModel/application" xmlns:basic="http://www.eclipse.org/ui/2010/UIModel/application/ui/basic" xmlns:menu="http://www.eclipse.org/ui/2010/UIModel/application/ui/menu" xmi:id="_Cc_BgGU1EeS8lKRWVsNI-w" elementId="org.eclipse.e4.ide.application" bindingContexts="_Cc_BiWU1EeS8lKRWVsNI-w">
+  <children xsi:type="basic:TrimmedWindow" xmi:id="_Cc_BgWU1EeS8lKRWVsNI-w" selectedElement="_SRuWgGU-EeS8lKRWVsNI-w" label="broker-app" iconURI="platform:/plugin/broker-app/icons/court.png" width="500" height="400">
+    <tags>shellMaximized</tags>
+    <children xsi:type="basic:PartSashContainer" xmi:id="_SRuWgGU-EeS8lKRWVsNI-w" elementId="broker-app.partsashcontainer.main" selectedElement="_w6rpUJHfEeSgvvVqkSKOdQ" horizontal="true">
+      <children xsi:type="basic:PartStack" xmi:id="_w6rpUJHfEeSgvvVqkSKOdQ" elementId="broker-app.partstack.overview" containerData="25">
+        <tags>NoAutoCollapse</tags>
+        <children xsi:type="basic:Part" xmi:id="_WHGPEJIAEeSgvvVqkSKOdQ" elementId="broker-app.partstack.overview.part.default" contributionURI="bundleclass://broker-app/com.siapri.broker.app.views.overview.Overview" label="Tableau de bord" iconURI="platform:/plugin/broker-app/icons/overview.png" tooltip="Aperçu des activités">
+          <toolbar xmi:id="_YNKwgPqgEeW0_LywsrKLPA" elementId="broker-app.toolbar.0">
+            <children xsi:type="menu:DirectToolItem" xmi:id="_4ZIhsPqgEeW0_LywsrKLPA" elementId="broker-app.directtoolitem.0" iconURI="platform:/plugin/broker-app/icons/expand.png" tooltip="Etendre tous" contributionURI="bundleclass://broker-app/com.siapri.broker.app.views.overview.Overview">
+              <tags>TRUE</tags>
+            </children>
+            <children xsi:type="menu:DirectToolItem" xmi:id="_KwGNwPqoEeW0_LywsrKLPA" elementId="broker-app.directtoolitem.1" iconURI="platform:/plugin/broker-app/icons/collapse.png" tooltip="Rabattre tous" contributionURI="bundleclass://broker-app/com.siapri.broker.app.views.overview.Overview">
+              <tags>FALSE</tags>
+            </children>
+          </toolbar>
+        </children>
+      </children>
+      <children xsi:type="basic:PartSashContainer" xmi:id="_zLxiEJhJEeSgvvVqkSKOdQ" elementId="broker-app.partsashcontainer.0" containerData="75" selectedElement="_iENX0GU-EeS8lKRWVsNI-w">
+        <children xsi:type="basic:PartStack" xmi:id="_iENX0GU-EeS8lKRWVsNI-w" elementId="broker-app.partstack.main" containerData="75">
+          <tags>NoAutoCollapse</tags>
+        </children>
+        <children xsi:type="basic:PartStack" xmi:id="_5w1xkJhJEeSgvvVqkSKOdQ" elementId="broker-app.partstack.detail" containerData="25">
+          <tags>NoAutoCollapse</tags>
+          <children xsi:type="basic:Part" xmi:id="_F-eyIJhVEeSgvvVqkSKOdQ" elementId="broker-app.partstack.detail.part.default" contributionURI="bundleclass://broker-app/com.siapri.broker.app.views.detail.DetailView" label="Détail de l'élément sélectionné" iconURI="platform:/plugin/broker-app/icons/detail.png"/>
+        </children>
+      </children>
+    </children>
+    <mainMenu xmi:id="_-0NOcG9wEeSPJcmi72KJvg" elementId="broker-app.menu.main">
+      <children xsi:type="menu:Menu" xmi:id="_Zpkb8HMiEeSQEoXN9AzoFg" elementId="broker-app.menu.fichier" label="Fichier">
+        <children xsi:type="menu:Menu" xmi:id="_qvqaMHMiEeSQEoXN9AzoFg" elementId="broker-app.menu.ajouter" label="Ajouter" iconURI="platform:/plugin/broker-app/icons/create.png">
+          <children xsi:type="menu:HandledMenuItem" xmi:id="_6dGjcHMiEeSQEoXN9AzoFg" elementId="broker-app.handledmenuitem.client" label="Client" iconURI="platform:/plugin/broker-app/icons/small/new_client.png"/>
+          <children xsi:type="menu:HandledMenuItem" xmi:id="_77RxoHMiEeSQEoXN9AzoFg" elementId="broker-app.handledmenuitem.affaire" label="Affaire" iconURI="platform:/plugin/broker-app/icons/small/afaires.png"/>
+          <children xsi:type="menu:HandledMenuItem" xmi:id="_9pF-UHMiEeSQEoXN9AzoFg" elementId="broker-app.handledmenuitem.paiement" label="Paiement"/>
+          <children xsi:type="menu:HandledMenuItem" xmi:id="_BOEg8HMjEeSQEoXN9AzoFg" elementId="broker-app.handledmenuitem.audience" label="Audience"/>
+          <children xsi:type="menu:HandledMenuItem" xmi:id="_DVybYHMjEeSQEoXN9AzoFg" elementId="broker-app.handledmenuitem.juridiction" label="Juridiction" iconURI="platform:/plugin/broker-app/icons/court_small.png"/>
+          <children xsi:type="menu:HandledMenuItem" xmi:id="_FXBTUHMjEeSQEoXN9AzoFg" elementId="broker-app.handledmenuitem.section" label="Section"/>
+        </children>
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_nengMHMiEeSQEoXN9AzoFg" elementId="broker-app.handledmenuitem.rechercher" label="Rechercher" iconURI="platform:/plugin/broker-app/icons/small/recherche.png"/>
+        <children xsi:type="menu:MenuSeparator" xmi:id="_HyDZEHMoEeSQEoXN9AzoFg" elementId="broker-app.menuseparator.3"/>
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_BDRz8HMoEeSQEoXN9AzoFg" elementId="broker-app.handledmenuitem.imprimer" label="Imprimer" iconURI="platform:/plugin/broker-app/icons/print.png"/>
+        <children xsi:type="menu:MenuSeparator" xmi:id="_aNPCUHMlEeSQEoXN9AzoFg" elementId="broker-app.menuseparator.2"/>
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_axipQHMlEeSQEoXN9AzoFg" elementId="broker-app.handledmenuitem.quitter" label="Quitter" command="_qm2SYG9yEeSPJcmi72KJvg"/>
+      </children>
+      <children xsi:type="menu:Menu" xmi:id="_FuNzMG9xEeSPJcmi72KJvg" elementId="broker-app.menu.file" label="Configuration">
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_OsofsG9xEeSPJcmi72KJvg" elementId="broker-app.handledmenuitem.prefs" label="Préférences" command="_pn7MAG9yEeSPJcmi72KJvg"/>
+        <children xsi:type="menu:MenuSeparator" xmi:id="_V6ueEG9xEeSPJcmi72KJvg" elementId="broker-app.menuseparator.0"/>
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_YzDWEG9xEeSPJcmi72KJvg" elementId="broker-app.handledmenuitem.exit" label="Fermer" command="_qm2SYG9yEeSPJcmi72KJvg"/>
+      </children>
+      <children xsi:type="menu:Menu" xmi:id="_AwQOcHMhEeSQEoXN9AzoFg" elementId="broker-app.menu.consultation" label="Consultations">
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_GXRhUHMhEeSQEoXN9AzoFg" elementId="broker-app.toolbar.main.item.clients" label="Client" iconURI="platform:/plugin/broker-app/icons/clients_small.png" tooltip="Affiche les clients" type="Check" command="_6bTmkJxJEeSkQcxVG9Pdsw"/>
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_NoFcgHMhEeSQEoXN9AzoFg" elementId="broker-app.handledmenuitem.affaire" label="Affaire" iconURI="platform:/plugin/broker-app/icons/small/afaires.png"/>
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_PhMTMHMhEeSQEoXN9AzoFg" elementId="broker-app.handledmenuitem.dossierClient" label="Dossier client" iconURI="platform:/plugin/broker-app/icons/small/dossier_client.png"/>
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_RtE78HMhEeSQEoXN9AzoFg" elementId="broker-app.handledmenuitem.renvois" label="Renvois"/>
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_WRAaIHMhEeSQEoXN9AzoFg" elementId="broker-app.handledmenuitem.paiements" label="Paiements"/>
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_cQ5gAHMhEeSQEoXN9AzoFg" elementId="broker-app.handledmenuitem.roleDeDemain" label="Role de demain"/>
+        <children xsi:type="menu:MenuSeparator" xmi:id="_gh0ioHMhEeSQEoXN9AzoFg" elementId="broker-app.menuseparator.1"/>
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_0DJ-0HMiEeSQEoXN9AzoFg" elementId="broker-app.handledmenuitem.audiences" label="Audiences"/>
+      </children>
+      <children xsi:type="menu:Menu" xmi:id="_WPJB0HM1EeSQEoXN9AzoFg" elementId="broker-app.menu.aPropos" label="A propos">
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_X8MZgHM1EeSQEoXN9AzoFg" elementId="broker-app.handledmenuitem.aide" label="Aide"/>
+      </children>
+    </mainMenu>
+    <trimBars xmi:id="_HbuvQGU8EeS8lKRWVsNI-w" elementId="broker-app.trimbar.0">
+      <children xsi:type="menu:ToolBar" xmi:id="_KESs8GU8EeS8lKRWVsNI-w" elementId="broker-app.toolbar.main">
+        <children xsi:type="menu:DirectToolItem" xmi:id="_pRE5EGU8EeS8lKRWVsNI-w" elementId="broker-app.toolbar.main.item.clients" label="Clients" iconURI="platform:/plugin/broker-app/icons/clients.png" tooltip="Affiche les clients" type="Check" contributionURI="bundleclass://broker-app/com.siapri.broker.app.ShowPart">
+          <tags>FORCE_TEXT</tags>
+        </children>
+        <children xsi:type="menu:DirectToolItem" xmi:id="_zrrigNl2EeScfKz0eBrZxA" elementId="broker-app.toolbar.main.item.adversary" label="Adversaires" iconURI="platform:/plugin/broker-app/icons/adversary.png" tooltip="Affiche les adversaires" type="Check" contributionURI="bundleclass://broker-app/com.siapri.broker.app.ShowPart">
+          <tags>FORCE_TEXT</tags>
+        </children>
+        <children xsi:type="menu:DirectToolItem" xmi:id="_Oz4wEHJXEeSfZfsrJTXG6w" elementId="broker-app.toolbar.main.item.courts" label="Juridiction" iconURI="platform:/plugin/broker-app/icons/court.png" tooltip="Affiche les cours" type="Check" contributionURI="bundleclass://broker-app/com.siapri.broker.app.ShowPart">
+          <tags>FORCE_TEXT</tags>
+        </children>
+        <children xsi:type="menu:DirectToolItem" xmi:id="_9QHaYGU8EeS8lKRWVsNI-w" elementId="broker-app.toolbar.main.item.cases" label="Affaires" iconURI="platform:/plugin/broker-app/icons/cases.png" tooltip="Affiche les affaires" type="Check" contributionURI="bundleclass://broker-app/com.siapri.broker.app.ShowPart">
+          <tags>FORCE_TEXT</tags>
+        </children>
+        <children xsi:type="menu:DirectToolItem" xmi:id="_PxUosHJXEeSfZfsrJTXG6w" elementId="broker-app.toolbar.main.item.hearings" label="Audience" iconURI="platform:/plugin/broker-app/icons/hearing_enabled.png" tooltip="Affiche les audiences" type="Check" contributionURI="bundleclass://broker-app/com.siapri.broker.app.ShowPart">
+          <tags>FORCE_TEXT</tags>
+        </children>
+        <children xsi:type="menu:DirectToolItem" xmi:id="_PKq58PIIEeW7ltzVlyt5_A" elementId="broker-app.toolbar.main.item.payments" label="Règlements" iconURI="platform:/plugin/broker-app/icons/payments.png" tooltip="Affiche les règlements" type="Check" contributionURI="bundleclass://broker-app/com.siapri.broker.app.ShowPart">
+          <tags>FORCE_TEXT</tags>
+        </children>
+      </children>
+      <children xsi:type="menu:ToolControl" xmi:id="_CXCaMJHaEeSgvvVqkSKOdQ" elementId="broker-app.toolcontrol.1" contributionURI="bundleclass://broker-app/com.siapri.broker.app.views.ToolbarSeperator">
+        <tags>stretch</tags>
+      </children>
+      <children xsi:type="menu:ToolBar" xmi:id="_FHJRMPeHEeWQXZ__8IoPWA" elementId="broker-app.toolbar.nav">
+        <children xsi:type="menu:DirectToolItem" xmi:id="_xhfmoPeOEeWOzavhc6B5JQ" elementId="broker-app.toolbar.nav.item.backward" label="Précédent" iconURI="platform:/plugin/broker-app/icons/backward.png" tooltip="Retour à la vue précédente" enabled="false" contributionURI="bundleclass://broker-app/com.siapri.broker.app.views.mainmenu.BackwardHandler">
+          <menu xmi:id="_APRpsPePEeWOzavhc6B5JQ" elementId="broker-app.menu.0">
+            <children xsi:type="menu:DynamicMenuContribution" xmi:id="_sT2iIPkEEeWJbPeP4G3pvg" elementId="broker-app.dynamicmenucontribution.0" contributionURI="bundleclass://broker-app/com.siapri.broker.app.views.mainmenu.BackwardHandler"/>
+          </menu>
+        </children>
+        <children xsi:type="menu:DirectToolItem" xmi:id="_R_zlsPeHEeWQXZ__8IoPWA" elementId="broker-app.toolbar.nav.item.forward" label="Suivant" iconURI="platform:/plugin/broker-app/icons/forward.png" tooltip="Aller à la vue suivante" enabled="false" contributionURI="bundleclass://broker-app/com.siapri.broker.app.views.mainmenu.ForwardHandler">
+          <menu xmi:id="_BOY9UPePEeWOzavhc6B5JQ" elementId="broker-app.menu.1">
+            <children xsi:type="menu:DynamicMenuContribution" xmi:id="_CCGUQPkmEeWJbPeP4G3pvg" elementId="broker-app.dynamicmenucontribution.1" contributionURI="bundleclass://broker-app/com.siapri.broker.app.views.mainmenu.ForwardHandler"/>
+          </menu>
+        </children>
+      </children>
+      <children xsi:type="menu:ToolControl" xmi:id="_5r25oPeGEeWQXZ__8IoPWA" elementId="broker-app.toolcontrol.2" contributionURI="bundleclass://broker-app/com.siapri.broker.app.views.ToolbarSeperator"/>
+      <children xsi:type="menu:ToolBar" xmi:id="_ruj9MJH0EeSgvvVqkSKOdQ" elementId="broker-app.toolbar.right">
+        <children xsi:type="menu:DirectToolItem" xmi:id="_cKXE8JHzEeSgvvVqkSKOdQ" elementId="broker-app.toolbar.main.item.settings" label="Configuration" iconURI="platform:/plugin/broker-app/icons/settings.png" tooltip="Afficher la fenêtre de configuration" contributionURI="bundleclass://broker-app/com.siapri.broker.app.views.mainmenu.ShowPreferencesHandler"/>
+        <children xsi:type="menu:DirectToolItem" xmi:id="_jcBUsJHzEeSgvvVqkSKOdQ" elementId="broker-app.toolbar.main.item.disconnect" label="Déconnecter" iconURI="platform:/plugin/broker-app/icons/disconnect.png" tooltip="Fermer la session" contributionURI="bundleclass://broker-app/com.siapri.broker.app.views.mainmenu.ExitHandler"/>
+      </children>
+    </trimBars>
+    <trimBars xmi:id="_UtwvoPw7EeWsPNhlh-E6qA" elementId="broker-app.trimbar.1" side="Bottom">
+      <children xsi:type="menu:ToolControl" xmi:id="_XNBf8P0CEeWmq-hLQoY1Iw" elementId="broker-app.toolcontrol.3" contributionURI="bundleclass://broker-app/com.siapri.broker.app.views.taskbar.CurrentPartElementCountTask"/>
+      <children xsi:type="menu:ToolControl" xmi:id="_mHxl8P3cEeWTXPwK0M1Igw" elementId="broker-app.toolcontrol.4" contributionURI="bundleclass://broker-app/com.siapri.broker.app.views.taskbar.TaskbarSeparator">
+        <tags>stretch</tags>
+      </children>
+      <children xsi:type="menu:ToolControl" xmi:id="_YlOwcPw7EeWsPNhlh-E6qA" elementId="broker-app.toolcontrol.0" contributionURI="bundleclass://broker-app/com.siapri.broker.app.views.taskbar.ConnectedUserTask"/>
+    </trimBars>
+  </children>
+  <handlers xmi:id="_nQeMcG9yEeSPJcmi72KJvg" elementId="broker-app.handler.prefs" contributionURI="bundleclass://broker-app/com.siapri.broker.app.views.mainmenu.ShowPreferencesHandler" command="_pn7MAG9yEeSPJcmi72KJvg"/>
+  <handlers xmi:id="_oa278G9yEeSPJcmi72KJvg" elementId="broker-app.handler.exit" contributionURI="bundleclass://broker-app/com.siapri.broker.app.views.mainmenu.ExitHandler" command="_qm2SYG9yEeSPJcmi72KJvg"/>
+  <handlers xmi:id="_LYxNQJxKEeSkQcxVG9Pdsw" elementId="broker-app.toolbar.main.item.clients" contributionURI="bundleclass://broker-app/com.siapri.broker.app.ShowPart" command="_6bTmkJxJEeSkQcxVG9Pdsw"/>
+  <handlers xmi:id="_EQ1wwPeGEeWQXZ__8IoPWA" elementId="broker-app.handler.navigation.forward" contributionURI="bundleclass://broker-app/com.siapri.broker.app.views.mainmenu.ForwardHandler" command="_gXwYIPeGEeWQXZ__8IoPWA"/>
+  <handlers xmi:id="_k34awPeOEeWOzavhc6B5JQ" elementId="broker-app.handler.navigation.backward" contributionURI="bundleclass://broker-app/com.siapri.broker.app.views.mainmenu.BackwardHandler" command="_f-9kAPeOEeWOzavhc6B5JQ"/>
+  <rootContext xmi:id="_Cc_BiWU1EeS8lKRWVsNI-w" elementId="org.eclipse.ui.contexts.dialogAndWindow" name="In Dialog and Windows">
+    <children xmi:id="_Cc_BimU1EeS8lKRWVsNI-w" elementId="org.eclipse.ui.contexts.window" name="In Windows"/>
+    <children xmi:id="_Cc_Bi2U1EeS8lKRWVsNI-w" elementId="org.eclipse.ui.contexts.dialog" name="In Dialogs"/>
+  </rootContext>
+  <descriptors xmi:id="_7t7BIGeoEeS_9pBc-i-Nog" elementId="broker-app.partdescriptor.main" label="" iconURI="" tooltip="" closeable="true" contributionURI="">
+    <tags>removeOnHide</tags>
+  </descriptors>
+  <commands xmi:id="_pn7MAG9yEeSPJcmi72KJvg" elementId="broker-app.command.showprefs" commandName="Show preferences"/>
+  <commands xmi:id="_qm2SYG9yEeSPJcmi72KJvg" elementId="broker-app.command.exit" commandName="Exit"/>
+  <commands xmi:id="_6bTmkJxJEeSkQcxVG9Pdsw" elementId="broker-app.command.client" commandName="Client"/>
+  <commands xmi:id="_gXwYIPeGEeWQXZ__8IoPWA" elementId="broker-app.command.navigation.forward" commandName="Forward"/>
+  <commands xmi:id="_f-9kAPeOEeWOzavhc6B5JQ" elementId="broker-app.command.navigation.backward" commandName="Backward"/>
+  <addons xmi:id="_Cc_BgmU1EeS8lKRWVsNI-w" elementId="org.eclipse.e4.core.commands.service" contributionURI="bundleclass://org.eclipse.e4.core.commands/org.eclipse.e4.core.commands.CommandServiceAddon"/>
+  <addons xmi:id="_Cc_Bg2U1EeS8lKRWVsNI-w" elementId="org.eclipse.e4.ui.contexts.service" contributionURI="bundleclass://org.eclipse.e4.ui.services/org.eclipse.e4.ui.services.ContextServiceAddon"/>
+  <addons xmi:id="_Cc_BhGU1EeS8lKRWVsNI-w" elementId="org.eclipse.e4.ui.bindings.service" contributionURI="bundleclass://org.eclipse.e4.ui.bindings/org.eclipse.e4.ui.bindings.BindingServiceAddon"/>
+  <addons xmi:id="_Cc_BhWU1EeS8lKRWVsNI-w" elementId="org.eclipse.e4.ui.workbench.commands.model" contributionURI="bundleclass://org.eclipse.e4.ui.workbench/org.eclipse.e4.ui.internal.workbench.addons.CommandProcessingAddon"/>
+  <addons xmi:id="_Cc_BhmU1EeS8lKRWVsNI-w" elementId="org.eclipse.e4.ui.workbench.handler.model" contributionURI="bundleclass://org.eclipse.e4.ui.workbench/org.eclipse.e4.ui.internal.workbench.addons.HandlerProcessingAddon"/>
+  <addons xmi:id="_Cc_Bh2U1EeS8lKRWVsNI-w" elementId="org.eclipse.e4.ui.workbench.contexts.model" contributionURI="bundleclass://org.eclipse.e4.ui.workbench/org.eclipse.e4.ui.internal.workbench.addons.ContextProcessingAddon"/>
+  <addons xmi:id="_Cc_BiGU1EeS8lKRWVsNI-w" elementId="org.eclipse.e4.ui.workbench.bindings.model" contributionURI="bundleclass://org.eclipse.e4.ui.workbench.swt/org.eclipse.e4.ui.workbench.swt.util.BindingProcessingAddon"/>
+</application:Application>

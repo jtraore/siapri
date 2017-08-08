@@ -1,0 +1,4 @@
+BROKER {
+    org.eclipse.equinox.security.auth.module.ExtensionLoginModule required
+        extensionId="broker-app.authenticateModule";
+};

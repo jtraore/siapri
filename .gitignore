@@ -6,3 +6,7 @@ RemoteSystemsTempFiles/
 .settings/
 bin/
 target/
+**/broker-business/lib/
+**/broker-business/META-INF/
+**/broker-app-libs/lib/
+**/broker-app-libs/META-INF/

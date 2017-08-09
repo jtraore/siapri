@@ -45,7 +45,7 @@
 	<field name="birthdate" class="java.util.Date">
 		<fieldDescription><![CDATA[birthdate]]></fieldDescription>
 	</field>
-	<field name="idCardType" class="com.ngosdi.lawyer.app.views.common.EIdCardType">
+	<field name="idCardType" class="com.siapri.broker.app.views.common.EIdCardType">
 		<fieldDescription><![CDATA[idCardType]]></fieldDescription>
 	</field>
 	<field name="gender" class="com.ngosdi.lawyer.beans.Gender">

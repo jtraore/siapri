@@ -97,6 +97,22 @@ public class DataListComposite extends Composite {
 			}
 		}
 	}
+
+	private Object selectedItem;
+	
+	private TableViewer tableViewer;
+	
+	private DataListFilter dataListFilter;
+	
+	private DataListModel dataListModel = null;
+	
+	private TableResizeController tableResizeController = null;
+	
+	private Button deleteButton;
+	
+	private Button editButton;
+	
+	private Button addButton;
 	
 	private final SelectionAdapter createActionController = new SelectionAdapter() {
 		@Override
@@ -197,22 +213,6 @@ public class DataListComposite extends Composite {
 		dataListFilter.setPattern(((Text) e.getSource()).getText());
 		tableViewer.refresh();
 	};
-	
-	private Object selectedItem;
-	
-	private TableViewer tableViewer;
-	
-	private DataListFilter dataListFilter;
-	
-	private final DataListModel dataListModel;
-	
-	private final TableResizeController tableResizeController;
-	
-	private Button deleteButton;
-	
-	private Button editButton;
-	
-	private Button addButton;
 	
 	public DataListComposite(final Composite parent, final int style, final DataListModel dataListModel) {
 		super(parent, style);

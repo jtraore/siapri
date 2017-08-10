@@ -40,7 +40,6 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 
-import com.ngosdi.lawyer.services.IServiceDao;
 import com.siapri.broker.app.BundleUtil;
 import com.siapri.broker.app.E4Service;
 import com.siapri.broker.app.IApplicationEvent;
@@ -53,6 +52,7 @@ import com.siapri.broker.app.views.common.action.DataListActionEvent;
 import com.siapri.broker.app.views.common.action.IAction;
 import com.siapri.broker.business.model.AbstractDocumentProvider;
 import com.siapri.broker.business.model.Document;
+import com.siapri.broker.business.service.IBasicDaoService;
 
 public class DataListComposite extends Composite {
 	
@@ -356,7 +356,7 @@ public class DataListComposite extends Composite {
 				final List<Document> selectedDocuments = Util.selectDocuments();
 				if (!selectedDocuments.isEmpty()) {
 					documentProvider.getDocuments().addAll(selectedDocuments);
-					BundleUtil.getService(IServiceDao.class).save(documentProvider);
+					BundleUtil.getService(IBasicDaoService.class).save(documentProvider);
 					MessageDialog.openInformation(Display.getCurrent().getActiveShell(), "Ajout de document", "Document(s) ajouté(s) avec succès");
 				}
 				return null;

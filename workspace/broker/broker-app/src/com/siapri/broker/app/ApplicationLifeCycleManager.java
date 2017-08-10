@@ -8,7 +8,6 @@ import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.core.services.log.Logger;
 import org.eclipse.e4.ui.model.application.MApplication;
-import org.eclipse.e4.ui.workbench.UIEvents.Application;
 import org.eclipse.e4.ui.workbench.UIEvents.UILifeCycle;
 import org.eclipse.e4.ui.workbench.lifecycle.PostContextCreate;
 import org.eclipse.e4.ui.workbench.modeling.EModelService;
@@ -20,9 +19,10 @@ import org.eclipse.swt.widgets.Shell;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventHandler;
 
-import com.ngosdi.lawyer.services.IAuthenticationService;
-import com.ngosdi.lawyer.services.IServiceDao;
 import com.siapri.broker.app.views.common.EImage;
+import com.siapri.broker.business.Application;
+import com.siapri.broker.business.service.IAuthenticationService;
+import com.siapri.broker.business.service.IBasicDaoService;
 
 public class ApplicationLifeCycleManager {
 	
@@ -91,9 +91,9 @@ public class ApplicationLifeCycleManager {
 	}
 	
 	private void registerDataService() {
-		final IServiceDao daoService = Application.getServiceDao();
+		final IBasicDaoService daoService = Application.getDaoService();
 		ContextInjectionFactory.inject(daoService, eclipseContext);
-		BundleUtil.registerService(IServiceDao.class, daoService);
+		BundleUtil.registerService(IBasicDaoService.class, daoService);
 		
 		final IAuthenticationService authService = Application.getAuthenticationService();
 		ContextInjectionFactory.inject(authService, eclipseContext);

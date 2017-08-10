@@ -118,7 +118,7 @@
 					<manifestLocation>META-INF</manifestLocation>
 					<instructions>
 						<Import-Package>org.eclipse.core.runtime</Import-Package>
-						<Export-Package>com.siapri.broker.business.*</Export-Package>
+						<Export-Package>com.siapri.broker.*</Export-Package>
 						<Embed-Dependency>*;scope=compile|runtime;inline=false</Embed-Dependency>
 						<Embed-Directory>lib</Embed-Directory>
 						<Embed-StripGroup>true</Embed-StripGroup>

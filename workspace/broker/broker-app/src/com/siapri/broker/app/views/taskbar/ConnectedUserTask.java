@@ -9,8 +9,8 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 
-import com.ngosdi.lawyer.beans.User;
-import com.ngosdi.lawyer.services.IAuthenticationService;
+import com.siapri.broker.business.security.User;
+import com.siapri.broker.business.service.IAuthenticationService;
 
 public class ConnectedUserTask {
 
@@ -27,6 +27,6 @@ public class ConnectedUserTask {
 		stylingEngine.setId(parent, "Taskbar");
 		stylingEngine.setId(label, "TaskbarLabel");
 		final User currentUser = authService.getCurrentUser();
-		label.setText(String.format("Connecté en tant que %s   ", currentUser.getLoginName()));
+		label.setText(String.format("Connecté en tant que %s   ", currentUser.getLogin()));
 	}
 }

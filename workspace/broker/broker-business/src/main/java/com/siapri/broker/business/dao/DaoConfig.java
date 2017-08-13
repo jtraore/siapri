@@ -21,36 +21,36 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableTransactionManagement
 @EnableJpaRepositories(basePackages = "com.siapri.broker.business.dao.repository")
 public class DaoConfig {
-	
+
 	@Autowired
 	private IDataSourceConfig dataSourceConfig;
-	
+
 	@Bean
-	public LocalContainerEntityManagerFactoryBean entityManagerFactoiry(){
-		LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
+	public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
+		final LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
 		em.setDataSource(dataSourceConfig.getDataSource());
 		em.setPackagesToScan("com.siapri.broker.business.model");
-		JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
+		final JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
 		em.setJpaVendorAdapter(vendorAdapter);
 		em.setJpaProperties(dataSourceConfig.getServerConnectionProperties());
 		return em;
 	}
-	
+
 	@Bean
-	public DataSource dataSource(){
+	public DataSource dataSource() {
 		return dataSourceConfig.getDataSource();
 	}
-	
+
 	@Bean
-	public PlatformTransactionManager transactionManager(EntityManagerFactory emf){
-		JpaTransactionManager transactionManager = new JpaTransactionManager();
+	public PlatformTransactionManager transactionManager(final EntityManagerFactory emf) {
+		final JpaTransactionManager transactionManager = new JpaTransactionManager();
 		transactionManager.setEntityManagerFactory(emf);
 		return transactionManager;
 	}
-	
+
 	@Bean
-	public PersistenceExceptionTranslationPostProcessor exceptionTranslation(){
+	public PersistenceExceptionTranslationPostProcessor exceptionTranslation() {
 		return new PersistenceExceptionTranslationPostProcessor();
 	}
-
+	
 }

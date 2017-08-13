@@ -34,13 +34,13 @@
    </vm>
 
    <plugins>
+      <plugin id="broker-app"/>
       <plugin id="com.ibm.icu"/>
-      <plugin id="com.ngosdi.lawyer.data"/>
       <plugin id="com.siapri.broker.app-libs"/>
+      <plugin id="com.siapri.broker.business"/>
       <plugin id="javax.annotation"/>
       <plugin id="javax.inject"/>
       <plugin id="javax.xml"/>
-      <plugin id="lawyer-app"/>
       <plugin id="org.apache.batik.css"/>
       <plugin id="org.apache.batik.util"/>
       <plugin id="org.apache.batik.util.gui"/>

@@ -6,10 +6,10 @@
          point="org.eclipse.core.runtime.products">
       <product
             application="org.eclipse.e4.ui.workbench.swt.E4Application"
-            name="broker-app">
+            name="lawyer-app">
          <property
                name="appName"
-               value="broker-app">
+               value="lawyer-app">
          </property>
          <property
            name="lifeCycleURI"
@@ -30,10 +30,6 @@
          <property
                name="preferenceCustomization"
                value="plugin_customization.ini">
-         </property>
-          <property
-               name="applicationCSS"
-               value="platform:/plugin/broker-app/css/default.css">
          </property>
       </product>
    </extension>
@@ -73,35 +69,6 @@
                priorityLevel="workbench">
          </variable>
       </sourceProvider>
-   </extension>
-   <extension
-         id="authenticateModule"
-         point="org.eclipse.equinox.security.loginModule">
-      <loginModule
-            class="com.siapri.broker.app.authentication.AuthenticateModule"
-            description="AuthenticateModule">
-      </loginModule>
-   </extension>
-   <extension
-         id="authenticateCallbackHandler"
-         point="org.eclipse.equinox.security.callbackHandler">
-      <callbackHandler
-            class="com.siapri.broker.app.authentication.AuthenticateCallbackHandler">
-      </callbackHandler>
-   </extension>
-   <extension
-         point="org.eclipse.equinox.security.callbackHandlerMapping">
-      <callbackHandlerMapping
-            callbackHandlerId="broker-app.authenticateCallbackHandler"
-            configName="BROKER">
-      </callbackHandlerMapping>
-   </extension>
-   <extension
-         point="org.eclipse.ui.splashHandlers">
-      <splashHandler
-            class="com.siapri.broker.app.splashHandlers.InteractiveSplashHandler"
-            id="com.siapri.broker.app.splashHandlers.interactive">
-      </splashHandler>
    </extension>
 
 </plugin>

@@ -18,7 +18,7 @@ import com.esotericsoftware.yamlbeans.YamlReader;
 @SpringBootApplication
 @EnableAutoConfiguration(exclude = { DataSourceAutoConfiguration.class, HibernateJpaAutoConfiguration.class })
 public class BusinessStarter {
-	
+
 	@Bean
 	public Config loadConfig() throws FileNotFoundException, IOException {
 		Config config = null;
@@ -29,11 +29,11 @@ public class BusinessStarter {
 		}
 		return config;
 	}
-	
+
 	public static void main(final String[] args) throws Exception {
-		start(BusinessStarter.class.getClassLoader().getResource("."));
+		start(null);
 	}
-	
+
 	public static void start(final URL scanUrl) {
 		System.setProperty("scanUrl", scanUrl.toString());
 		SpringApplication.run(BusinessStarter.class, new String[0]);

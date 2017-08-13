@@ -20,7 +20,13 @@ public class ResourceScanner implements Scanner {
 	public ScanResult scan(final ScanEnvironment environment, final ScanOptions options, final ScanParameters params) {
 		final ScanResultCollector resultCollector = new ScanResultCollector(environment, options, params);
 		final StandardArchiveDescriptorFactory archiveDescriptorFactory = new StandardArchiveDescriptorFactory();
-		final ArchiveDescriptor archiveDescriptor = archiveDescriptorFactory.buildArchiveDescriptor(getScanUrl());
+		final ArchiveDescriptor archiveDescriptor;
+		final URL scanUrl = getScanUrl();
+		if (scanUrl != null) {
+			archiveDescriptor = archiveDescriptorFactory.buildArchiveDescriptor(scanUrl);
+		} else {
+			archiveDescriptor = archiveDescriptorFactory.buildArchiveDescriptor(environment.getRootUrl());
+		}
 		final ArchiveContext context = new ArchiveContextImpl(true, resultCollector);
 		archiveDescriptor.visitArchive(context);
 		return resultCollector.toScanResult();

@@ -6,10 +6,10 @@
          point="org.eclipse.core.runtime.products">
       <product
             application="org.eclipse.e4.ui.workbench.swt.E4Application"
-            name="lawyer-app">
+            name="broker-app">
          <property
                name="appName"
-               value="lawyer-app">
+               value="broker-app">
          </property>
          <property
            name="lifeCycleURI"
@@ -30,6 +30,10 @@
          <property
                name="preferenceCustomization"
                value="plugin_customization.ini">
+         </property>
+          <property
+               name="applicationCSS"
+               value="platform:/plugin/broker-app/css/default.css">
          </property>
       </product>
    </extension>

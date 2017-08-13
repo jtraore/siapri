@@ -4,5 +4,5 @@ dataSource:
    url: jdbc:postgresql://localhost:5432/broker
    userName: postgres
    password: RGV2NGd1YW1wcmk=
-   schemaStrategy: create
+   schemaStrategy: create-drop
    showSql: true

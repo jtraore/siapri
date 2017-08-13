@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 .metadata/
 RemoteSystemsTempFiles/
 .recommenders/
@@ -9,4 +10,17 @@ target/
 **/broker-business/lib/
 **/broker-business/META-INF/
 **/broker-app-libs/lib/
+=======
+.metadata/
+RemoteSystemsTempFiles/
+.recommenders/
+.project
+.classpath
+.settings/
+bin/
+target/
+**/broker-business/lib/
+**/broker-business/META-INF/
+**/broker-app-libs/lib/
+>>>>>>> Stashed changes
 **/broker-app-libs/META-INF/

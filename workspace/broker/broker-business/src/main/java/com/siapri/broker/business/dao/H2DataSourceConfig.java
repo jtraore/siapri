@@ -27,9 +27,9 @@ public class H2DataSourceConfig implements IDataSourceConfig {
 	@Override
 	public Properties getServerConnectionProperties() {
 		final Properties properties = new Properties();
-		properties.setProperty("hibernate.hbm2ddl.auto", "update");
+		properties.setProperty("hibernate.hbm2ddl.auto", "create");
 		properties.setProperty("hibernate.dialect", H2Dialect.class.getName());
-		properties.setProperty("hibernate.ejb.resource_scanner", ResourceScanner.class.getName());
+		// properties.setProperty("hibernate.ejb.resource_scanner", ResourceScanner.class.getName());
 		// properties.setProperty("hibernate.hbm2ddl.import_files", "init.sql");
 		return properties;
 	}

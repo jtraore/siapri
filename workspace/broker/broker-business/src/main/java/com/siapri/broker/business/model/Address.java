@@ -1,81 +1,90 @@
 package com.siapri.broker.business.model;
 
 import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.Embeddable;
 import javax.validation.constraints.Size;
 
-@Entity
-@Table(name = "ADDRESS")
-public class Address extends AbstractEntity{
+@Embeddable
+public class Address {
 
-	private static final long serialVersionUID = 1L;
-
-	@Column(name = "NAME", nullable = true)
+	@Column(name = "LABEL", nullable = true)
 	@Size(max = 25)
-	private String name;
-	
-	@Column(name = "ROAD_NUMBER", nullable = true)
-	private String roadNumber;
-	
-	@Column(name = "ROAD", nullable = true)
-	private String road;
-	
+	private String label;
+
+	@Column(name = "NUMBER", nullable = true)
+	private String number;
+
+	@Column(name = "STREET", nullable = true)
+	private String street;
+
+	@Column(name = "ADDITIONAL_INFO")
+	private String additionalInfo;
+
 	@Column(name = "POSTAL_CODE", nullable = true)
 	private String postalCode;
-	
+
 	@Size(min = 1)
 	@Column(name = "CITY", nullable = false)
 	private String city;
-	
+
 	@Size(min = 1)
 	@Column(name = "COUNTRY", nullable = false)
 	private String country;
-	
+
 	@Column(name = "COMMENT", nullable = true)
 	private String comment;
-	
-	public Address(){}
-	
-	public Address(String name, String roadNumber, String road, String postalCode, String city, String country, String comment){
-		this.name = name;
-		this.roadNumber = roadNumber;
-		this.road = road;
+
+	public Address() {
+	}
+
+	public Address(final String label, final String number, final String street, final String additionalInfo, final String postalCode, final String city, final String country, final String comment) {
+		this.label = label;
+		this.number = number;
+		this.street = street;
+		this.additionalInfo = additionalInfo;
 		this.postalCode = postalCode;
 		this.city = city;
 		this.country = country;
 		this.comment = comment;
 	}
 
-	public String getName() {
-		return name;
+	public String getLabel() {
+		return label;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setLabel(final String label) {
+		this.label = label;
 	}
 
-	public String getRoadNumber() {
-		return roadNumber;
+	public String getNumber() {
+		return number;
 	}
 
-	public void setRoadNumber(String roadNumber) {
-		this.roadNumber = roadNumber;
+	public void setNumber(final String number) {
+		this.number = number;
 	}
 
-	public String getRoad() {
-		return road;
+	public String getStreet() {
+		return street;
 	}
 
-	public void setRoad(String road) {
-		this.road = road;
+	public void setStreet(final String street) {
+		this.street = street;
+	}
+
+	public String getAdditionalInfo() {
+		return additionalInfo;
+	}
+
+	public void setAdditionalInfo(final String additionalInfo) {
+		this.additionalInfo = additionalInfo;
 	}
 
 	public String getPostalCode() {
 		return postalCode;
 	}
 
-	public void setPostalCode(String postalCode) {
+	public void setPostalCode(final String postalCode) {
 		this.postalCode = postalCode;
 	}
 
@@ -83,7 +92,7 @@ public class Address extends AbstractEntity{
 		return city;
 	}
 
-	public void setCity(String city) {
+	public void setCity(final String city) {
 		this.city = city;
 	}
 
@@ -91,7 +100,7 @@ public class Address extends AbstractEntity{
 		return country;
 	}
 
-	public void setCountry(String country) {
+	public void setCountry(final String country) {
 		this.country = country;
 	}
 
@@ -99,9 +108,8 @@ public class Address extends AbstractEntity{
 		return comment;
 	}
 
-	public void setComment(String comment) {
+	public void setComment(final String comment) {
 		this.comment = comment;
 	}
-	
-	
+
 }

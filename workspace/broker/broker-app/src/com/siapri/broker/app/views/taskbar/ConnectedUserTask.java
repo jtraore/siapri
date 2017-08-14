@@ -13,10 +13,10 @@ import com.siapri.broker.business.security.User;
 import com.siapri.broker.business.service.IAuthenticationService;
 
 public class ConnectedUserTask {
-
+	
 	@Inject
 	private IAuthenticationService authService;
-
+	
 	@PostConstruct
 	public void createGui(final Composite parent, final IStylingEngine stylingEngine) {
 		final Composite composite = new Composite(parent, SWT.NONE);
@@ -27,6 +27,6 @@ public class ConnectedUserTask {
 		stylingEngine.setId(parent, "Taskbar");
 		stylingEngine.setId(label, "TaskbarLabel");
 		final User currentUser = authService.getCurrentUser();
-		label.setText(String.format("Connecté en tant que %s   ", currentUser.getLogin()));
+		label.setText(String.format("Connecté en tant que %s   ", "admin" /* currentUser.getLogin() */));
 	}
 }

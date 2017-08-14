@@ -26,41 +26,6 @@
         </children>
       </children>
     </children>
-    <mainMenu xmi:id="_-0NOcG9wEeSPJcmi72KJvg" elementId="broker-app.menu.main">
-      <children xsi:type="menu:Menu" xmi:id="_Zpkb8HMiEeSQEoXN9AzoFg" elementId="broker-app.menu.fichier" label="Fichier">
-        <children xsi:type="menu:Menu" xmi:id="_qvqaMHMiEeSQEoXN9AzoFg" elementId="broker-app.menu.ajouter" label="Ajouter" iconURI="platform:/plugin/broker-app/icons/create.png">
-          <children xsi:type="menu:HandledMenuItem" xmi:id="_6dGjcHMiEeSQEoXN9AzoFg" elementId="broker-app.handledmenuitem.client" label="Client" iconURI="platform:/plugin/broker-app/icons/small/new_client.png"/>
-          <children xsi:type="menu:HandledMenuItem" xmi:id="_77RxoHMiEeSQEoXN9AzoFg" elementId="broker-app.handledmenuitem.affaire" label="Affaire" iconURI="platform:/plugin/broker-app/icons/small/afaires.png"/>
-          <children xsi:type="menu:HandledMenuItem" xmi:id="_9pF-UHMiEeSQEoXN9AzoFg" elementId="broker-app.handledmenuitem.paiement" label="Paiement"/>
-          <children xsi:type="menu:HandledMenuItem" xmi:id="_BOEg8HMjEeSQEoXN9AzoFg" elementId="broker-app.handledmenuitem.audience" label="Audience"/>
-          <children xsi:type="menu:HandledMenuItem" xmi:id="_DVybYHMjEeSQEoXN9AzoFg" elementId="broker-app.handledmenuitem.juridiction" label="Juridiction" iconURI="platform:/plugin/broker-app/icons/court_small.png"/>
-          <children xsi:type="menu:HandledMenuItem" xmi:id="_FXBTUHMjEeSQEoXN9AzoFg" elementId="broker-app.handledmenuitem.section" label="Section"/>
-        </children>
-        <children xsi:type="menu:HandledMenuItem" xmi:id="_nengMHMiEeSQEoXN9AzoFg" elementId="broker-app.handledmenuitem.rechercher" label="Rechercher" iconURI="platform:/plugin/broker-app/icons/small/recherche.png"/>
-        <children xsi:type="menu:MenuSeparator" xmi:id="_HyDZEHMoEeSQEoXN9AzoFg" elementId="broker-app.menuseparator.3"/>
-        <children xsi:type="menu:HandledMenuItem" xmi:id="_BDRz8HMoEeSQEoXN9AzoFg" elementId="broker-app.handledmenuitem.imprimer" label="Imprimer" iconURI="platform:/plugin/broker-app/icons/print.png"/>
-        <children xsi:type="menu:MenuSeparator" xmi:id="_aNPCUHMlEeSQEoXN9AzoFg" elementId="broker-app.menuseparator.2"/>
-        <children xsi:type="menu:HandledMenuItem" xmi:id="_axipQHMlEeSQEoXN9AzoFg" elementId="broker-app.handledmenuitem.quitter" label="Quitter" command="_qm2SYG9yEeSPJcmi72KJvg"/>
-      </children>
-      <children xsi:type="menu:Menu" xmi:id="_FuNzMG9xEeSPJcmi72KJvg" elementId="broker-app.menu.file" label="Configuration">
-        <children xsi:type="menu:HandledMenuItem" xmi:id="_OsofsG9xEeSPJcmi72KJvg" elementId="broker-app.handledmenuitem.prefs" label="Préférences" command="_pn7MAG9yEeSPJcmi72KJvg"/>
-        <children xsi:type="menu:MenuSeparator" xmi:id="_V6ueEG9xEeSPJcmi72KJvg" elementId="broker-app.menuseparator.0"/>
-        <children xsi:type="menu:HandledMenuItem" xmi:id="_YzDWEG9xEeSPJcmi72KJvg" elementId="broker-app.handledmenuitem.exit" label="Fermer" command="_qm2SYG9yEeSPJcmi72KJvg"/>
-      </children>
-      <children xsi:type="menu:Menu" xmi:id="_AwQOcHMhEeSQEoXN9AzoFg" elementId="broker-app.menu.consultation" label="Consultations">
-        <children xsi:type="menu:HandledMenuItem" xmi:id="_GXRhUHMhEeSQEoXN9AzoFg" elementId="broker-app.toolbar.main.item.clients" label="Client" iconURI="platform:/plugin/broker-app/icons/clients_small.png" tooltip="Affiche les clients" type="Check" command="_6bTmkJxJEeSkQcxVG9Pdsw"/>
-        <children xsi:type="menu:HandledMenuItem" xmi:id="_NoFcgHMhEeSQEoXN9AzoFg" elementId="broker-app.handledmenuitem.affaire" label="Affaire" iconURI="platform:/plugin/broker-app/icons/small/afaires.png"/>
-        <children xsi:type="menu:HandledMenuItem" xmi:id="_PhMTMHMhEeSQEoXN9AzoFg" elementId="broker-app.handledmenuitem.dossierClient" label="Dossier client" iconURI="platform:/plugin/broker-app/icons/small/dossier_client.png"/>
-        <children xsi:type="menu:HandledMenuItem" xmi:id="_RtE78HMhEeSQEoXN9AzoFg" elementId="broker-app.handledmenuitem.renvois" label="Renvois"/>
-        <children xsi:type="menu:HandledMenuItem" xmi:id="_WRAaIHMhEeSQEoXN9AzoFg" elementId="broker-app.handledmenuitem.paiements" label="Paiements"/>
-        <children xsi:type="menu:HandledMenuItem" xmi:id="_cQ5gAHMhEeSQEoXN9AzoFg" elementId="broker-app.handledmenuitem.roleDeDemain" label="Role de demain"/>
-        <children xsi:type="menu:MenuSeparator" xmi:id="_gh0ioHMhEeSQEoXN9AzoFg" elementId="broker-app.menuseparator.1"/>
-        <children xsi:type="menu:HandledMenuItem" xmi:id="_0DJ-0HMiEeSQEoXN9AzoFg" elementId="broker-app.handledmenuitem.audiences" label="Audiences"/>
-      </children>
-      <children xsi:type="menu:Menu" xmi:id="_WPJB0HM1EeSQEoXN9AzoFg" elementId="broker-app.menu.aPropos" label="A propos">
-        <children xsi:type="menu:HandledMenuItem" xmi:id="_X8MZgHM1EeSQEoXN9AzoFg" elementId="broker-app.handledmenuitem.aide" label="Aide"/>
-      </children>
-    </mainMenu>
     <trimBars xmi:id="_HbuvQGU8EeS8lKRWVsNI-w" elementId="broker-app.trimbar.0">
       <children xsi:type="menu:ToolBar" xmi:id="_KESs8GU8EeS8lKRWVsNI-w" elementId="broker-app.toolbar.main">
         <children xsi:type="menu:DirectToolItem" xmi:id="_pRE5EGU8EeS8lKRWVsNI-w" elementId="broker-app.toolbar.main.item.clients" label="Clients" iconURI="platform:/plugin/broker-app/icons/clients.png" tooltip="Affiche les clients" type="Check" contributionURI="bundleclass://broker-app/com.siapri.broker.app.ShowPart">

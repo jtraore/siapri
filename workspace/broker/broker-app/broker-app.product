@@ -16,13 +16,13 @@
    <windowImages/>
 
    <splash
-      location="lawyer-app"
+      location="broker-app"
       startupProgressRect="5,275,445,15"
       startupMessageRect="7,252,445,20"
       startupForegroundColor="FF0000" />
-   <launcher name="lawyer">
+   <launcher name="broker">
       <win useIco="true">
-         <ico path="/lawyer-app/icons/lawyer_ico.ico"/>
+         <ico path="/broker-app/icons/app.ico"/>
          <bmp/>
       </win>
    </launcher>

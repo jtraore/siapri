@@ -100,7 +100,7 @@ public class ShowPart {
 		final PartView<?> view = partViewService.getPartView(part.getElementId());
 		eventBroker.post(IApplicationEvent.ITEMS_COUNT, view.getDataListComposite().getDataListModel().getDataList().size());
 
-		preferences.put("lawyer.parts.active", part.getElementId());
+		preferences.put("broker.parts.active", part.getElementId());
 		try {
 			preferences.flush();
 		} catch (final BackingStoreException e) {
@@ -151,7 +151,7 @@ public class ShowPart {
 			partViewService.showView(entry.getValue());
 		}
 
-		final String activePartId = preferences.get("lawyer.parts.active", null);
+		final String activePartId = preferences.get("broker.parts.active", null);
 		if (activePartId != null) {
 			partViewService.showView(activePartId);
 		}

@@ -15,55 +15,55 @@ import org.hibernate.annotations.Type;
 @Entity
 @Table(name = "SINISTER")
 public class Sinister extends AbstractEntity {
-
-	private static final long serialVersionUID = 1L;
 	
-	@ManyToOne
-	@JoinColumn(name = "CUSTOMER_ID", referencedColumnName = "ID")
-	private Customer customer;
+	private static final long serialVersionUID = 1L;
 
+	@ManyToOne
+	@JoinColumn(name = "CLIENT_ID", referencedColumnName = "ID")
+	private Client client;
+	
 	@Type(type = "org.jadira.usertype.dateandtime.threeten.PersistentZonedDateTime")
 	@Column(name = "OCCURRED_DATE")
 	private ZonedDateTime occurredDate;
-
+	
 	@NotNull
 	@Column(name = "DESCRIPTION", nullable = false)
 	private String description;
-
+	
 	@NotNull
 	@Embedded
 	private Address address;
-
+	
 	public Sinister() {
 	}
-
+	
 	public Sinister(final ZonedDateTime occurredDate, final String description) {
 		this.occurredDate = occurredDate;
 		this.description = description;
 	}
-
-	public Customer getCustomer() {
-		return customer;
+	
+	public Client getClient() {
+		return client;
 	}
 
-	public void setCustomer(final Customer customer) {
-		this.customer = customer;
+	public void setClient(final Client client) {
+		this.client = client;
 	}
-
+	
 	public ZonedDateTime getOccurredDate() {
 		return occurredDate;
 	}
-
+	
 	public void setOccurredDate(final ZonedDateTime occurredDate) {
 		this.occurredDate = occurredDate;
 	}
-
+	
 	public String getDescription() {
 		return description;
 	}
-
+	
 	public void setDescription(final String description) {
 		this.description = description;
 	}
-
+	
 }

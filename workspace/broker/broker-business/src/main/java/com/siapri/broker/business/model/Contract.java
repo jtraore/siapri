@@ -35,8 +35,8 @@ public class Contract extends AbstractDocumentProvider {
 	private List<Sinister> sinisters = new ArrayList<>();
 	
 	@ManyToOne
-	@JoinColumn(name = "CUSTOMER_ID", nullable = false)
-	private Customer customer;
+	@JoinColumn(name = "CLIENT_ID", nullable = false)
+	private Client client;
 	
 	@NotNull
 	@ManyToOne
@@ -73,6 +73,22 @@ public class Contract extends AbstractDocumentProvider {
 
 	public void setSinisters(final List<Sinister> sinisters) {
 		this.sinisters = sinisters;
+	}
+
+	public Client getClient() {
+		return client;
+	}
+
+	public void setClient(final Client client) {
+		this.client = client;
+	}
+
+	public InsuranceType getInsuranceType() {
+		return insuranceType;
+	}
+
+	public void setInsuranceType(final InsuranceType insuranceType) {
+		this.insuranceType = insuranceType;
 	}
 
 }

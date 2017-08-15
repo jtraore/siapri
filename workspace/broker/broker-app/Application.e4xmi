@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <application:Application xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:application="http://www.eclipse.org/ui/2010/UIModel/application" xmlns:basic="http://www.eclipse.org/ui/2010/UIModel/application/ui/basic" xmlns:menu="http://www.eclipse.org/ui/2010/UIModel/application/ui/menu" xmi:id="_Cc_BgGU1EeS8lKRWVsNI-w" elementId="org.eclipse.e4.ide.application" bindingContexts="_Cc_BiWU1EeS8lKRWVsNI-w">
-  <children xsi:type="basic:TrimmedWindow" xmi:id="_Cc_BgWU1EeS8lKRWVsNI-w" selectedElement="_SRuWgGU-EeS8lKRWVsNI-w" label="broker-app" iconURI="platform:/plugin/broker-app/icons/court.png" width="500" height="400">
+  <children xsi:type="basic:TrimmedWindow" xmi:id="_Cc_BgWU1EeS8lKRWVsNI-w" selectedElement="_SRuWgGU-EeS8lKRWVsNI-w" label="Siapri broker" iconURI="platform:/plugin/broker-app/icons/court.png" width="500" height="400">
     <tags>shellMaximized</tags>
     <children xsi:type="basic:PartSashContainer" xmi:id="_SRuWgGU-EeS8lKRWVsNI-w" elementId="broker-app.partsashcontainer.main" selectedElement="_w6rpUJHfEeSgvvVqkSKOdQ" horizontal="true">
       <children xsi:type="basic:PartStack" xmi:id="_w6rpUJHfEeSgvvVqkSKOdQ" elementId="broker-app.partstack.overview" containerData="25">

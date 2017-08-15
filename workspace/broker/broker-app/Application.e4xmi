@@ -31,16 +31,10 @@
         <children xsi:type="menu:DirectToolItem" xmi:id="_pRE5EGU8EeS8lKRWVsNI-w" elementId="broker-app.toolbar.main.item.clients" label="Clients" iconURI="platform:/plugin/broker-app/icons/clients.png" tooltip="Affiche les clients" type="Check" contributionURI="bundleclass://broker-app/com.siapri.broker.app.ShowPart">
           <tags>FORCE_TEXT</tags>
         </children>
-        <children xsi:type="menu:DirectToolItem" xmi:id="_zrrigNl2EeScfKz0eBrZxA" elementId="broker-app.toolbar.main.item.adversary" label="Adversaires" iconURI="platform:/plugin/broker-app/icons/adversary.png" tooltip="Affiche les adversaires" type="Check" contributionURI="bundleclass://broker-app/com.siapri.broker.app.ShowPart">
+        <children xsi:type="menu:DirectToolItem" xmi:id="_9QHaYGU8EeS8lKRWVsNI-w" elementId="broker-app.toolbar.main.item.contract" label="Contrats" iconURI="platform:/plugin/broker-app/icons/cases.png" tooltip="Affiche les contrats" type="Check" contributionURI="bundleclass://broker-app/com.siapri.broker.app.ShowPart">
           <tags>FORCE_TEXT</tags>
         </children>
-        <children xsi:type="menu:DirectToolItem" xmi:id="_Oz4wEHJXEeSfZfsrJTXG6w" elementId="broker-app.toolbar.main.item.courts" label="Juridiction" iconURI="platform:/plugin/broker-app/icons/court.png" tooltip="Affiche les cours" type="Check" contributionURI="bundleclass://broker-app/com.siapri.broker.app.ShowPart">
-          <tags>FORCE_TEXT</tags>
-        </children>
-        <children xsi:type="menu:DirectToolItem" xmi:id="_9QHaYGU8EeS8lKRWVsNI-w" elementId="broker-app.toolbar.main.item.cases" label="Affaires" iconURI="platform:/plugin/broker-app/icons/cases.png" tooltip="Affiche les affaires" type="Check" contributionURI="bundleclass://broker-app/com.siapri.broker.app.ShowPart">
-          <tags>FORCE_TEXT</tags>
-        </children>
-        <children xsi:type="menu:DirectToolItem" xmi:id="_PxUosHJXEeSfZfsrJTXG6w" elementId="broker-app.toolbar.main.item.hearings" label="Audience" iconURI="platform:/plugin/broker-app/icons/hearing_enabled.png" tooltip="Affiche les audiences" type="Check" contributionURI="bundleclass://broker-app/com.siapri.broker.app.ShowPart">
+        <children xsi:type="menu:DirectToolItem" xmi:id="_4PvAkIGtEeeNpYTbXqKuzw" elementId="broker-app.toolbar.main.item.sinistres" label="Sinistres" iconURI="platform:/plugin/broker-app/icons/file.png" tooltip="Affiche les sinistres" type="Check" contributionURI="bundleclass://broker-app/com.siapri.broker.app.ShowPart">
           <tags>FORCE_TEXT</tags>
         </children>
         <children xsi:type="menu:DirectToolItem" xmi:id="_PKq58PIIEeW7ltzVlyt5_A" elementId="broker-app.toolbar.main.item.payments" label="Règlements" iconURI="platform:/plugin/broker-app/icons/payments.png" tooltip="Affiche les règlements" type="Check" contributionURI="bundleclass://broker-app/com.siapri.broker.app.ShowPart">

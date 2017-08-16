@@ -6,7 +6,7 @@ import org.eclipse.core.runtime.IStatus;
 
 public interface IValidationSupport {
 
-	public IValidator NOT_EMPTY_VALIDATOR = new IValidator() {
+	public IValidator NON_EMPTY_VALIDATOR = new IValidator() {
 		@Override
 		public IStatus validate(final Object value) {
 			if (value == null || value instanceof String && ((String) value).isEmpty()) {

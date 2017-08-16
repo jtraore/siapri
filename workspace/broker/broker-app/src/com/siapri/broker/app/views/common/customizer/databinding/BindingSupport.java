@@ -43,90 +43,101 @@ public class BindingSupport {
 	}
 
 	public IStatus getValidationStatus() {
-		return (IStatus) aggregateValidationStatus.getValue();
+		return aggregateValidationStatus.getValue();
 	}
 
+	@SuppressWarnings("unchecked")
 	public void bindText(final Object object, final String property, final Widget widget) {
-		final IObservableValue widgetValue = WidgetProperties.text(SWT.Modify).observe(widget);
-		final IObservableValue modelValue = BeanProperties.value(property).observe(object);
+		final IObservableValue<?> widgetValue = WidgetProperties.text(SWT.Modify).observe(widget);
+		final IObservableValue<?> modelValue = BeanProperties.value(property).observe(object);
 		bindingContext.bindValue(widgetValue, modelValue);
 	}
 
+	@SuppressWarnings("unchecked")
 	public void bindText(final Object object, final String property, final Widget widget, final IValidator validator) {
-		final IObservableValue widgetValue = WidgetProperties.text(SWT.Modify).observe(widget);
-		final IObservableValue modelValue = BeanProperties.value(property).observe(object);
+		final IObservableValue<?> widgetValue = WidgetProperties.text(SWT.Modify).observe(widget);
+		final IObservableValue<?> modelValue = BeanProperties.value(property).observe(object);
 		final UpdateValueStrategy updateValueStrategy = new UpdateValueStrategy();
 		updateValueStrategy.setBeforeSetValidator(validator);
 		final Binding binding = bindingContext.bindValue(widgetValue, modelValue, updateValueStrategy, null);
 		ControlDecorationSupport.create(binding, SWT.LEFT | SWT.TOP);
 	}
 
+	@SuppressWarnings("unchecked")
 	public void bindComboViewer(final Object object, final String property, final ComboViewer comboViewer) {
-		final IObservableValue viewerValue = ViewersObservables.observeSingleSelection(comboViewer);
-		final IObservableValue modelValue = BeanProperties.value(property).observe(object);
+		final IObservableValue<?> viewerValue = ViewersObservables.observeSingleSelection(comboViewer);
+		final IObservableValue<?> modelValue = BeanProperties.value(property).observe(object);
 		bindingContext.bindValue(viewerValue, modelValue);
 	}
 
+	@SuppressWarnings("unchecked")
 	public void bindComboViewer(final Object object, final String property, final ComboViewer comboViewer, final IValidator validator) {
-		final IObservableValue viewerValue = ViewersObservables.observeSingleSelection(comboViewer);
-		final IObservableValue modelValue = BeanProperties.value(property).observe(object);
+		final IObservableValue<?> viewerValue = ViewersObservables.observeSingleSelection(comboViewer);
+		final IObservableValue<?> modelValue = BeanProperties.value(property).observe(object);
 		final UpdateValueStrategy updateValueStrategy = new UpdateValueStrategy();
 		updateValueStrategy.setBeforeSetValidator(validator);
 		final Binding binding = bindingContext.bindValue(viewerValue, modelValue, updateValueStrategy, null);
 		ControlDecorationSupport.create(binding, SWT.LEFT | SWT.TOP);
 	}
 
+	@SuppressWarnings("unchecked")
 	public void bindFormattedText(final Object object, final String property, final FormattedText formattedText) {
 		final FormattedTextObservableValue formattedTextValue = new FormattedTextObservableValue(formattedText, SWT.Modify);
-		final IObservableValue modelValue = BeanProperties.value(property).observe(object);
+		final IObservableValue<?> modelValue = BeanProperties.value(property).observe(object);
 		bindingContext.bindValue(formattedTextValue, modelValue);
 	}
 
+	@SuppressWarnings("unchecked")
 	public void bindFormattedText(final Object object, final String property, final FormattedText formattedText, final IValidator validator) {
 		final FormattedTextObservableValue formattedTextValue = new FormattedTextObservableValue(formattedText, SWT.Modify);
-		final IObservableValue modelValue = BeanProperties.value(property).observe(object);
+		final IObservableValue<?> modelValue = BeanProperties.value(property).observe(object);
 		final UpdateValueStrategy updateValueStrategy = new UpdateValueStrategy();
 		updateValueStrategy.setBeforeSetValidator(validator);
 		final Binding binding = bindingContext.bindValue(formattedTextValue, modelValue, updateValueStrategy, null);
 		ControlDecorationSupport.create(binding, SWT.LEFT | SWT.TOP);
 	}
 
+	@SuppressWarnings("unchecked")
 	public void bindObjectSeekComposite(final Object object, final String property, final ObjectSeekComposite objectSeekComposite) {
 		final ObjectSeekCompositeObservableValue objectSeekCompositeObservableValue = new ObjectSeekCompositeObservableValue(objectSeekComposite);
-		final IObservableValue modelValue = BeanProperties.value(property).observe(object);
+		final IObservableValue<?> modelValue = BeanProperties.value(property).observe(object);
 		bindingContext.bindValue(objectSeekCompositeObservableValue, modelValue);
 	}
 
+	@SuppressWarnings("unchecked")
 	public void bindObjectSeekComposite(final Object object, final String property, final ObjectSeekComposite objectSeekComposite, final IValidator validator) {
 		final ObjectSeekCompositeObservableValue objectSeekCompositeObservableValue = new ObjectSeekCompositeObservableValue(objectSeekComposite);
-		final IObservableValue modelValue = BeanProperties.value(property).observe(object);
+		final IObservableValue<?> modelValue = BeanProperties.value(property).observe(object);
 		final UpdateValueStrategy updateValueStrategy = new UpdateValueStrategy();
 		updateValueStrategy.setBeforeSetValidator(validator);
 		final Binding binding = bindingContext.bindValue(objectSeekCompositeObservableValue, modelValue, updateValueStrategy, null);
 		ControlDecorationSupport.create(binding, SWT.LEFT | SWT.TOP);
 	}
 
+	@SuppressWarnings("unchecked")
 	public void bindCDateTimeWidget(final Object object, final String property, final CDateTime cdt, final IValidator validator) {
 		final CDateTimeObservableValue cdtObservableValue = new CDateTimeObservableValue(cdt);
-		final IObservableValue modelValue = BeanProperties.value(property).observe(object);
+		final IObservableValue<?> modelValue = BeanProperties.value(property).observe(object);
 		final UpdateValueStrategy updateValueStrategy = new UpdateValueStrategy();
 		updateValueStrategy.setBeforeSetValidator(validator);
 		final Binding binding = bindingContext.bindValue(cdtObservableValue, modelValue, updateValueStrategy, null);
 		ControlDecorationSupport.create(binding, SWT.LEFT | SWT.TOP);
 	}
 
+	@SuppressWarnings("unchecked")
 	public void bindDateChooserComboWidget(final Object object, final String property, final DateChooserCombo cdt, final IValidator validator) {
 		final DateChooserObservableValue cdtObservableValue = new DateChooserObservableValue(cdt);
-		final IObservableValue modelValue = BeanProperties.value(property).observe(object);
+		final IObservableValue<?> modelValue = BeanProperties.value(property).observe(object);
 		final UpdateValueStrategy updateValueStrategy = new UpdateValueStrategy();
 		updateValueStrategy.setBeforeSetValidator(validator);
 		final Binding binding = bindingContext.bindValue(cdtObservableValue, modelValue, updateValueStrategy, null);
 		ControlDecorationSupport.create(binding, SWT.LEFT | SWT.TOP);
 	}
 
+	@SuppressWarnings("unchecked")
 	public void bindDateTimeChooserComboWidget(final Object object, final String property, final DateTime dt, final IValidator validator) {
-		final IObservableValue modelValue = BeanProperties.value(property).observe(object);
-		ISWTObservableValue dtObservableValue = WidgetProperties.selection().observe(dt);
+		final IObservableValue<?> modelValue = BeanProperties.value(property).observe(object);
+		final ISWTObservableValue dtObservableValue = WidgetProperties.selection().observe(dt);
 		final UpdateValueStrategy updateValueStrategy = new UpdateValueStrategy();
 		updateValueStrategy.setBeforeSetValidator(validator);
 		final Binding binding = bindingContext.bindValue(dtObservableValue, modelValue, updateValueStrategy, null);

@@ -14,7 +14,7 @@ import com.siapri.broker.app.views.common.customizer.ObjectSeekComposite;
 
 public class ObjectSeekCompositeObservableValue extends AbstractObservableValue implements ISWTObservable {
 
-	private final ObjectSeekComposite objectSeekComposite;
+	private final ObjectSeekComposite targetComposite;
 
 	private boolean updating = false;
 
@@ -26,7 +26,7 @@ public class ObjectSeekCompositeObservableValue extends AbstractObservableValue 
 			if (updating) {
 				return;
 			}
-			final Object newValue = objectSeekComposite.getValue();
+			final Object newValue = targetComposite.getValue();
 			fireValueChange(Diffs.createValueDiff(oldValue, newValue));
 		}
 	};
@@ -37,36 +37,36 @@ public class ObjectSeekCompositeObservableValue extends AbstractObservableValue 
 
 	public ObjectSeekCompositeObservableValue(final Realm realm, final ObjectSeekComposite objectSeekComposite) {
 		super(realm);
-		this.objectSeekComposite = objectSeekComposite;
+		this.targetComposite = objectSeekComposite;
 		objectSeekComposite.addValueChangeListener(valueChangeListener);
 	}
 
 	@Override
 	public Object getValueType() {
-		return objectSeekComposite.getElementType();
+		return targetComposite.getElementType();
 	}
 
 	@Override
 	protected Object doGetValue() {
-		return oldValue = objectSeekComposite.getValue();
+		return oldValue = targetComposite.getValue();
 	}
 
 	@Override
 	protected void doSetValue(final Object value) {
 		updating = true;
-		objectSeekComposite.setValue(value);
+		targetComposite.setValue(value);
 		oldValue = value;
 		updating = false;
 	}
 
 	@Override
 	public synchronized void dispose() {
-		objectSeekComposite.removeValueChangeListener(valueChangeListener);
+		targetComposite.removeValueChangeListener(valueChangeListener);
 		super.dispose();
 	}
 
 	@Override
 	public Widget getWidget() {
-		return objectSeekComposite;
+		return targetComposite;
 	}
 }

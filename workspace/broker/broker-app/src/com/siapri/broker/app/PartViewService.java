@@ -11,6 +11,7 @@ import org.eclipse.e4.ui.workbench.modeling.EPartService.PartState;
 
 import com.siapri.broker.app.views.NavigationManager;
 import com.siapri.broker.app.views.PartView;
+import com.siapri.broker.app.views.client.ClientView;
 import com.siapri.broker.app.views.detail.IDetailCompositeProvider;
 
 public class PartViewService {
@@ -22,7 +23,7 @@ public class PartViewService {
 	private final NavigationManager navigationManager = new NavigationManager();
 
 	public PartViewService() {
-		// partViewMapping.put("broker-app.toolbar.main.item.clients", Activator.BUNDLE_URI_PREFIX + ClientView.class.getName());
+		partViewMapping.put("broker-app.toolbar.main.item.clients", Activator.BUNDLE_URI_PREFIX + ClientView.class.getName());
 		// partViewMapping.put("broker-app.toolbar.main.item.adversary", Activator.BUNDLE_URI_PREFIX + AdversaryView.class.getName());
 		// partViewMapping.put("broker-app.toolbar.main.item.cases", Activator.BUNDLE_URI_PREFIX + CaseView.class.getName());
 		// partViewMapping.put("broker-app.toolbar.main.item.courts", Activator.BUNDLE_URI_PREFIX + CourtView.class.getName());

@@ -16,7 +16,7 @@ import com.siapri.broker.business.model.Gender;
 import com.siapri.broker.business.model.Person;
 
 public class ClientCustomizerModel extends AbstractCustomizerModel<Person> {
-
+	
 	private String firstName;
 	private String lastName;
 	private Gender gender;
@@ -26,27 +26,29 @@ public class ClientCustomizerModel extends AbstractCustomizerModel<Person> {
 	private String landPhone;
 	private String mobilePhone;
 	private String fax;
-
+	
 	protected ClientCustomizerModel() {
 		super(null);
 	}
-
+	
 	public ClientCustomizerModel(final Person target) {
 		super(target);
 	}
-
+	
 	@Override
 	public void synchronize() {
 		firstName = target.getFirstName();
 		lastName = target.getLastName();
 		gender = target.getGender();
-		birthdate = Date.from(target.getBirthdate().atStartOfDay(ZoneId.systemDefault()).toInstant());
+		if (target.getBirthdate() != null) {
+			birthdate = Date.from(target.getBirthdate().atStartOfDay(ZoneId.systemDefault()).toInstant());
+		}
 		homeAddress = ProxyFactory.createProxy(target.getAddresses().getOrDefault(EAddressType.HOME.name(), new Address()));
 		workAddress = ProxyFactory.createProxy(target.getAddresses().getOrDefault(EAddressType.WORK.name(), new Address()));
 		mobilePhone = target.getPhones().get(EPhoneType.MOBILE.name());
 		landPhone = target.getPhones().get(EPhoneType.LAND.name());
 	}
-
+	
 	@Override
 	public void validate() {
 		target.setFirstName(firstName);
@@ -64,69 +66,69 @@ public class ClientCustomizerModel extends AbstractCustomizerModel<Person> {
 			target.getPhones().put(EPhoneType.LAND.name(), landPhone);
 		}
 	}
-	
+
 	public String getFirstName() {
 		return firstName;
 	}
-	
+
 	public void setFirstName(final String firstName) {
 		this.firstName = firstName;
 	}
-	
+
 	public String getLastName() {
 		return lastName;
 	}
-	
+
 	public void setLastName(final String lastName) {
 		this.lastName = lastName;
 	}
-	
+
 	public Gender getGender() {
 		return gender;
 	}
-	
+
 	public void setGender(final Gender gender) {
 		this.gender = gender;
 	}
-	
+
 	public Date getBirthdate() {
 		return birthdate;
 	}
-	
+
 	public void setBirthdate(final Date birthdate) {
 		this.birthdate = birthdate;
 	}
-	
+
 	public String getLandPhone() {
 		return landPhone;
 	}
-	
+
 	public void setLandPhone(final String landPhone) {
 		this.landPhone = landPhone;
 	}
-	
+
 	public String getMobilePhone() {
 		return mobilePhone;
 	}
-	
+
 	public void setMobilePhone(final String mobilePhone) {
 		this.mobilePhone = mobilePhone;
 	}
-	
+
 	public Address getHomeAddress() {
 		return homeAddress;
 	}
-	
+
 	public Address getWorkAddress() {
 		return workAddress;
 	}
-
+	
 	public String getFax() {
 		return fax;
 	}
-
+	
 	public void setFax(final String fax) {
 		this.fax = fax;
 	}
-
+	
 }

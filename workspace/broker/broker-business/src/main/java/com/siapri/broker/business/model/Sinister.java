@@ -14,7 +14,7 @@ import org.hibernate.annotations.Type;
 
 @Entity
 @Table(name = "SINISTER")
-public class Sinister extends AbstractEntity {
+public class Sinister extends AbstractDocumentProvider {
 	
 	private static final long serialVersionUID = 1L;
 
@@ -65,5 +65,13 @@ public class Sinister extends AbstractEntity {
 	public void setDescription(final String description) {
 		this.description = description;
 	}
-	
+
+	public Address getAddress() {
+		return address;
+	}
+
+	public void setAddress(final Address address) {
+		this.address = address;
+	}
+
 }

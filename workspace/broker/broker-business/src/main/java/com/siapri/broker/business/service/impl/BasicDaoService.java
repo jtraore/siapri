@@ -9,6 +9,8 @@ import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
@@ -96,6 +98,12 @@ public class BasicDaoService implements IBasicDaoService {
 			return Optional.of(entity);
 		}
 		return Optional.empty();
+	}
+	
+	@Override
+	public <T extends AbstractEntity> List<T> getLatestElements(final Class<T> clazz, final int limit) {
+		final Page<T> page = getRepository(clazz).findAll(new PageRequest(0, limit, Direction.DESC, "lastModifiedDate"));
+		return page.getContent();
 	}
 
 }

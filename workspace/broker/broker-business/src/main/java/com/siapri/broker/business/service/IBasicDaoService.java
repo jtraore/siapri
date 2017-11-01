@@ -6,7 +6,6 @@ import java.util.stream.Stream;
 
 import com.siapri.broker.business.model.AbstractEntity;
 
-
 public interface IBasicDaoService {
 
 	<T extends AbstractEntity> T save(T entity);
@@ -25,4 +24,5 @@ public interface IBasicDaoService {
 
 	<T extends AbstractEntity> Optional<T> find(Class<T> clazz, long entityId);
 
+	<T extends AbstractEntity> List<T> getLatestElements(Class<T> clazz, int limit);
 }

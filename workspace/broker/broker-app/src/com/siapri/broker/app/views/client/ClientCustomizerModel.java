@@ -1,6 +1,8 @@
 package com.siapri.broker.app.views.client;
 
-import java.time.LocalDate;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.util.Date;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -14,43 +16,43 @@ import com.siapri.broker.business.model.Gender;
 import com.siapri.broker.business.model.Person;
 
 public class ClientCustomizerModel extends AbstractCustomizerModel<Person> {
-	
+
 	private String firstName;
 	private String lastName;
 	private Gender gender;
-	private LocalDate birthdate;
+	private Date birthdate;
 	private Address homeAddress;
 	private Address workAddress;
 	private String landPhone;
 	private String mobilePhone;
 	private String fax;
-	
+
 	protected ClientCustomizerModel() {
 		super(null);
 	}
-	
+
 	public ClientCustomizerModel(final Person target) {
 		super(target);
 	}
-	
+
 	@Override
 	public void synchronize() {
 		firstName = target.getFirstName();
 		lastName = target.getLastName();
 		gender = target.getGender();
-		birthdate = target.getBirthdate();
+		birthdate = Date.from(target.getBirthdate().atStartOfDay(ZoneId.systemDefault()).toInstant());
 		homeAddress = ProxyFactory.createProxy(target.getAddresses().getOrDefault(EAddressType.HOME.name(), new Address()));
 		workAddress = ProxyFactory.createProxy(target.getAddresses().getOrDefault(EAddressType.WORK.name(), new Address()));
 		mobilePhone = target.getPhones().get(EPhoneType.MOBILE.name());
 		landPhone = target.getPhones().get(EPhoneType.LAND.name());
 	}
-	
+
 	@Override
 	public void validate() {
 		target.setFirstName(firstName);
 		target.setLastName(lastName);
 		target.setGender(gender);
-		target.setBirthdate(birthdate);
+		target.setBirthdate(Instant.ofEpochMilli(birthdate.getTime()).atZone(ZoneId.systemDefault()).toLocalDate());
 		if (StringUtils.isNotBlank(homeAddress.getStreet())) {
 			target.getAddresses().put(EAddressType.HOME.name(), (Address) ((IProxy) homeAddress).getTarget());
 		}
@@ -62,69 +64,69 @@ public class ClientCustomizerModel extends AbstractCustomizerModel<Person> {
 			target.getPhones().put(EPhoneType.LAND.name(), landPhone);
 		}
 	}
-
+	
 	public String getFirstName() {
 		return firstName;
 	}
-
+	
 	public void setFirstName(final String firstName) {
 		this.firstName = firstName;
 	}
-
+	
 	public String getLastName() {
 		return lastName;
 	}
-
+	
 	public void setLastName(final String lastName) {
 		this.lastName = lastName;
 	}
-
+	
 	public Gender getGender() {
 		return gender;
 	}
-
+	
 	public void setGender(final Gender gender) {
 		this.gender = gender;
 	}
-
-	public LocalDate getBirthdate() {
+	
+	public Date getBirthdate() {
 		return birthdate;
 	}
-
-	public void setBirthdate(final LocalDate birthdate) {
+	
+	public void setBirthdate(final Date birthdate) {
 		this.birthdate = birthdate;
 	}
-
+	
 	public String getLandPhone() {
 		return landPhone;
 	}
-
+	
 	public void setLandPhone(final String landPhone) {
 		this.landPhone = landPhone;
 	}
-
+	
 	public String getMobilePhone() {
 		return mobilePhone;
 	}
-
+	
 	public void setMobilePhone(final String mobilePhone) {
 		this.mobilePhone = mobilePhone;
 	}
-
+	
 	public Address getHomeAddress() {
 		return homeAddress;
 	}
-
+	
 	public Address getWorkAddress() {
 		return workAddress;
 	}
-	
+
 	public String getFax() {
 		return fax;
 	}
-	
+
 	public void setFax(final String fax) {
 		this.fax = fax;
 	}
-	
+
 }

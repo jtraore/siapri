@@ -18,7 +18,6 @@ import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.model.application.ui.basic.MPartStack;
 import org.eclipse.e4.ui.model.application.ui.basic.MStackElement;
 import org.eclipse.e4.ui.model.application.ui.menu.MDirectToolItem;
-import org.eclipse.e4.ui.model.application.ui.menu.MHandledMenuItem;
 import org.eclipse.e4.ui.workbench.UIEvents.UILifeCycle;
 import org.eclipse.e4.ui.workbench.modeling.EModelService;
 import org.eclipse.e4.ui.workbench.modeling.EPartService;
@@ -36,44 +35,44 @@ import com.siapri.broker.app.views.mainmenu.NavigationMenuUtil;
 
 @Singleton
 public class ShowPart {
-	
+
 	@Inject
 	private MApplication application;
-	
+
 	@Inject
 	private EModelService modelService;
-	
+
 	@Inject
 	private EPartService partService;
-	
+
 	@Inject
 	@Optional
 	private PartViewService partViewService;
-	
+
 	@Inject
 	@Preference
 	private IEclipsePreferences preferences;
-	
+
 	@Inject
 	@Optional
 	private Display currentDisplay;
-	
+
 	@Inject
 	private IEventBroker eventBroker;
-	
+
 	@Execute
 	public void execute(final MDirectToolItem directToolItem) {
 		Display.getCurrent().asyncExec(() -> showOrHidePart(true, directToolItem.isSelected(), directToolItem.getElementId(), directToolItem.getIconURI(), directToolItem.getLabel()));
 	}
 	
-	@Execute
-	public void execute(final MHandledMenuItem handledMenuItem) {
-		Display.getCurrent().asyncExec(() -> showOrHidePart(false, handledMenuItem.isSelected(), handledMenuItem.getElementId(), handledMenuItem.getIconURI(), handledMenuItem.getLabel()));
-	}
-	
+	// @Execute
+	// public void execute(final MHandledMenuItem handledMenuItem) {
+	// Display.getCurrent().asyncExec(() -> showOrHidePart(false, handledMenuItem.isSelected(), handledMenuItem.getElementId(), handledMenuItem.getIconURI(), handledMenuItem.getLabel()));
+	// }
+
 	private void showOrHidePart(final boolean directToolItemEvent, final boolean itemSelected, final String elementId, final String iconURI, final String label) {
 		final MPartStack partStack = (MPartStack) modelService.find(Activator.MAIN_PART_STACK_ID, application);
-		final String partId = /* partStack.getElementId() + "." + */elementId;
+		final String partId = partStack.getElementId() + "." + elementId.substring(elementId.lastIndexOf(".") + 1);
 		if (itemSelected) {
 			final MPart newPart = partService.createPart(Activator.MAIN_PART_DESCRIPTOR_ID);
 			newPart.setElementId(partId);
@@ -88,7 +87,7 @@ public class ShowPart {
 			partService.hidePart(partService.findPart(partId));
 		}
 	}
-	
+
 	@Inject
 	@Optional
 	private void partActivated(@Active final MPart part) {
@@ -96,17 +95,17 @@ public class ShowPart {
 		if (!partViewService.getPartViewMapping().containsKey(part.getElementId().substring(partStack.getElementId().length() + 1))) {
 			return;
 		}
-		
+
 		final PartView<?> view = partViewService.getPartView(part.getElementId());
 		eventBroker.post(IApplicationEvent.ITEMS_COUNT, view.getDataListComposite().getDataListModel().getDataList().size());
-		
+
 		preferences.put("broker.parts.active", part.getElementId());
 		try {
 			preferences.flush();
 		} catch (final BackingStoreException e) {
 			// TODO LOGGER
 		}
-		
+
 		final NavigationManager navigationManager = partViewService.getNavigationManager();
 		navigationManager.addPart(part.getElementId());
 		final MDirectToolItem backwardToolItem = (MDirectToolItem) modelService.find(NavigationMenuUtil.BACKWARD_ITEM_ID, application);
@@ -114,24 +113,24 @@ public class ShowPart {
 		final MDirectToolItem forwardToolItem = (MDirectToolItem) modelService.find(NavigationMenuUtil.FORWARD_ITEM_ID, application);
 		Display.getCurrent().asyncExec(() -> forwardToolItem.setEnabled(navigationManager.canGoForward()));
 	}
-	
+
 	@Inject
 	@Optional
 	public void appStarted(@UIEventTopic(UILifeCycle.APP_STARTUP_COMPLETE) final Event event) {
-		
+
 		final Shell activeShell = currentDisplay.getActiveShell();
 		final Listener[] shellCloseListeners = activeShell.getListeners(SWT.Close);
 		for (final Listener listener : shellCloseListeners) {
 			Display.getCurrent().getActiveShell().removeListener(SWT.Close, listener);
 		}
-		
+
 		activeShell.addListener(SWT.Close, e -> savePreferences());
-		
+
 		for (final Listener listener : shellCloseListeners) {
 			activeShell.addListener(SWT.Close, listener);
 		}
 	}
-	
+
 	@Inject
 	@Optional
 	public void e4ServicesAvailable(@UIEventTopic(IApplicationEvent.E4_SERVICES_AVAILABLE) final Event event) {
@@ -146,23 +145,23 @@ public class ShowPart {
 				preferences.putBoolean(partId + ".displayed", false);
 			}
 		}
-		
+
 		for (final Entry<Integer, String> entry : partMapping.entrySet()) {
 			partViewService.showView(entry.getValue());
 		}
-		
+
 		final String activePartId = preferences.get("broker.parts.active", null);
 		if (activePartId != null) {
 			partViewService.showView(activePartId);
 		}
 	}
-	
+
 	@Inject
 	@Optional
 	public void appShutingdown(@UIEventTopic(UILifeCycle.APP_SHUTDOWN_STARTED) final Event event) {
 		// Not working for now (because of a bug in e4)
 	}
-	
+
 	private void savePreferences() {
 		final MPartStack partStack = (MPartStack) modelService.find(Activator.MAIN_PART_STACK_ID, application);
 		int index = 0;
@@ -170,12 +169,12 @@ public class ShowPart {
 			preferences.putBoolean(part.getElementId() + ".displayed", true);
 			preferences.putInt(part.getElementId() + ".index", index++);
 		}
-		
+
 		try {
 			preferences.flush();
 		} catch (final BackingStoreException e) {
 			// TODO LOGGER
 		}
 	}
-	
+
 }

@@ -15,6 +15,10 @@
            name="lifeCycleURI"
            value="bundleclass://broker-app/com.siapri.broker.app.ApplicationLifeCycleManager">
          </property>
+          <property
+           name="applicationCSS"
+           value="platform:/plugin/broker-app/css/default.css">
+         </property>
          <property
                name="startupForegroundColor"
                value="FF0000">

@@ -14,20 +14,21 @@ import org.eclipse.swt.widgets.Text;
 
 import com.siapri.broker.app.views.common.TitledSeparator;
 import com.siapri.broker.app.views.common.customizer.AbstractCustomizer;
+import com.siapri.broker.app.views.common.customizer.CustomizerUtil;
 import com.siapri.broker.app.views.common.customizer.IValidationSupport;
 import com.siapri.broker.app.views.common.proxy.ProxyFactory;
 import com.siapri.broker.business.model.Gender;
 import com.siapri.broker.business.model.Person;
 
 public class ClientCustomizer extends AbstractCustomizer<Person> {
-	
+
 	private final ClientCustomizerModel customizerModel;
-	
+
 	public ClientCustomizer(final Person client, final String title, final String description) {
 		super(client, title, description);
 		customizerModel = ProxyFactory.createProxy(new ClientCustomizerModel(client));
 	}
-	
+
 	@Override
 	public Composite createArea(final Composite parent, final int style) {
 		parent.setLayout(new GridLayout());
@@ -35,8 +36,10 @@ public class ClientCustomizer extends AbstractCustomizer<Person> {
 		final GridLayout gridLayout = new GridLayout(6, false);
 		composite.setLayout(gridLayout);
 		
+		new TitledSeparator(composite, "Identité").setLayoutData(new GridData(SWT.FILL, SWT.DEFAULT, true, false, 6, 1));
+
 		final Label genderLabel = new Label(composite, SWT.NONE);
-		genderLabel.setText("Type: ");
+		genderLabel.setText("Civilité: ");
 		final ComboViewer typeComboViewer = new ComboViewer(composite, SWT.READ_ONLY);
 		typeComboViewer.setContentProvider(ArrayContentProvider.getInstance());
 		typeComboViewer.setLabelProvider(new LabelProvider() {
@@ -49,16 +52,16 @@ public class ClientCustomizer extends AbstractCustomizer<Person> {
 			}
 		});
 		typeComboViewer.setInput(Gender.values());
-		bindingSupport.bindComboViewer(customizerModel, "type", typeComboViewer, IValidationSupport.NON_EMPTY_VALIDATOR);
-		
-		new Label(composite, SWT.NONE).setLayoutData(new GridData(SWT.FILL, SWT.DEFAULT, false, false, 4, 1));
+		bindingSupport.bindComboViewer(customizerModel, "gender", typeComboViewer, IValidationSupport.NON_EMPTY_VALIDATOR);
+
+		new Label(composite, SWT.NONE).setLayoutData(new GridData(SWT.FILL, SWT.DEFAULT, true, false, 4, 1));
 		
 		final Label firstNameLabel = new Label(composite, SWT.NONE);
 		firstNameLabel.setText("Nom: ");
 		final Text firstNameText = new Text(composite, SWT.BORDER);
 		bindingSupport.bindText(customizerModel, "firstName", firstNameText, IValidationSupport.NON_EMPTY_VALIDATOR);
 		firstNameText.setLayoutData(new GridData(SWT.FILL, SWT.DEFAULT, false, false, 5, 1));
-		
+
 		final Label lastNameLabel = new Label(composite, SWT.NONE);
 		lastNameLabel.setText("Prénom: ");
 		final Text lastNameText = new Text(composite, SWT.BORDER);
@@ -71,22 +74,24 @@ public class ClientCustomizer extends AbstractCustomizer<Person> {
 		final DateTime birthDateField = new DateTime(composite, SWT.BORDER | SWT.DATE | SWT.DROP_DOWN);
 		birthDateField.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_WHITE));
 		final GridData gridData = new GridData(SWT.FILL, SWT.DEFAULT, true, false);
-		gridData.widthHint = 150;
+		// gridData.widthHint = 150;
 		birthDateField.setLayoutData(gridData);
 		bindingSupport.bindDateTimeChooserComboWidget(customizerModel, "birthdate", birthDateField, IValidationSupport.NON_EMPTY_VALIDATOR);
 		
-		new TitledSeparator(composite, "Contact").setLayoutData(new GridData(SWT.FILL, SWT.DEFAULT, true, false, 6, 1));
+		new Label(composite, SWT.NONE).setLayoutData(new GridData(SWT.FILL, SWT.DEFAULT, true, false, 4, 1));
+
+		new TitledSeparator(composite, "Adresse domicile").setLayoutData(new GridData(SWT.FILL, SWT.DEFAULT, true, false, 6, 1));
+		CustomizerUtil.setUpAddressComposite(composite, customizerModel, bindingSupport, "homeAddress", true);
 		
-		final Label addressLabel = new Label(composite, SWT.NONE);
-		addressLabel.setText("Adresse: ");
-		final Text addressText = new Text(composite, SWT.BORDER);
-		bindingSupport.bindText(customizerModel, "address", addressText);
-		addressText.setLayoutData(new GridData(SWT.FILL, SWT.DEFAULT, true, false, 5, 1));
+		new TitledSeparator(composite, "Adresse travail").setLayoutData(new GridData(SWT.FILL, SWT.DEFAULT, true, false, 6, 1));
+		CustomizerUtil.setUpAddressComposite(composite, customizerModel, bindingSupport, "workAddress");
+
+		new TitledSeparator(composite, "Numéros téléphone").setLayoutData(new GridData(SWT.FILL, SWT.DEFAULT, true, false, 6, 1));
 		
 		final Label mobileLabel = new Label(composite, SWT.NONE);
 		mobileLabel.setText("Mobile: ");
 		final Text mobileText = new Text(composite, SWT.BORDER);
-		bindingSupport.bindText(customizerModel, "mobilePhone", mobileText);
+		bindingSupport.bindText(customizerModel, "mobilePhone", mobileText, IValidationSupport.NON_EMPTY_VALIDATOR);
 		mobileText.setLayoutData(gridData);
 		
 		final Label landLabel = new Label(composite, SWT.NONE);
@@ -100,15 +105,15 @@ public class ClientCustomizer extends AbstractCustomizer<Person> {
 		final Text faxText = new Text(composite, SWT.BORDER);
 		bindingSupport.bindText(customizerModel, "fax", faxText);
 		faxText.setLayoutData(gridData);
-		
+
 		return composite;
 	}
-	
+
 	@Override
 	public void validateUpdate() {
 		customizerModel.validate();
 	}
-	
+
 	@Override
 	public void cancelUpdate() {
 		// Ask the user to confirm the cancellation

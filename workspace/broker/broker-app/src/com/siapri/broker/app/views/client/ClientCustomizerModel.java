@@ -7,6 +7,8 @@ import org.apache.commons.lang.StringUtils;
 import com.siapri.broker.app.views.common.EAddressType;
 import com.siapri.broker.app.views.common.EPhoneType;
 import com.siapri.broker.app.views.common.customizer.AbstractCustomizerModel;
+import com.siapri.broker.app.views.common.proxy.IProxy;
+import com.siapri.broker.app.views.common.proxy.ProxyFactory;
 import com.siapri.broker.business.model.Address;
 import com.siapri.broker.business.model.Gender;
 import com.siapri.broker.business.model.Person;
@@ -21,6 +23,7 @@ public class ClientCustomizerModel extends AbstractCustomizerModel<Person> {
 	private Address workAddress;
 	private String landPhone;
 	private String mobilePhone;
+	private String fax;
 	
 	protected ClientCustomizerModel() {
 		super(null);
@@ -36,8 +39,8 @@ public class ClientCustomizerModel extends AbstractCustomizerModel<Person> {
 		lastName = target.getLastName();
 		gender = target.getGender();
 		birthdate = target.getBirthdate();
-		homeAddress = target.getAddresses().getOrDefault(EAddressType.HOME.name(), new Address());
-		workAddress = target.getAddresses().getOrDefault(EAddressType.WORK.name(), new Address());
+		homeAddress = ProxyFactory.createProxy(target.getAddresses().getOrDefault(EAddressType.HOME.name(), new Address()));
+		workAddress = ProxyFactory.createProxy(target.getAddresses().getOrDefault(EAddressType.WORK.name(), new Address()));
 		mobilePhone = target.getPhones().get(EPhoneType.MOBILE.name());
 		landPhone = target.getPhones().get(EPhoneType.LAND.name());
 	}
@@ -49,14 +52,12 @@ public class ClientCustomizerModel extends AbstractCustomizerModel<Person> {
 		target.setGender(gender);
 		target.setBirthdate(birthdate);
 		if (StringUtils.isNotBlank(homeAddress.getStreet())) {
-			target.getAddresses().put(EAddressType.HOME.name(), homeAddress);
+			target.getAddresses().put(EAddressType.HOME.name(), (Address) ((IProxy) homeAddress).getTarget());
 		}
 		if (StringUtils.isNotBlank(workAddress.getStreet())) {
-			target.getAddresses().put(EAddressType.WORK.name(), workAddress);
+			target.getAddresses().put(EAddressType.WORK.name(), (Address) ((IProxy) workAddress).getTarget());
 		}
-		if (StringUtils.isNotBlank(mobilePhone)) {
-			target.getPhones().put(EPhoneType.MOBILE.name(), mobilePhone);
-		}
+		target.getPhones().put(EPhoneType.MOBILE.name(), mobilePhone);
 		if (StringUtils.isNotBlank(landPhone)) {
 			target.getPhones().put(EPhoneType.LAND.name(), landPhone);
 		}
@@ -116,6 +117,14 @@ public class ClientCustomizerModel extends AbstractCustomizerModel<Person> {
 
 	public Address getWorkAddress() {
 		return workAddress;
+	}
+	
+	public String getFax() {
+		return fax;
+	}
+	
+	public void setFax(final String fax) {
+		this.fax = fax;
 	}
 	
 }

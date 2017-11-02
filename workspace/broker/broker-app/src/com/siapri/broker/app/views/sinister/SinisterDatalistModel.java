@@ -24,20 +24,20 @@ import com.siapri.broker.business.service.IBasicDaoService;
 
 public class SinisterDatalistModel extends DataListModel {
 	private List<Sinister> sinisters;
-
+	
 	public SinisterDatalistModel(final Composite parent) {
 		initialize(parent);
 	}
-
+	
 	private void initialize(final Composite parent) {
 		labelProvider = new DataListLabelProvider();
-
+		
 		xPathExpressions = new String[] { "Description", "Client" };
-
+		
 		columnDescriptors = new ColumnDescriptor[2];
 		columnDescriptors[0] = new ColumnDescriptor("Description", 0.5, 125);
 		columnDescriptors[1] = new ColumnDescriptor("Client", 0.5, 125);
-
+		
 		final IAction createAction = (event) -> {
 			final Sinister sinister = new Sinister();
 			final String title = "Nouveau sinistre";
@@ -53,7 +53,7 @@ public class SinisterDatalistModel extends DataListModel {
 			}
 			return null;
 		};
-
+		
 		final IAction editAction = (event) -> {
 			final Sinister sinister = (Sinister) event.getTarget();
 			final String title = "Edition d'un sinistre";
@@ -67,14 +67,14 @@ public class SinisterDatalistModel extends DataListModel {
 			}
 			return null;
 		};
-		
+
 		final IAction deleteAction = (event) -> {
 			final Sinister sinister = (Sinister) event.getTarget();
 			BundleUtil.getService(IBasicDaoService.class).delete(sinister);
 			((DataListActionEvent) event).getDataListModel().getDataList().remove(sinister);
 			return sinister;
 		};
-
+		
 		actionModel = new DataListActionModel(createAction, editAction, deleteAction);
 		sinisters = retrieveSinisters();
 		dataList = new WritableList<Object>(new ArrayList<>(sinisters), Sinister.class) {
@@ -84,22 +84,22 @@ public class SinisterDatalistModel extends DataListModel {
 			}
 		};
 	}
-	
+
 	private List<Sinister> retrieveSinisters() {
 		return BundleUtil.getService(IBasicDaoService.class).getAll(Sinister.class);
 	}
-
+	
 	public List<Sinister> getSinisters() {
 		return sinisters;
 	}
-
+	
 	private static final class DataListLabelProvider extends LabelProvider implements ITableLabelProvider {
-
+		
 		@Override
 		public Image getColumnImage(final Object object, final int column) {
 			return null;
 		}
-
+		
 		@Override
 		public String getColumnText(final Object object, final int column) {
 			final Sinister sinister = (Sinister) object;
@@ -107,7 +107,7 @@ public class SinisterDatalistModel extends DataListModel {
 				case 0:
 					return sinister.getDescription();
 				case 1:
-					return sinister.getClient().toString();
+					return "";
 			}
 			return null;
 		}

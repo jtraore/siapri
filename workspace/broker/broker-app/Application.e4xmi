@@ -29,15 +29,21 @@
     <trimBars xmi:id="_HbuvQGU8EeS8lKRWVsNI-w" elementId="broker-app.trimbar.0">
       <children xsi:type="menu:ToolBar" xmi:id="_KESs8GU8EeS8lKRWVsNI-w" elementId="broker-app.toolbar.main">
         <children xsi:type="menu:DirectToolItem" xmi:id="_pRE5EGU8EeS8lKRWVsNI-w" elementId="broker-app.toolbar.main.item.clients" label="Clients" iconURI="platform:/plugin/broker-app/icons/clients.png" tooltip="Affiche les clients" type="Check" contributionURI="bundleclass://broker-app/com.siapri.broker.app.ShowPart">
+          <persistedState key="viewClass" value="com.siapri.broker.app.views.client.ClientView"/>
           <tags>FORCE_TEXT</tags>
         </children>
         <children xsi:type="menu:DirectToolItem" xmi:id="_9QHaYGU8EeS8lKRWVsNI-w" elementId="broker-app.toolbar.main.item.contract" label="Contrats" iconURI="platform:/plugin/broker-app/icons/cases.png" tooltip="Affiche les contrats" type="Check" contributionURI="bundleclass://broker-app/com.siapri.broker.app.ShowPart">
           <tags>FORCE_TEXT</tags>
         </children>
         <children xsi:type="menu:DirectToolItem" xmi:id="_4PvAkIGtEeeNpYTbXqKuzw" elementId="broker-app.toolbar.main.item.sinistres" label="Sinistres" iconURI="platform:/plugin/broker-app/icons/file.png" tooltip="Affiche les sinistres" type="Check" contributionURI="bundleclass://broker-app/com.siapri.broker.app.ShowPart">
+          <persistedState key="viewClass" value="com.siapri.broker.app.views.sinister.SinisterView"/>
           <tags>FORCE_TEXT</tags>
         </children>
         <children xsi:type="menu:DirectToolItem" xmi:id="_PKq58PIIEeW7ltzVlyt5_A" elementId="broker-app.toolbar.main.item.payments" label="Règlements" iconURI="platform:/plugin/broker-app/icons/payments.png" tooltip="Affiche les règlements" type="Check" contributionURI="bundleclass://broker-app/com.siapri.broker.app.ShowPart">
+          <tags>FORCE_TEXT</tags>
+        </children>
+        <children xsi:type="menu:DirectToolItem" xmi:id="_tnvKgMFQEee_XNBMVVCVqA" elementId="broker-app.toolbar.main.item.insurancetype" label="Type d'assurance" iconURI="platform:/plugin/broker-app/icons/cases.png" tooltip="Affiche les type d'assurance" type="Check" contributionURI="bundleclass://broker-app/com.siapri.broker.app.ShowPart">
+          <persistedState key="viewClass" value="InsuranceTypeView"/>
           <tags>FORCE_TEXT</tags>
         </children>
       </children>

@@ -91,12 +91,10 @@ public class ShowPart {
 	@Inject
 	@Optional
 	private void partActivated(@Active final MPart part) {
-		// final MPartStack partStack = (MPartStack) modelService.find(Activator.MAIN_PART_STACK_ID, application);
-		// if (!partViewService.getPartViewMapping().containsKey(part.getElementId().substring(partStack.getElementId().length() + 1))) {
-		// return;
-		// }
-		
 		final PartView<?> view = partViewService.getPartView(part.getElementId());
+		if (view == null) {
+			return;
+		}
 		eventBroker.post(IApplicationEvent.ITEMS_COUNT, view.getDataListComposite().getDataListModel().getDataList().size());
 		
 		preferences.put("broker.parts.active", part.getElementId());

@@ -12,12 +12,12 @@
                value="siapri broker">
          </property>
          <property
+               name="cssTheme"
+               value="broker">
+         </property>
+         <property
            name="lifeCycleURI"
            value="bundleclass://broker-app/com.siapri.broker.app.ApplicationLifeCycleManager">
-         </property>
-          <property
-           name="applicationCSS"
-           value="platform:/plugin/broker-app/css/default.css">
          </property>
          <property
                name="startupForegroundColor"
@@ -38,41 +38,8 @@
       </product>
    </extension>
    <extension
-         point="org.eclipse.ui.intro">
-      <intro
-            class="org.eclipse.ui.intro.config.CustomizableIntroPart"
-            id="broker-app.intro">
-      </intro>
-      <introProductBinding
-            introId="broker-app.intro"
-            productId="broker-app.product">
-      </introProductBinding>
-   </extension>
-   <extension
-         point="org.eclipse.ui.intro.config">
-      <config
-            content="introContent.xml"
-            id="broker-app.introConfigId"
-            introId="broker-app.intro">
-         <presentation
-               home-page-id="root">
-            <implementation
-                  kind="html"
-                  os="win32,linux,macosx"
-                  style="content/shared.css">
-            </implementation>
-         </presentation>
-      </config>
-   </extension>
-   <extension
-         point="org.eclipse.ui.services">
-      <sourceProvider
-            provider="com.siapri.broker.app.authentication.SessionSourceProvider">
-         <variable
-               name="com.siapri.broker.app.sessionState"
-               priorityLevel="workbench">
-         </variable>
-      </sourceProvider>
+         point="org.eclipse.e4.ui.css.swt.theme">
+         <theme label="broker" id="broker" basestylesheeturi="css/default.css" />
    </extension>
 
 </plugin>

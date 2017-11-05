@@ -26,36 +26,36 @@ import com.siapri.broker.app.views.common.datalist.DataListModel;
 import com.siapri.broker.business.model.AbstractEntity;
 
 public abstract class PartView<T> {
-
+	
 	@Inject
 	protected MPart currentPart;
-
+	
 	@Inject
 	protected MApplication application;
-
+	
 	@Inject
 	protected EModelService modelService;
-
+	
 	@Inject
 	protected PartViewService partViewService;
-
+	
 	@Inject
 	private IEventBroker eventBroker;
-
+	
 	@Inject
 	@Preference
 	private IEclipsePreferences preferences;
-
+	
 	protected DataListComposite dataListComposite;
-
+	
 	protected DataListModel dataListModel;
-
+	
 	protected abstract void createGui(final Composite parent);
-
+	
 	@Inject
 	public PartView() {
 	}
-
+	
 	@PostConstruct
 	public void postConstruct(final Composite parent) {
 		createGui(parent);
@@ -63,7 +63,7 @@ public abstract class PartView<T> {
 		dataListComposite.setLayoutData(new GridData(GridData.FILL, GridData.FILL, true, true));
 		BundleUtil.getService(PartViewService.class).addPartView(currentPart.getElementId(), this);
 	}
-
+	
 	@PreDestroy
 	public void preDestroy() {
 		final String partId = currentPart.getElementId();
@@ -74,15 +74,15 @@ public abstract class PartView<T> {
 		BundleUtil.getService(PartViewService.class).removeDetailCompositeProvider(partId);
 		eventBroker.post(IApplicationEvent.ITEMS_COUNT, -1);
 	}
-
+	
 	public void select(final Object object) {
 		dataListComposite.select(object);
 	}
-
+	
 	public DataListComposite getDataListComposite() {
 		return dataListComposite;
 	}
-
+	
 	@Inject
 	@Optional
 	private void itemCreated(@UIEventTopic(IApplicationEvent.ITEM_CREATED) final Object item) {
@@ -90,13 +90,13 @@ public abstract class PartView<T> {
 			dataListModel.getDataList().add(item);
 		}
 	}
-
+	
 	@Inject
 	@Optional
 	private void itemSelected(@UIEventTopic(IApplicationEvent.ITEM_SELECTED) final AbstractEntity item) {
-		if (item.getClass().equals(dataListModel.getElementType()) && dataListModel.getDataList().contains(item)) {
+		if (item != null && item.getClass().equals(dataListModel.getElementType()) && dataListModel.getDataList().contains(item)) {
 			preferences.putLong(currentPart.getElementId() + ".item.selection", item.getId());
 		}
 	}
-
+	
 }

@@ -1,43 +1,39 @@
 package com.siapri.broker.business.model;
 
 import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.Embeddable;
 
-@Entity
-@Table(name = "WARRANTY")
-public class Warranty extends AbstractEntity {
+@Embeddable
+public class Warranty {
+	
+	@Column(name = "CODE")
+	private String code;
 
-	private static final long serialVersionUID = 1L;
-	
-	@Column(name = "NAME")
-	private String name;
-	
 	@Column(name = "DESCRIPTION")
 	private String description;
-	
+
 	public Warranty() {
 	}
-
+	
 	public Warranty(final String name, final String description) {
-		this.name = name;
+		code = name;
 		this.description = description;
 	}
-
-	public String getName() {
-		return name;
+	
+	public String getCode() {
+		return code;
 	}
 
-	public void setName(final String name) {
-		this.name = name;
+	public void setCode(final String code) {
+		this.code = code;
 	}
-
+	
 	public String getDescription() {
 		return description;
 	}
-
+	
 	public void setDescription(final String description) {
 		this.description = description;
 	}
-
+	
 }

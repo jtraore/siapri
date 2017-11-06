@@ -29,9 +29,9 @@ public class Contract extends AbstractDocumentProvider {
 	@Column(name = "NUMBER", nullable = false)
 	private String number;
 
-	@Column(name = "SUBSCRIBTION_DATE")
+	@Column(name = "SUBSCRIPTION_DATE")
 	@Type(type = "org.jadira.usertype.dateandtime.threeten.PersistentZonedDateTime")
-	private ZonedDateTime subscribtionDate;
+	private ZonedDateTime subscriptionDate;
 
 	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinColumn(name = "SINISTER_ID", referencedColumnName = "ID")
@@ -56,7 +56,7 @@ public class Contract extends AbstractDocumentProvider {
 
 	public Contract(final String number, final ZonedDateTime subscribtionDate) {
 		this.number = number;
-		this.subscribtionDate = subscribtionDate;
+		subscriptionDate = subscribtionDate;
 	}
 	
 	public String getNumber() {
@@ -67,12 +67,12 @@ public class Contract extends AbstractDocumentProvider {
 		this.number = number;
 	}
 	
-	public ZonedDateTime getSubscribtionDate() {
-		return subscribtionDate;
+	public ZonedDateTime getSubscriptionDate() {
+		return subscriptionDate;
 	}
 	
-	public void setSubscribtionDate(final ZonedDateTime subscribtionDate) {
-		this.subscribtionDate = subscribtionDate;
+	public void setSubscriptionDate(final ZonedDateTime subscribtionDate) {
+		subscriptionDate = subscribtionDate;
 	}
 	
 	public List<Sinister> getSinisters() {

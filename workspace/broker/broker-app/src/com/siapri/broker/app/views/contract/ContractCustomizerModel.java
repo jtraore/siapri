@@ -30,7 +30,7 @@ public class ContractCustomizerModel extends AbstractCustomizerModel<Contract> {
 			subscriptionDate = Date.from(target.getSubscriptionDate().toInstant());
 		}
 		client = target.getClient();
-		insuranceType = target.getInsuranceType();
+		// insuranceType = target.getInsuranceType();
 	}
 
 	@Override
@@ -38,6 +38,39 @@ public class ContractCustomizerModel extends AbstractCustomizerModel<Contract> {
 		target.setNumber(number);
 		target.setSubscriptionDate(subscriptionDate.toInstant().atZone(ZoneId.systemDefault()));
 		target.setClient(client);
-		target.setInsuranceType(insuranceType);
+		// target.setInsuranceType(insuranceType);
 	}
+
+	public String getNumber() {
+		return number;
+	}
+
+	public void setNumber(final String number) {
+		this.number = number;
+	}
+
+	public Date getSubscriptionDate() {
+		return subscriptionDate;
+	}
+
+	public void setSubscriptionDate(final Date subscriptionDate) {
+		this.subscriptionDate = subscriptionDate;
+	}
+
+	public Client getClient() {
+		return client;
+	}
+
+	public void setClient(final Client client) {
+		this.client = client;
+	}
+
+	public InsuranceType getInsuranceType() {
+		return insuranceType;
+	}
+
+	public void setInsuranceType(final InsuranceType insuranceType) {
+		this.insuranceType = insuranceType;
+	}
+
 }

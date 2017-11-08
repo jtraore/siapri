@@ -73,13 +73,13 @@ public class ContractCustomizer extends AbstractCustomizer<Contract> {
 		final DataListModel clientListModel = new ClientDataListModel(parent);
 		final SearchContext cleintSearchContext = new SearchContext(clientListModel, clientLabelProvider, "Recherche client", "Cette fenetre permet de rechercher un client");
 		final ObjectSeekComposite clientSeekComposite = new ObjectSeekComposite(composite, cleintSearchContext);
-		clientSeekComposite.setLayoutData(new GridData(SWT.FILL, SWT.DEFAULT, true, false, 6, 1));
+		clientSeekComposite.setLayoutData(new GridData(SWT.FILL, SWT.DEFAULT, true, false, 5, 1));
 		bindingSupport.bindObjectSeekComposite(customizerModel, "client", clientSeekComposite, IValidationSupport.NON_EMPTY_VALIDATOR);
 
 		new TitledSeparator(composite, "Type d'assurance et garanties").setLayoutData(new GridData(SWT.FILL, SWT.DEFAULT, true, false, 6, 1));
 
 		final Label insuranceTypeLabel = new Label(composite, SWT.NONE);
-		insuranceTypeLabel.setText("Type d'assurance:");
+		insuranceTypeLabel.setText("Type d'assurance: ");
 
 		final LabelProvider insuranceTypeLabelProvider = new LabelProvider() {
 			@Override
@@ -91,7 +91,7 @@ public class ContractCustomizer extends AbstractCustomizer<Contract> {
 		final DataListModel insuranceTypeListModel = new InsuranceTypeDataListModel(parent);
 		final SearchContext insuranceTypeSearchContext = new SearchContext(insuranceTypeListModel, insuranceTypeLabelProvider, "Recherche type d'assurance", "Cette fenetre permet de rechercher un type d'assurance");
 		final ObjectSeekComposite insuranceTypeComposite = new ObjectSeekComposite(composite, insuranceTypeSearchContext);
-		clientSeekComposite.setLayoutData(new GridData(SWT.FILL, SWT.DEFAULT, true, false, 6, 1));
+		insuranceTypeComposite.setLayoutData(new GridData(SWT.FILL, SWT.DEFAULT, true, false, 5, 1));
 		bindingSupport.bindObjectSeekComposite(customizerModel, "insuranceType", insuranceTypeComposite, IValidationSupport.NON_EMPTY_VALIDATOR);
 
 		// final WarrantyDataListModel dataListModel = new WarrantyDataListModel(composite, object);

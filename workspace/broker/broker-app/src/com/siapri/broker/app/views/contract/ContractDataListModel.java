@@ -43,7 +43,7 @@ public class ContractDataListModel extends DataListModel {
 		
 		xPathExpressions = new String[] { "number", "client.firstName", "client.LastName" };
 		
-		columnDescriptors = new ColumnDescriptor[2];
+		columnDescriptors = new ColumnDescriptor[3];
 		columnDescriptors[0] = new ColumnDescriptor("Number", 0.30, 125);
 		columnDescriptors[1] = new ColumnDescriptor("Date", 0.20, 125);
 		columnDescriptors[2] = new ColumnDescriptor("Client", 0.50, 125);
@@ -66,7 +66,7 @@ public class ContractDataListModel extends DataListModel {
 		
 		final IAction editAction = (event) -> {
 			final Contract contract = (Contract) event.getTarget();
-			final String title = "Edition d'un type contrat";
+			final String title = "Edition d'un contrat";
 			final String description = String.format("Cette fenêtre permet d'éditer un contrat");
 			final ContractCustomizer customizer = new ContractCustomizer(contract, title, description);
 			final DocumentList documentList = new DocumentList(contract.getDocuments());

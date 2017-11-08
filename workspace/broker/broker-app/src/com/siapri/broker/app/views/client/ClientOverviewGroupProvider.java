@@ -11,26 +11,26 @@ import com.siapri.broker.business.model.Person;
 import com.siapri.broker.business.service.IBasicDaoService;
 
 public class ClientOverviewGroupProvider implements IOverviewGroupProvider<Person> {
-	
+
 	@Override
 	public String getTitle() {
-		return "Particuliers recemment enregistrés";
+		return "Derniers clients enregistrés";
 	}
-	
+
 	@Override
 	public List<OverviewItem<Person>> getOverviewItems() {
 		return getOverviewClients().stream().map(client -> createOverviewItem(client)).collect(Collectors.toList());
 	}
-	
+
 	@Override
 	public IOverviewItemLocator<Person> getItemLocator() {
 		return new ClientOverviewItemLocator();
 	}
-	
+
 	public static OverviewItem<Person> createOverviewItem(final Person client) {
 		return new OverviewItem<>(client, client.getFirstName() + " " + client.getLastName());
 	}
-	
+
 	protected List<Person> getOverviewClients() {
 		return BundleUtil.getService(IBasicDaoService.class).getLatestElements(Person.class, 10);
 	}

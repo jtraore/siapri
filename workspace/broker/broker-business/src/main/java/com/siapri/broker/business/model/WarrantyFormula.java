@@ -5,21 +5,28 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
-import javax.persistence.Embeddable;
+import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
-@Embeddable
-public class WarrantyFormula {
+@Entity
+@Table(name = "WARRANTY_FORMULA")
+public class WarrantyFormula extends AbstractEntity {
+
+	private static final long serialVersionUID = 1L;
+	
+	@Column(name = "CODE")
+	private String code;
 	
 	@Column(name = "NAME")
 	private String name;
-
+	
 	@NotNull
 	@ManyToOne
 	@JoinColumn(name = "INSURANCE_TYPE_ID")
@@ -28,6 +35,14 @@ public class WarrantyFormula {
 	@ElementCollection(fetch = FetchType.EAGER)
 	@Fetch(value = FetchMode.SUBSELECT)
 	private List<String> warrantyCodes = new ArrayList<>();
+
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(final String code) {
+		this.code = code;
+	}
 	
 	public String getName() {
 		return name;
@@ -36,11 +51,11 @@ public class WarrantyFormula {
 	public void setName(final String name) {
 		this.name = name;
 	}
-
+	
 	public InsuranceType getInsuranceType() {
 		return insuranceType;
 	}
-
+	
 	public void setInsuranceType(final InsuranceType insuranceType) {
 		this.insuranceType = insuranceType;
 	}

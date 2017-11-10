@@ -6,7 +6,6 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
@@ -42,8 +41,8 @@ public class Contract extends AbstractDocumentProvider {
 	@JoinColumn(name = "CLIENT_ID", nullable = false)
 	private Client client;
 	
-	@NotNull
-	@Embedded
+	@ManyToOne
+	@JoinColumn(name = "WARRANTY_FORMULA_ID"/* , nullable = false */)
 	private WarrantyFormula warrantyFormula;
 	
 	public Contract() {

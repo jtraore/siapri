@@ -28,7 +28,7 @@ public class InsuranceType extends AbstractEntity {
 	@ElementCollection(fetch = FetchType.EAGER)
 	@Fetch(value = FetchMode.SUBSELECT)
 	private List<Warranty> warranties = new ArrayList<>();
-
+	
 	public InsuranceType() {
 	}
 

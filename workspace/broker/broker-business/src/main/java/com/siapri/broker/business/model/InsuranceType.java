@@ -3,10 +3,13 @@ package com.siapri.broker.business.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.Fetch;
@@ -28,6 +31,11 @@ public class InsuranceType extends AbstractEntity {
 	@ElementCollection(fetch = FetchType.EAGER)
 	@Fetch(value = FetchMode.SUBSELECT)
 	private List<Warranty> warranties = new ArrayList<>();
+	
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@JoinColumn(name = "INSURANCE_TYPE_ID", referencedColumnName = "ID")
+	@Fetch(value = FetchMode.SUBSELECT)
+	private List<WarrantyFormula> formulas = new ArrayList<>();
 	
 	public InsuranceType() {
 	}
@@ -59,6 +67,14 @@ public class InsuranceType extends AbstractEntity {
 	
 	public void setWarranties(final List<Warranty> warranties) {
 		this.warranties = warranties;
+	}
+	
+	public List<WarrantyFormula> getFormulas() {
+		return formulas;
+	}
+	
+	public void setFormulas(final List<WarrantyFormula> formulas) {
+		this.formulas = formulas;
 	}
 
 }

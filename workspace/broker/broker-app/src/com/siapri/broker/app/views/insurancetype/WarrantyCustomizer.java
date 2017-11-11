@@ -13,29 +13,29 @@ import com.siapri.broker.app.views.common.proxy.ProxyFactory;
 import com.siapri.broker.business.model.Warranty;
 
 public class WarrantyCustomizer extends AbstractCustomizer<Warranty> {
-
-	private final WarrantyCustomizerModel customizerModel;
 	
+	private final WarrantyCustomizerModel customizerModel;
+
 	public WarrantyCustomizer(final Warranty warranty, final String title, final String description) {
 		super(warranty, title, description);
 		customizerModel = ProxyFactory.createProxy(new WarrantyCustomizerModel(warranty));
 	}
-	
+
 	@Override
 	public Composite createArea(final Composite parent, final int style) {
 		parent.setLayout(new GridLayout());
 		final Composite composite = new Composite(parent, SWT.NONE);
 		final GridLayout gridLayout = new GridLayout(6, false);
 		composite.setLayout(gridLayout);
-
+		
 		final Label codeLabel = new Label(composite, SWT.NONE);
-		codeLabel.setText("Nom: ");
+		codeLabel.setText("Code: ");
 		final Text codeText = new Text(composite, SWT.BORDER);
 		bindingSupport.bindText(customizerModel, "code", codeText, IValidationSupport.NON_EMPTY_VALIDATOR);
 		codeText.setLayoutData(new GridData(SWT.FILL, SWT.DEFAULT, true, false, 2, 1));
-
-		new Label(composite, SWT.NONE).setLayoutData(new GridData(SWT.FILL, SWT.DEFAULT, true, false, 3, 1));
 		
+		new Label(composite, SWT.NONE).setLayoutData(new GridData(SWT.FILL, SWT.DEFAULT, true, false, 3, 1));
+
 		final Label descriptionLabel = new Label(composite, SWT.NONE);
 		descriptionLabel.setText("description: ");
 		descriptionLabel.setLayoutData(new GridData(SWT.DEFAULT, SWT.DEFAULT, false, false));
@@ -44,17 +44,17 @@ public class WarrantyCustomizer extends AbstractCustomizer<Warranty> {
 		final GridData descriptionTextGridData = new GridData(SWT.FILL, SWT.DEFAULT, true, false, 5, 1);
 		descriptionTextGridData.heightHint = 120;
 		descriptionText.setLayoutData(descriptionTextGridData);
-
+		
 		return composite;
 	}
-	
+
 	@Override
 	public void validateUpdate() {
 		customizerModel.validate();
 	}
-	
+
 	@Override
 	public void cancelUpdate() {
 	}
-
+	
 }

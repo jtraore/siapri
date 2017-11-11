@@ -94,7 +94,7 @@ public class ContractCustomizer extends AbstractCustomizer<Contract> {
 		insuranceTypeComposite.setLayoutData(new GridData(SWT.FILL, SWT.DEFAULT, true, false, 5, 1));
 		bindingSupport.bindObjectSeekComposite(customizerModel, "insuranceType", insuranceTypeComposite, IValidationSupport.NON_EMPTY_VALIDATOR);
 
-		// final WarrantyDataListModel dataListModel = new WarrantyDataListModel(composite, object);
+		// final FormulaDataListModel dataListModel = new FormulaDataListModel(composite, object);
 		// final DataListComposite dataListComposite = new DataListComposite(composite, SWT.NONE, dataListModel);
 		// final GridData warrantiGridData = new GridData(GridData.FILL, GridData.FILL, true, true, 6, 1);
 		// warrantiGridData.heightHint = 500;

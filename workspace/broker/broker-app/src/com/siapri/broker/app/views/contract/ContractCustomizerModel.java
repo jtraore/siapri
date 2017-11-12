@@ -7,6 +7,7 @@ import com.siapri.broker.app.views.common.customizer.AbstractCustomizerModel;
 import com.siapri.broker.business.model.Client;
 import com.siapri.broker.business.model.Contract;
 import com.siapri.broker.business.model.InsuranceType;
+import com.siapri.broker.business.model.WarrantyFormula;
 
 public class ContractCustomizerModel extends AbstractCustomizerModel<Contract> {
 	
@@ -14,13 +15,15 @@ public class ContractCustomizerModel extends AbstractCustomizerModel<Contract> {
 	private Date subscriptionDate;
 	private Client client;
 	private InsuranceType insuranceType;
+	private WarrantyFormula warrantyFormula;
 	
 	public ContractCustomizerModel() {
-		this(null);
+		this(null, null);
 	}
 	
-	public ContractCustomizerModel(final Contract target) {
+	public ContractCustomizerModel(final Contract target, final InsuranceType insuranceType) {
 		super(target);
+		this.insuranceType = insuranceType;
 	}
 
 	@Override
@@ -30,7 +33,7 @@ public class ContractCustomizerModel extends AbstractCustomizerModel<Contract> {
 			subscriptionDate = Date.from(target.getSubscriptionDate().toInstant());
 		}
 		client = target.getClient();
-		// insuranceType = target.getInsuranceType();
+		warrantyFormula = target.getWarrantyFormula();
 	}
 
 	@Override
@@ -39,6 +42,7 @@ public class ContractCustomizerModel extends AbstractCustomizerModel<Contract> {
 		target.setSubscriptionDate(subscriptionDate.toInstant().atZone(ZoneId.systemDefault()));
 		target.setClient(client);
 		// target.setInsuranceType(insuranceType);
+		target.setWarrantyFormula(warrantyFormula);
 	}
 
 	public String getNumber() {
@@ -71,6 +75,14 @@ public class ContractCustomizerModel extends AbstractCustomizerModel<Contract> {
 
 	public void setInsuranceType(final InsuranceType insuranceType) {
 		this.insuranceType = insuranceType;
+	}
+	
+	public WarrantyFormula getWarrantyFormula() {
+		return warrantyFormula;
+	}
+	
+	public void setWarrantyFormula(final WarrantyFormula warrantyFormula) {
+		this.warrantyFormula = warrantyFormula;
 	}
 
 }

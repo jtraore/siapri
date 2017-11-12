@@ -1,36 +1,59 @@
 package com.siapri.broker.app.views.contract;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.eclipse.core.databinding.observable.list.WritableList;
+import org.eclipse.jface.databinding.viewers.ObservableListContentProvider;
+import org.eclipse.jface.viewers.ArrayContentProvider;
+import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.jface.viewers.TableLayout;
+import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.DateTime;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.Text;
 
 import com.siapri.broker.app.views.client.ClientDataListModel;
+import com.siapri.broker.app.views.common.EImage;
 import com.siapri.broker.app.views.common.TitledSeparator;
 import com.siapri.broker.app.views.common.customizer.AbstractCustomizer;
 import com.siapri.broker.app.views.common.customizer.IValidationSupport;
 import com.siapri.broker.app.views.common.customizer.ObjectSeekComposite;
 import com.siapri.broker.app.views.common.customizer.SearchContext;
 import com.siapri.broker.app.views.common.datalist.DataListModel;
+import com.siapri.broker.app.views.common.proxy.IProxy;
 import com.siapri.broker.app.views.common.proxy.ProxyFactory;
-import com.siapri.broker.app.views.insurancetype.InsuranceTypeDataListModel;
 import com.siapri.broker.business.model.Company;
 import com.siapri.broker.business.model.Contract;
 import com.siapri.broker.business.model.InsuranceType;
 import com.siapri.broker.business.model.Person;
+import com.siapri.broker.business.model.Warranty;
+import com.siapri.broker.business.model.WarrantyFormula;
 
 public class ContractCustomizer extends AbstractCustomizer<Contract> {
 	
 	private final ContractCustomizerModel customizerModel;
+	private final List<InsuranceType> insuranceTypes;
 
-	public ContractCustomizer(final Contract contract, final String title, final String description) {
+	public ContractCustomizer(final Contract contract, final List<InsuranceType> insuranceTypes, final String title, final String description) {
 		super(contract, title, description);
-		customizerModel = ProxyFactory.createProxy(new ContractCustomizerModel(contract));
+		final WarrantyFormula formula = contract.getWarrantyFormula();
+		InsuranceType insuranceType = null;
+		if (formula != null) {
+			insuranceType = insuranceTypes.stream().filter(it -> it.getFormulas().contains(formula)).findFirst().get();
+		}
+		customizerModel = ProxyFactory.createProxy(new ContractCustomizerModel(contract, insuranceType));
+		this.insuranceTypes = insuranceTypes;
 	}
 
 	@Override
@@ -80,27 +103,105 @@ public class ContractCustomizer extends AbstractCustomizer<Contract> {
 
 		final Label insuranceTypeLabel = new Label(composite, SWT.NONE);
 		insuranceTypeLabel.setText("Type d'assurance: ");
-
-		final LabelProvider insuranceTypeLabelProvider = new LabelProvider() {
+		
+		final ComboViewer insuranceTypeComboViewer = new ComboViewer(composite, SWT.READ_ONLY);
+		insuranceTypeComboViewer.getCombo().setLayoutData(new GridData(SWT.FILL, SWT.DEFAULT, true, false, 5, 1));
+		insuranceTypeComboViewer.setContentProvider(ArrayContentProvider.getInstance());
+		insuranceTypeComboViewer.setLabelProvider(new LabelProvider() {
 			@Override
 			public String getText(final Object element) {
-				final InsuranceType insuranceType = (InsuranceType) element;
-				return insuranceType.getCode();
+				return ((InsuranceType) element).getName();
 			}
-		};
-		final DataListModel insuranceTypeListModel = new InsuranceTypeDataListModel(parent);
-		final SearchContext insuranceTypeSearchContext = new SearchContext(insuranceTypeListModel, insuranceTypeLabelProvider, "Recherche type d'assurance", "Cette fenetre permet de rechercher un type d'assurance");
-		final ObjectSeekComposite insuranceTypeComposite = new ObjectSeekComposite(composite, insuranceTypeSearchContext);
-		insuranceTypeComposite.setLayoutData(new GridData(SWT.FILL, SWT.DEFAULT, true, false, 5, 1));
-		bindingSupport.bindObjectSeekComposite(customizerModel, "insuranceType", insuranceTypeComposite, IValidationSupport.NON_EMPTY_VALIDATOR);
+		});
+		insuranceTypeComboViewer.setInput(insuranceTypes.toArray());
+		bindingSupport.bindComboViewer(customizerModel, "insuranceType", insuranceTypeComboViewer, IValidationSupport.NON_EMPTY_VALIDATOR);
 
-		// final FormulaDataListModel dataListModel = new FormulaDataListModel(composite, object);
-		// final DataListComposite dataListComposite = new DataListComposite(composite, SWT.NONE, dataListModel);
-		// final GridData warrantiGridData = new GridData(GridData.FILL, GridData.FILL, true, true, 6, 1);
-		// warrantiGridData.heightHint = 500;
-		// dataListComposite.setLayoutData(warrantiGridData);
+		final Label formulaLabel = new Label(composite, SWT.NONE);
+		formulaLabel.setText("Formule de garanties: ");
+		
+		final ComboViewer formulaComboViewer = new ComboViewer(composite, SWT.READ_ONLY);
+		formulaComboViewer.getCombo().setLayoutData(new GridData(SWT.FILL, SWT.DEFAULT, true, false, 5, 1));
+		formulaComboViewer.setContentProvider(new ObservableListContentProvider());
+		formulaComboViewer.setLabelProvider(new LabelProvider() {
+			@Override
+			public String getText(final Object element) {
+				return ((WarrantyFormula) element).getName();
+			}
+		});
+		final WritableList<Object> formulaList = new WritableList<>(new ArrayList<>(), WarrantyFormula.class);
+		formulaComboViewer.setInput(formulaList);
+		if (customizerModel.getInsuranceType() != null) {
+			formulaList.addAll(customizerModel.getInsuranceType().getFormulas());
+		}
+		bindingSupport.bindComboViewer(customizerModel, "warrantyFormula", formulaComboViewer, IValidationSupport.NON_EMPTY_VALIDATOR);
+
+		((IProxy) customizerModel).addPropertyChangeListener(event -> {
+			if (event.getPropertyName().equals("insuranceType")) {
+				formulaList.clear();
+				formulaList.addAll(((InsuranceType) event.getNewValue()).getFormulas());
+				formulaComboViewer.refresh();
+			}
+		});
+
+		final Composite warrantyTableComposite = new Composite(composite, SWT.NONE);
+		final GridData wrrantyGridData = new GridData(SWT.FILL, SWT.FILL, true, true, 6, 1);
+		warrantyTableComposite.setLayoutData(wrrantyGridData);
+		warrantyTableComposite.setLayout(new FillLayout());
+		wrrantyGridData.heightHint = 300;
+		createWarrantyTable(warrantyTableComposite);
 		
 		return composite;
+	}
+	
+	private void createWarrantyTable(final Composite parent) {
+
+		final TableViewer tableViewer = new TableViewer(parent, SWT.SINGLE | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
+
+		final Table table = tableViewer.getTable();
+		table.setHeaderVisible(true);
+		table.setLinesVisible(true);
+
+		final TableLayout tableLayout = new TableLayout();
+		table.setLayout(tableLayout);
+
+		tableViewer.setContentProvider(new ObservableListContentProvider());
+
+		final TableViewerColumn columnName = new TableViewerColumn(tableViewer, SWT.NONE);
+		columnName.getColumn().setText("Garanties");
+		columnName.getColumn().setWidth(700);
+
+		tableViewer.setLabelProvider(new LabelProvider() {
+			@Override
+			public Image getImage(final Object element) {
+				final WarrantyFormula formula = customizerModel.getWarrantyFormula();
+				if (formula != null) {
+					if (formula.getWarrantyCodes().contains(((Warranty) element).getCode())) {
+						return EImage.OK.getSwtImage();
+					}
+				}
+				return null;
+			}
+			
+			@Override
+			public final String getText(final Object element) {
+				return super.getText(((Warranty) element).getDescription());
+			}
+		});
+		final WritableList<Warranty> writableList = new WritableList<>(new ArrayList<>(), Warranty.class);
+		if (customizerModel.getInsuranceType() != null) {
+			writableList.addAll(customizerModel.getInsuranceType().getWarranties());
+		}
+		tableViewer.setInput(writableList);
+
+		((IProxy) customizerModel).addPropertyChangeListener(event -> {
+			if (event.getPropertyName().equals("insuranceType")) {
+				writableList.clear();
+				writableList.addAll(((InsuranceType) event.getNewValue()).getWarranties());
+				tableViewer.refresh();
+			} else if (event.getPropertyName().equals("warrantyFormula")) {
+				tableViewer.refresh();
+			}
+		});
 	}
 
 	@Override

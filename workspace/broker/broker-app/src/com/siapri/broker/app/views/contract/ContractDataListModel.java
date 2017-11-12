@@ -12,7 +12,6 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 
 import com.siapri.broker.app.BundleUtil;
-import com.siapri.broker.app.views.common.action.DataListActionEvent;
 import com.siapri.broker.app.views.common.action.IAction;
 import com.siapri.broker.app.views.common.customizer.CustomizerDialog;
 import com.siapri.broker.app.views.common.customizer.DialogBox;
@@ -52,14 +51,12 @@ public class ContractDataListModel extends DataListModel {
 			final Contract contract = new Contract();
 			final String title = "Nouveau contrat";
 			final String description = String.format("Cette fenêtre permet de créer un nouveau contrat");
-			final ContractCustomizer customizer = new ContractCustomizer(contract, title, description);
+			final ContractCustomizer customizer = new ContractCustomizer(contract, retrieveInsuranceTypes(), title, description);
 			final DocumentList documentList = new DocumentList(contract.getDocuments());
 			final DialogBox dialog = new CustomizerDialog(parent.getShell(), customizer);
 			if (dialog.open() == Window.OK) {
 				// Save to DB
-				final Contract savedContract = BundleUtil.getService(IBasicDaoService.class).save(contract);
-				((DataListActionEvent) event).getDataListModel().getDataList().add(savedContract);
-				return savedContract;
+				return BundleUtil.getService(IBasicDaoService.class).save(contract);
 			}
 			return null;
 		};
@@ -68,7 +65,7 @@ public class ContractDataListModel extends DataListModel {
 			final Contract contract = (Contract) event.getTarget();
 			final String title = "Edition d'un contrat";
 			final String description = String.format("Cette fenêtre permet d'éditer un contrat");
-			final ContractCustomizer customizer = new ContractCustomizer(contract, title, description);
+			final ContractCustomizer customizer = new ContractCustomizer(contract, retrieveInsuranceTypes(), title, description);
 			final DocumentList documentList = new DocumentList(contract.getDocuments());
 			final CustomizerDialog dialog = new CustomizerDialog(parent.getShell(), customizer);
 			
@@ -90,7 +87,6 @@ public class ContractDataListModel extends DataListModel {
 			final Contract contract = (Contract) event.getTarget();
 			// Delete from DB
 			BundleUtil.getService(IBasicDaoService.class).delete(contract);
-			((DataListActionEvent) event).getDataListModel().getDataList().remove(contract);
 			return contract;
 		};
 		
@@ -108,6 +104,10 @@ public class ContractDataListModel extends DataListModel {
 	
 	private List<Contract> retrieveContracts() {
 		return BundleUtil.getService(IBasicDaoService.class).getAll(Contract.class);
+	}
+
+	private List<InsuranceType> retrieveInsuranceTypes() {
+		return BundleUtil.getService(IBasicDaoService.class).getAll(InsuranceType.class);
 	}
 
 	private static final class DataListLabelProvider extends LabelProvider implements ITableLabelProvider {

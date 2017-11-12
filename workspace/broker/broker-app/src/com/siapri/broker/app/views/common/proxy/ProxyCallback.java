@@ -4,6 +4,7 @@ import java.beans.Introspector;
 import java.beans.PropertyChangeListener;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.Objects;
 
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
@@ -29,7 +30,7 @@ public class ProxyCallback implements MethodInterceptor {
 			
 			final Object obj = method.invoke(proxy.getTarget(), args);
 			
-			if (oldValue != null) {
+			if (args.length > 0 && !Objects.equals(oldValue, args[0])) {
 				// extract the property name of the bean : ex : with method getClientName(), the bean property is clientName.
 				final String property = method.getName().substring(3);
 				proxy.firePropertyChange(Introspector.decapitalize(property), oldValue, args[0]);// TODO here replace

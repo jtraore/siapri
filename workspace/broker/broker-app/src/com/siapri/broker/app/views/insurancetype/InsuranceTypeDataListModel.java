@@ -11,7 +11,6 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 
 import com.siapri.broker.app.BundleUtil;
-import com.siapri.broker.app.views.common.action.DataListActionEvent;
 import com.siapri.broker.app.views.common.action.IAction;
 import com.siapri.broker.app.views.common.customizer.CustomizerDialog;
 import com.siapri.broker.app.views.common.customizer.DialogBox;
@@ -48,9 +47,7 @@ public class InsuranceTypeDataListModel extends DataListModel {
 			final DialogBox dialog = new CustomizerDialog(parent.getShell(), customizer);
 			if (dialog.open() == Window.OK) {
 				// Save to DB
-				final InsuranceType savedInsuranceType = BundleUtil.getService(IBasicDaoService.class).save(insuranceType);
-				((DataListActionEvent) event).getDataListModel().getDataList().add(savedInsuranceType);
-				return savedInsuranceType;
+				return BundleUtil.getService(IBasicDaoService.class).save(insuranceType);
 			}
 			return null;
 		};
@@ -80,7 +77,6 @@ public class InsuranceTypeDataListModel extends DataListModel {
 			final InsuranceType insuranceType = (InsuranceType) event.getTarget();
 			// Delete from DB
 			BundleUtil.getService(IBasicDaoService.class).delete(insuranceType);
-			((DataListActionEvent) event).getDataListModel().getDataList().remove(insuranceType);
 			return insuranceType;
 		};
 

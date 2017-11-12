@@ -9,7 +9,6 @@ import org.eclipse.jface.window.Window;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 
-import com.siapri.broker.app.views.common.action.DataListActionEvent;
 import com.siapri.broker.app.views.common.action.IAction;
 import com.siapri.broker.app.views.common.customizer.CustomizerDialog;
 import com.siapri.broker.app.views.common.customizer.DialogBox;
@@ -46,7 +45,6 @@ public class FormulaDataListModel extends DataListModel {
 			final DialogBox dialog = new CustomizerDialog(parent.getShell(), customizer);
 			if (dialog.open() == Window.OK) {
 				insuranceType.getFormulas().add(formula);
-				((DataListActionEvent) event).getDataListModel().getDataList().add(formula);
 				return formula;
 			}
 			return null;
@@ -67,7 +65,6 @@ public class FormulaDataListModel extends DataListModel {
 		final IAction deleteAction = (event) -> {
 			final WarrantyFormula formula = (WarrantyFormula) event.getTarget();
 			insuranceType.getFormulas().remove(formula);
-			((DataListActionEvent) event).getDataListModel().getDataList().remove(formula);
 			return formula;
 		};
 		

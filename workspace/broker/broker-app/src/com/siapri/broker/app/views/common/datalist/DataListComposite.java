@@ -227,16 +227,18 @@ public class DataListComposite extends Composite {
 
 		setLayout(new GridLayout());
 
-		final Composite filterComposite = new Composite(this, SWT.NONE);
-		filterComposite.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, true, false));
-		filterComposite.setLayout(new GridLayout(2, false));
-		final CLabel filterLabel = new CLabel(filterComposite, SWT.NONE);
-		filterLabel.setText("Rechercher: ");
-		filterLabel.setImage(EImage.FIND.getSwtImage());
-		final Text filterText = new Text(filterComposite, SWT.SEARCH | SWT.ICON_CANCEL | SWT.ICON_SEARCH);
-		filterText.setMessage("Rechercher un élément dans la liste");
-		filterText.addModifyListener(filterModifyListener);
-		filterText.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, true, false));
+		if (dataListModel.isFilterDisplayed()) {
+			final Composite filterComposite = new Composite(this, SWT.NONE);
+			filterComposite.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, true, false));
+			filterComposite.setLayout(new GridLayout(2, false));
+			final CLabel filterLabel = new CLabel(filterComposite, SWT.NONE);
+			filterLabel.setText("Rechercher: ");
+			filterLabel.setImage(EImage.FIND.getSwtImage());
+			final Text filterText = new Text(filterComposite, SWT.SEARCH | SWT.ICON_CANCEL | SWT.ICON_SEARCH);
+			filterText.setMessage("Rechercher un élément dans la liste");
+			filterText.addModifyListener(filterModifyListener);
+			filterText.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, true, false));
+		}
 
 		final Composite actionBar = new Composite(this, SWT.NONE);
 		actionBar.setLayoutData(new GridData(GridData.FILL, GridData.BEGINNING, true, false));
@@ -244,11 +246,13 @@ public class DataListComposite extends Composite {
 		actionBarLayout.marginWidth = 0;
 		actionBar.setLayout(actionBarLayout);
 
-		final ToolBar toolBar = new ToolBar(actionBar, SWT.RIGHT | SWT.VERTICAL);
-		final ToolItem reportItem = new ToolItem(toolBar, SWT.DROP_DOWN);
-		reportItem.setText("Rapports");
-		reportItem.setImage(EImage.PRINT.getSwtImage());
-		reportItem.addSelectionListener(new ReportListener());
+		if (dataListModel.isReportButtonDisplayed()) {
+			final ToolBar toolBar = new ToolBar(actionBar, SWT.RIGHT | SWT.VERTICAL);
+			final ToolItem reportItem = new ToolItem(toolBar, SWT.DROP_DOWN);
+			reportItem.setText("Rapports");
+			reportItem.setImage(EImage.PRINT.getSwtImage());
+			reportItem.addSelectionListener(new ReportListener());
+		}
 
 		final Composite buttonsComposite = new Composite(actionBar, SWT.NONE);
 		buttonsComposite.setLayoutData(new GridData(GridData.END, GridData.BEGINNING, true, false));

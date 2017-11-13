@@ -1,17 +1,26 @@
 package com.siapri.broker.app.views.client;
 
-import com.siapri.broker.business.model.Client;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.siapri.broker.business.model.Contract;
+import com.siapri.broker.business.model.Person;
 
 public class ClientDetail {
 	
-	private final Client client;
+	private final Person client;
+	private final List<Contract> contracts = new ArrayList<>();
 	
-	public ClientDetail(final Client client) {
+	public ClientDetail(final Person client) {
 		this.client = client;
 	}
 	
-	public final Client getClient() {
+	public final Person getClient() {
 		return client;
+	}
+	
+	public List<Contract> getContracts() {
+		return contracts;
 	}
 	
 }

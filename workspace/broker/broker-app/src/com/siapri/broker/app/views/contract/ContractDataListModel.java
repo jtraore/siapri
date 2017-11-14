@@ -42,10 +42,11 @@ public class ContractDataListModel extends DataListModel {
 		
 		xPathExpressions = new String[] { "number", "client.firstName", "client.LastName" };
 		
-		columnDescriptors = new ColumnDescriptor[3];
-		columnDescriptors[0] = new ColumnDescriptor("Number", 0.30, 125);
-		columnDescriptors[1] = new ColumnDescriptor("Date", 0.20, 125);
-		columnDescriptors[2] = new ColumnDescriptor("Client", 0.50, 125);
+		columnDescriptors = new ColumnDescriptor[4];
+		columnDescriptors[0] = new ColumnDescriptor("Number", 0.15, 125);
+		columnDescriptors[1] = new ColumnDescriptor("Date", 0.15, 125);
+		columnDescriptors[2] = new ColumnDescriptor("Client", 0.30, 125);
+		columnDescriptors[3] = new ColumnDescriptor("Assurance", 0.40, 125);
 		
 		final IAction createAction = (event) -> {
 			final Contract contract = new Contract();
@@ -133,6 +134,8 @@ public class ContractDataListModel extends DataListModel {
 					}
 					final Company company = (Company) client;
 					return String.format("%s - %s", company.getSiret(), company.getName());
+				case 3:
+					return contract.getWarrantyFormula().getName();
 			}
 			return null;
 		}

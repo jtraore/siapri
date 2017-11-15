@@ -1,6 +1,5 @@
 package com.siapri.broker.app.views.contract;
 
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,6 +11,7 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 
 import com.siapri.broker.app.BundleUtil;
+import com.siapri.broker.app.views.common.Util;
 import com.siapri.broker.app.views.common.action.IAction;
 import com.siapri.broker.app.views.common.customizer.CustomizerDialog;
 import com.siapri.broker.app.views.common.customizer.DialogBox;
@@ -28,8 +28,6 @@ import com.siapri.broker.business.service.IBasicDaoService;
 
 public class ContractDataListModel extends DataListModel {
 
-	private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-	
 	private List<Contract> contracts;
 	
 	public ContractDataListModel(final Composite parent) {
@@ -103,7 +101,7 @@ public class ContractDataListModel extends DataListModel {
 		
 	}
 	
-	private List<Contract> retrieveContracts() {
+	protected List<Contract> retrieveContracts() {
 		return BundleUtil.getService(IBasicDaoService.class).getAll(Contract.class);
 	}
 
@@ -126,7 +124,7 @@ public class ContractDataListModel extends DataListModel {
 				case 0:
 					return contract.getNumber();
 				case 1:
-					return DATE_TIME_FORMATTER.format(contract.getSubscriptionDate());
+					return Util.DATE_TIME_FORMATTER.format(contract.getSubscriptionDate());
 				case 2:
 					if (client instanceof Person) {
 						final Person person = (Person) client;

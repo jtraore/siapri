@@ -1,6 +1,7 @@
 package com.siapri.broker.app.views.common;
 
 import java.io.File;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -21,7 +22,9 @@ import org.eclipse.swt.widgets.MenuItem;
 import com.siapri.broker.business.model.Document;
 
 public final class Util {
-	
+
+	public static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
 	public static Image getDefaultProgramImage(final Document document) {
 		final File file = new File(document.getPath());
 		if (file.exists()) {
@@ -33,14 +36,14 @@ public final class Util {
 		}
 		return null;
 	}
-	
+
 	public static void buildMenuItem(final Menu menu, final String name, final Image image, final SelectionListener listener) {
 		final MenuItem item = new MenuItem(menu, SWT.PUSH);
 		item.setText(name);
 		item.setImage(image);
 		item.addSelectionListener(listener);
 	}
-	
+
 	public static void openDocument(final Document document) {
 		final File file = new File(document.getPath());
 		if (file.exists()) {
@@ -51,7 +54,7 @@ public final class Util {
 			MessageDialog.openError(Display.getCurrent().getActiveShell(), "Overture de document", String.format("%s n'existe pas", document.getPath()));
 		}
 	}
-	
+
 	public static List<Document> selectDocuments() {
 		final FileDialog fileDialog = new FileDialog(Display.getCurrent().getActiveShell(), SWT.MULTI);
 		fileDialog.setText("Sélectionnez les fichiers à joindre");

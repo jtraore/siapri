@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionListener;
@@ -19,11 +20,27 @@ import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 
+import com.siapri.broker.business.model.Address;
 import com.siapri.broker.business.model.Document;
+import com.siapri.broker.business.model.Gender;
 
 public final class Util {
 
 	public static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+	
+	public static String formatAddress(final Address address) {
+		if (StringUtils.isNotBlank(address.getStreet())) {
+			return String.format("%s, %s, %s, %s, %s", address.getNumber(), address.getStreet(), address.getPostalCode(), address.getCity(), address.getCountry());
+		}
+		return "";
+	}
+	
+	public static String getGenderAsString(final Gender gender) {
+		if (gender == Gender.MALE) {
+			return "Mr";
+		}
+		return "Mme";
+	}
 
 	public static Image getDefaultProgramImage(final Document document) {
 		final File file = new File(document.getPath());

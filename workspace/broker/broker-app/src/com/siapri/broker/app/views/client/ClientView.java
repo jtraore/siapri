@@ -23,23 +23,26 @@ import com.siapri.broker.business.model.Person;
 import com.siapri.broker.business.service.IBasicDaoService;
 
 public class ClientView extends PartView<Person> {
-	
-	private Map<Person, ClientDetail> clientDetails;
 
+	private Map<Person, ClientDetail> clientDetails;
+	
 	@Override
 	protected void createGui(final Composite parent) {
-
+		
 		parent.setLayout(new FillLayout());
-		
+
 		dataListModel = new ClientDataListModel(parent);
-
-		final Map<Client, List<Contract>> contractsByClient = getContractsByClient();
 		
-		clientDetails = ((ClientDataListModel) dataListModel).getClients().stream().map(c -> createClientDetail(c, contractsByClient)).collect(Collectors.toMap(ClientDetail::getClient, Function.identity()));
-
+		final Map<Client, List<Contract>> contractsByClient = getContractsByClient();
+		// @formatter:off
+		clientDetails = ((ClientDataListModel) dataListModel).getClients()
+				.stream()
+				.map(c -> createClientDetail(c, contractsByClient))
+				.collect(Collectors.toMap(ClientDetail::getClient, Function.identity()));
+		// @formatter:on
 		partViewService.addDetailCompositeProvider(new ClientDetailCompositeProvider(currentPart.getElementId(), clientDetails));
 	}
-
+	
 	@Inject
 	@Optional
 	private void itemCreated(@UIEventTopic(IApplicationEvent.ITEM_CREATED) final Object item) {
@@ -51,7 +54,7 @@ public class ClientView extends PartView<Person> {
 			clientDetails.put(client, createClientDetail(client, new HashMap<>()));
 		}
 	}
-
+	
 	@Inject
 	@Optional
 	private void itemEdited(@UIEventTopic(IApplicationEvent.ITEM_EDITED) final Object item) {
@@ -61,7 +64,7 @@ public class ClientView extends PartView<Person> {
 			Collections.replaceAll(contracts, contracts.get(contracts.indexOf(contract)), contract);
 		}
 	}
-
+	
 	@Inject
 	@Optional
 	private void itemRemoved(@UIEventTopic(IApplicationEvent.ITEM_REMOVED) final Object item) {
@@ -72,15 +75,15 @@ public class ClientView extends PartView<Person> {
 			clientDetails.get(contract.getClient()).getContracts().remove(contract);
 		}
 	}
-
+	
 	private ClientDetail createClientDetail(final Person client, final Map<Client, List<Contract>> contractsByClient) {
 		final ClientDetail clientDetail = new ClientDetail(client);
 		clientDetail.getContracts().addAll(contractsByClient.get(client));
 		return clientDetail;
 	}
-
+	
 	private Map<Client, List<Contract>> getContractsByClient() {
 		return BundleUtil.getService(IBasicDaoService.class).getAll(Contract.class).stream().collect(Collectors.groupingBy(Contract::getClient));
 	}
-	
+
 }

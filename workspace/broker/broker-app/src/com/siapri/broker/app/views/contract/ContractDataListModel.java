@@ -12,6 +12,7 @@ import org.eclipse.swt.widgets.Composite;
 
 import com.siapri.broker.app.BundleUtil;
 import com.siapri.broker.app.views.common.Util;
+import com.siapri.broker.app.views.common.action.ContextualAction;
 import com.siapri.broker.app.views.common.action.IAction;
 import com.siapri.broker.app.views.common.customizer.CustomizerDialog;
 import com.siapri.broker.app.views.common.customizer.DialogBox;
@@ -89,7 +90,7 @@ public class ContractDataListModel extends DataListModel {
 			return contract;
 		};
 
-		actionModel = new DataListActionModel(createAction, editAction, deleteAction);
+		actionModel = new DataListActionModel(createAction, editAction, deleteAction, createDatalistMenuActions(parent));
 
 		contracts = retrieveContracts();
 		dataList = new WritableList<Object>(new ArrayList<>(contracts), InsuranceType.class) {
@@ -99,6 +100,10 @@ public class ContractDataListModel extends DataListModel {
 			}
 		};
 
+	}
+
+	protected ContextualAction[] createDatalistMenuActions(final Composite parent) {
+		return new ContextualAction[0];
 	}
 
 	public List<Contract> getContracts() {

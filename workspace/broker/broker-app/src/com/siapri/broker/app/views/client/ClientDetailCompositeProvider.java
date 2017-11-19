@@ -17,10 +17,15 @@ import com.siapri.broker.app.views.common.EAddressType;
 import com.siapri.broker.app.views.common.EPhoneType;
 import com.siapri.broker.app.views.common.TitledSeparator;
 import com.siapri.broker.app.views.common.Util;
+import com.siapri.broker.app.views.common.action.ContextualAction;
+import com.siapri.broker.app.views.common.action.ContextualActionPathElement;
+import com.siapri.broker.app.views.common.action.IAction;
 import com.siapri.broker.app.views.common.datalist.ColumnDescriptor;
 import com.siapri.broker.app.views.common.datalist.DataListComposite;
 import com.siapri.broker.app.views.contract.ContractDataListModel;
+import com.siapri.broker.app.views.contract.ContractOverviewItemLocator;
 import com.siapri.broker.app.views.detail.AbstractDetailCompositeProvider;
+import com.siapri.broker.app.views.overview.OverviewItem;
 import com.siapri.broker.business.model.Contract;
 import com.siapri.broker.business.model.Person;
 
@@ -98,12 +103,25 @@ public class ClientDetailCompositeProvider extends AbstractDetailCompositeProvid
 	private void createContractComposite(final Composite parent, final Person item) {
 		final Composite composite = createColumnComposite(parent);
 		new TitledSeparator(composite, "Liste des contrats").setLayoutData(new GridData(SWT.FILL, SWT.DEFAULT, true, false));
-		final ContractDataListModel dataListModel = new ClientContractDataListModel(composite);
+
+		final IAction navigateToAction = event -> {
+			new ContractOverviewItemLocator().locate(new OverviewItem<>((Contract) event.getTarget(), ""));
+			return null;
+		};
+
+		final ContextualActionPathElement[] navigateToPath = new ContextualActionPathElement[] { new ContextualActionPathElement("Afficher dans la vue Contrats", null) };
+		final ContextualAction navigateToContextualAction = new ContextualAction(navigateToAction, navigateToPath);
+
+		final ContractDataListModel dataListModel = new ClientContractDataListModel(composite) {
+			@Override
+			protected ContextualAction[] createDatalistMenuActions(final Composite parent) {
+				return new ContextualAction[] { new ContextualAction(navigateToAction, navigateToPath) };
+			}
+		};
 		dataListModel.setFilterDisplayed(false);
 		dataListModel.setReportButtonDisplayed(false);
 		final DataListComposite dataListComposite = new DataListComposite(composite, SWT.NONE, dataListModel);
 		final GridData gridData = new GridData(GridData.FILL, GridData.FILL, true, true);
-		// gridData.heightHint = 150;
 		dataListComposite.setLayoutData(gridData);
 	}
 	

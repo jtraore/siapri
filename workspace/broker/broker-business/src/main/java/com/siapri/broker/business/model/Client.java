@@ -36,6 +36,9 @@ public abstract class Client extends AbstractDocumentProvider {
 	@CollectionTable(name = "CUSTOMER_ADDRESSES")
 	private final Map<String, Address> addresses = new HashMap<>();
 	
+	@Column(name = "FAX")
+	private String fax;
+	
 	@ManyToOne
 	@JoinColumn(name = "BROKER_ID", referencedColumnName = "ID")
 	private Broker broker;
@@ -46,5 +49,13 @@ public abstract class Client extends AbstractDocumentProvider {
 
 	public Map<String, Address> getAddresses() {
 		return addresses;
+	}
+	
+	public String getFax() {
+		return fax;
+	}
+	
+	public void setFax(final String fax) {
+		this.fax = fax;
 	}
 }

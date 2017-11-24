@@ -37,6 +37,10 @@ public class InsuranceType extends AbstractEntity {
 	@Fetch(value = FetchMode.SUBSELECT)
 	private List<WarrantyFormula> formulas = new ArrayList<>();
 	
+	@ElementCollection(fetch = FetchType.EAGER)
+	@Fetch(value = FetchMode.SUBSELECT)
+	private List<String> attributes = new ArrayList<>();
+	
 	public InsuranceType() {
 	}
 
@@ -75,6 +79,14 @@ public class InsuranceType extends AbstractEntity {
 	
 	public void setFormulas(final List<WarrantyFormula> formulas) {
 		this.formulas = formulas;
+	}
+	
+	public List<String> getAttributes() {
+		return attributes;
+	}
+	
+	public void setAttributes(final List<String> attributes) {
+		this.attributes = attributes;
 	}
 
 }

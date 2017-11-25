@@ -6,6 +6,7 @@ import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.Type;
@@ -15,10 +16,10 @@ import org.hibernate.annotations.Type;
 public class Sinister extends AbstractDocumentProvider {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	@Type(type = "org.jadira.usertype.dateandtime.threeten.PersistentZonedDateTime")
 	@Column(name = "OCCURRED_DATE")
-	private ZonedDateTime occurredDate;
+	private ZonedDateTime occuredDate;
 
 	@NotNull
 	@Column(name = "DESCRIPTION", nullable = false)
@@ -28,20 +29,23 @@ public class Sinister extends AbstractDocumentProvider {
 	@Embedded
 	private Address address;
 
+	@Transient
+	private Contract contract;
+
 	public Sinister() {
 	}
 
 	public Sinister(final ZonedDateTime occurredDate, final String description) {
-		this.occurredDate = occurredDate;
+		occuredDate = occurredDate;
 		this.description = description;
 	}
 
-	public ZonedDateTime getOccurredDate() {
-		return occurredDate;
+	public ZonedDateTime getOccuredDate() {
+		return occuredDate;
 	}
 
-	public void setOccurredDate(final ZonedDateTime occurredDate) {
-		this.occurredDate = occurredDate;
+	public void setOccuredDate(final ZonedDateTime occuredDate) {
+		this.occuredDate = occuredDate;
 	}
 
 	public String getDescription() {
@@ -51,13 +55,21 @@ public class Sinister extends AbstractDocumentProvider {
 	public void setDescription(final String description) {
 		this.description = description;
 	}
-	
+
 	public Address getAddress() {
 		return address;
 	}
-	
+
 	public void setAddress(final Address address) {
 		this.address = address;
 	}
-	
+
+	public Contract getContract() {
+		return contract;
+	}
+
+	public void setContract(final Contract contract) {
+		this.contract = contract;
+	}
+
 }

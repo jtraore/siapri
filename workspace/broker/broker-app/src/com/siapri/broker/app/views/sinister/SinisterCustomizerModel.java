@@ -1,50 +1,40 @@
 package com.siapri.broker.app.views.sinister;
 
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.util.Date;
 
 import com.siapri.broker.app.views.common.customizer.AbstractCustomizerModel;
+import com.siapri.broker.app.views.common.customizer.propertybinding.EntityProperty;
+import com.siapri.broker.app.views.common.customizer.propertybinding.converter.ZonedDateTimeToDateConverter;
+import com.siapri.broker.app.views.common.proxy.ProxyFactory;
 import com.siapri.broker.business.model.Address;
 import com.siapri.broker.business.model.Contract;
 import com.siapri.broker.business.model.Sinister;
 
 public class SinisterCustomizerModel extends AbstractCustomizerModel<Sinister> {
-	
-	private Date occuredDate;
-	private String description;
-	private Address address;
 
+	@EntityProperty(converter = ZonedDateTimeToDateConverter.class)
+	private Date occuredDate;
+
+	@EntityProperty
+	private String description;
+
+	@EntityProperty
 	private Contract contract;
+
+	private Address address;
 
 	protected SinisterCustomizerModel() {
 		super(null);
 	}
-	
-	public SinisterCustomizerModel(final Sinister sinister, final Contract contract) {
+
+	public SinisterCustomizerModel(final Sinister sinister) {
 		super(sinister);
-		this.contract = contract;
 	}
-	
+
 	@Override
 	public void synchronize() {
-		if (target.getOccurredDate() != null) {
-			occuredDate = Date.from(target.getOccurredDate().toInstant());
-		}
-		description = target.getDescription();
-		address = target.getAddress();
-		
-	}
-	
-	@Override
-	public void validate() {
-		if (!contract.getSinisters().contains(target)) {
-			contract.getSinisters().add(target);
-		}
-		target.setOccurredDate(ZonedDateTime.ofInstant(occuredDate.toInstant(), ZoneId.systemDefault()));
-		target.setDescription(description);
-		target.setAddress(address);
-		
+		super.synchronize();
+		address = ProxyFactory.createProxy(target.getAddress());
 	}
 
 	public Date getOccurateDate() {

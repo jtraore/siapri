@@ -13,6 +13,7 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 
 import com.siapri.broker.app.BundleUtil;
+import com.siapri.broker.app.views.common.action.ContextualAction;
 import com.siapri.broker.app.views.common.action.IAction;
 import com.siapri.broker.app.views.common.customizer.CustomizerDialog;
 import com.siapri.broker.app.views.common.customizer.DialogBox;
@@ -78,7 +79,7 @@ public class SinisterDatalistModel extends DataListModel {
 			return sinister;
 		};
 
-		actionModel = new DataListActionModel(createAction, editAction, deleteAction);
+		actionModel = new DataListActionModel(createAction, editAction, deleteAction, createDatalistMenuActions(parent));
 		sinisters = retrieveSinisters();
 		dataList = new WritableList<Object>(new ArrayList<>(sinisters), Sinister.class) {
 			@Override
@@ -87,8 +88,12 @@ public class SinisterDatalistModel extends DataListModel {
 			}
 		};
 	}
+	
+	protected ContextualAction[] createDatalistMenuActions(final Composite parent) {
+		return new ContextualAction[0];
+	}
 
-	private List<Sinister> retrieveSinisters() {
+	protected List<Sinister> retrieveSinisters() {
 		return BundleUtil.getService(IBasicDaoService.class).getAll(Sinister.class);
 	}
 

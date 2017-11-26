@@ -26,8 +26,11 @@ import com.siapri.broker.app.views.contract.ContractDataListModel;
 import com.siapri.broker.app.views.contract.ContractOverviewItemLocator;
 import com.siapri.broker.app.views.detail.AbstractDetailCompositeProvider;
 import com.siapri.broker.app.views.overview.OverviewItem;
+import com.siapri.broker.app.views.sinister.SinisterDatalistModel;
+import com.siapri.broker.app.views.sinister.SinisterOverviewItemLocator;
 import com.siapri.broker.business.model.Contract;
 import com.siapri.broker.business.model.Person;
+import com.siapri.broker.business.model.Sinister;
 
 public class ClientDetailCompositeProvider extends AbstractDetailCompositeProvider<Person> {
 	
@@ -104,20 +107,7 @@ public class ClientDetailCompositeProvider extends AbstractDetailCompositeProvid
 		final Composite composite = createColumnComposite(parent);
 		new TitledSeparator(composite, "Liste des contrats").setLayoutData(new GridData(SWT.FILL, SWT.DEFAULT, true, false));
 
-		final IAction navigateToAction = event -> {
-			new ContractOverviewItemLocator().locate(new OverviewItem<>((Contract) event.getTarget(), ""));
-			return null;
-		};
-
-		final ContextualActionPathElement[] navigateToPath = new ContextualActionPathElement[] { new ContextualActionPathElement("Afficher dans la vue Contrats", null) };
-		final ContextualAction navigateToContextualAction = new ContextualAction(navigateToAction, navigateToPath);
-
-		final ContractDataListModel dataListModel = new ClientContractDataListModel(composite) {
-			@Override
-			protected ContextualAction[] createDatalistMenuActions(final Composite parent) {
-				return new ContextualAction[] { new ContextualAction(navigateToAction, navigateToPath) };
-			}
-		};
+		final ContractDataListModel dataListModel = new ClientContractDataListModel(composite);
 		dataListModel.setFilterDisplayed(false);
 		dataListModel.setReportButtonDisplayed(false);
 		final DataListComposite dataListComposite = new DataListComposite(composite, SWT.NONE, dataListModel);
@@ -127,6 +117,14 @@ public class ClientDetailCompositeProvider extends AbstractDetailCompositeProvid
 	
 	private void createSinisterComposite(final Composite parent, final Person item) {
 		final Composite composite = createColumnComposite(parent);
+		new TitledSeparator(composite, "Liste des sinistres").setLayoutData(new GridData(SWT.FILL, SWT.DEFAULT, true, false));
+
+		final SinisterDatalistModel dataListModel = new ClientSinisterDataListModel(composite);
+		dataListModel.setFilterDisplayed(false);
+		dataListModel.setReportButtonDisplayed(false);
+		final DataListComposite dataListComposite = new DataListComposite(composite, SWT.NONE, dataListModel);
+		final GridData gridData = new GridData(GridData.FILL, GridData.FILL, true, true);
+		dataListComposite.setLayoutData(gridData);
 	}
 
 	private Composite createColumnComposite(final Composite parent) {
@@ -149,6 +147,45 @@ public class ClientDetailCompositeProvider extends AbstractDetailCompositeProvid
 		protected List<Contract> retrieveContracts() {
 			return clientDetails.get(currentClient).getContracts();
 		}
+
+		@Override
+		protected ContextualAction[] createDatalistMenuActions(final Composite parent) {
+			final IAction navigateToAction = event -> {
+				new ContractOverviewItemLocator().locate(new OverviewItem<>((Contract) event.getTarget(), ""));
+				return null;
+			};
+
+			final ContextualActionPathElement[] navigateToPath = new ContextualActionPathElement[] { new ContextualActionPathElement("Afficher dans la vue Contrats", null) };
+
+			return new ContextualAction[] { new ContextualAction(navigateToAction, navigateToPath) };
+		}
+	}
+	
+	private class ClientSinisterDataListModel extends SinisterDatalistModel {
+
+		public ClientSinisterDataListModel(final Composite parent) {
+			super(parent);
+			columnDescriptors = new ColumnDescriptor[] { new ColumnDescriptor("Date", 0.15, 125), new ColumnDescriptor("Contrat", 0.15, 125), new ColumnDescriptor("Adresse", 0.35, 125), new ColumnDescriptor("Description", 0.35, 125) };
+			labelProvider = new SinisterDataListLabelProvider();
+			selectionEventActivated = false;
+		}
+		
+		@Override
+		protected List<Sinister> retrieveSinisters() {
+			return clientDetails.get(currentClient).getSinisters();
+		}
+
+		@Override
+		protected ContextualAction[] createDatalistMenuActions(final Composite parent) {
+			final IAction navigateToAction = event -> {
+				new SinisterOverviewItemLocator().locate(new OverviewItem<>((Sinister) event.getTarget(), ""));
+				return null;
+			};
+
+			final ContextualActionPathElement[] navigateToPath = new ContextualActionPathElement[] { new ContextualActionPathElement("Afficher dans la vue Sinistres", null) };
+
+			return new ContextualAction[] { new ContextualAction(navigateToAction, navigateToPath) };
+		}
 	}
 	
 	private final class ContractDataListLabelProvider extends LabelProvider implements ITableLabelProvider {
@@ -168,6 +205,30 @@ public class ClientDetailCompositeProvider extends AbstractDetailCompositeProvid
 					return Util.DATE_TIME_FORMATTER.format(contract.getSubscriptionDate());
 				case 2:
 					return contract.getWarrantyFormula().getName();
+			}
+			return null;
+		}
+	}
+	
+	private final class SinisterDataListLabelProvider extends LabelProvider implements ITableLabelProvider {
+		
+		@Override
+		public Image getColumnImage(final Object arg0, final int arg1) {
+			return null;
+		}
+		
+		@Override
+		public String getColumnText(final Object object, final int column) {
+			final Sinister sinister = (Sinister) object;
+			switch (column) {
+				case 0:
+					return Util.DATE_TIME_FORMATTER.format(sinister.getOccuredDate());
+				case 1:
+					return sinister.getContract().getNumber();
+				case 2:
+					return Util.formatAddress(sinister.getAddress());
+				case 3:
+					return sinister.getDescription();
 			}
 			return null;
 		}

@@ -36,7 +36,7 @@
           <persistedState key="viewClass" value="com.siapri.broker.app.views.contract.ContractView"/>
           <tags>FORCE_TEXT</tags>
         </children>
-        <children xsi:type="menu:DirectToolItem" xmi:id="_4PvAkIGtEeeNpYTbXqKuzw" elementId="broker-app.toolbar.main.item.sinistres" label="Sinistres" iconURI="platform:/plugin/broker-app/icons/file.png" tooltip="Affiche les sinistres" type="Check" contributionURI="bundleclass://broker-app/com.siapri.broker.app.ShowPart">
+        <children xsi:type="menu:DirectToolItem" xmi:id="_4PvAkIGtEeeNpYTbXqKuzw" elementId="broker-app.toolbar.main.item.sinisters" label="Sinistres" iconURI="platform:/plugin/broker-app/icons/file.png" tooltip="Affiche les sinistres" type="Check" contributionURI="bundleclass://broker-app/com.siapri.broker.app.ShowPart">
           <persistedState key="viewClass" value="com.siapri.broker.app.views.sinister.SinisterView"/>
           <tags>FORCE_TEXT</tags>
         </children>

@@ -2,9 +2,9 @@ package com.siapri.broker.app.views.insurancetype;
 
 import com.siapri.broker.app.views.common.customizer.AbstractCustomizerModel;
 import com.siapri.broker.app.views.common.customizer.propertybinding.EntityProperty;
-import com.siapri.broker.business.model.Warranty;
+import com.siapri.broker.business.model.ICodeDescriptionPair;
 
-public class WarrantyCustomizerModel extends AbstractCustomizerModel<Warranty> {
+public class CodeDescriptionPairCustomizerModel<T extends ICodeDescriptionPair> extends AbstractCustomizerModel<T> {
 	
 	@EntityProperty
 	private String code;
@@ -12,11 +12,11 @@ public class WarrantyCustomizerModel extends AbstractCustomizerModel<Warranty> {
 	@EntityProperty
 	private String description;
 	
-	public WarrantyCustomizerModel() {
+	public CodeDescriptionPairCustomizerModel() {
 		this(null);
 	}
 	
-	public WarrantyCustomizerModel(final Warranty target) {
+	public CodeDescriptionPairCustomizerModel(final T target) {
 		super(target);
 	}
 	

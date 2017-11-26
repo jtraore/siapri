@@ -10,15 +10,15 @@ import org.eclipse.swt.widgets.Text;
 import com.siapri.broker.app.views.common.customizer.AbstractCustomizer;
 import com.siapri.broker.app.views.common.customizer.IValidationSupport;
 import com.siapri.broker.app.views.common.proxy.ProxyFactory;
-import com.siapri.broker.business.model.Warranty;
+import com.siapri.broker.business.model.ICodeDescriptionPair;
 
-public class WarrantyCustomizer extends AbstractCustomizer<Warranty> {
+public class CodeDescriptionPairCustomizer<T extends ICodeDescriptionPair> extends AbstractCustomizer<T> {
 	
-	private final WarrantyCustomizerModel customizerModel;
+	private final CodeDescriptionPairCustomizerModel<T> customizerModel;
 
-	public WarrantyCustomizer(final Warranty warranty, final String title, final String description) {
-		super(warranty, title, description);
-		customizerModel = ProxyFactory.createProxy(new WarrantyCustomizerModel(warranty));
+	public CodeDescriptionPairCustomizer(final T element, final String title, final String description) {
+		super(element, title, description);
+		customizerModel = ProxyFactory.createProxy(new CodeDescriptionPairCustomizerModel<>(element));
 	}
 
 	@Override

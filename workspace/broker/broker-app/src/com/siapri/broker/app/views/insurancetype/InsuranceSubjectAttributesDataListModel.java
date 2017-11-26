@@ -1,7 +1,6 @@
 package com.siapri.broker.app.views.insurancetype;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import org.eclipse.core.databinding.observable.list.WritableList;
 import org.eclipse.jface.viewers.ITableLabelProvider;
@@ -16,14 +15,14 @@ import com.siapri.broker.app.views.common.customizer.DialogBox;
 import com.siapri.broker.app.views.common.datalist.ColumnDescriptor;
 import com.siapri.broker.app.views.common.datalist.DataListActionModel;
 import com.siapri.broker.app.views.common.datalist.DataListModel;
+import com.siapri.broker.business.model.InsuranceSubjectAttribute;
 import com.siapri.broker.business.model.InsuranceType;
-import com.siapri.broker.business.model.Warranty;
 
-public class WarrantyDataListModel extends DataListModel {
+public class InsuranceSubjectAttributesDataListModel extends DataListModel {
 	
 	private final InsuranceType insuranceType;
 	
-	public WarrantyDataListModel(final Composite parent, final InsuranceType insuranceType) {
+	public InsuranceSubjectAttributesDataListModel(final Composite parent, final InsuranceType insuranceType) {
 		this.insuranceType = insuranceType;
 		inititalize(parent);
 	}
@@ -39,54 +38,39 @@ public class WarrantyDataListModel extends DataListModel {
 		columnDescriptors[1] = new ColumnDescriptor("Description", 0.70, 125);
 		
 		final IAction createAction = (event) -> {
-			final Warranty element = new Warranty();
-			final String title = "Nouvelle garantie";
-			final String description = String.format("Cette fenêtre permet de créer une nouvelle garantie");
-			final CodeDescriptionPairCustomizer<Warranty> customizer = new CodeDescriptionPairCustomizer<>(element, title, description);
+			final InsuranceSubjectAttribute element = new InsuranceSubjectAttribute();
+			final String title = "Nouvelle propriété";
+			final String description = String.format("Cette fenêtre permet de créer une nouvelle propriété");
+			final CodeDescriptionPairCustomizer<InsuranceSubjectAttribute> customizer = new CodeDescriptionPairCustomizer<>(element, title, description);
 			final DialogBox dialog = new CustomizerDialog(parent.getShell(), customizer);
 			if (dialog.open() == Window.OK) {
-				insuranceType.getWarranties().add(element);
+				insuranceType.getAttributes().add(element);
 				return element;
 			}
 			return null;
 		};
 		
 		final IAction editAction = (event) -> {
-			final Warranty element = (Warranty) event.getTarget();
-			final String oldCode = element.getCode();
-			final String title = "Edition d'une garantie";
-			final String description = String.format("Cette fenêtre permet d'éditer une garantie");
-			final CodeDescriptionPairCustomizer<Warranty> customizer = new CodeDescriptionPairCustomizer<>(element, title, description);
+			final InsuranceSubjectAttribute element = (InsuranceSubjectAttribute) event.getTarget();
+			final String title = "Edition d'une propriété";
+			final String description = String.format("Cette fenêtre permet d'éditer une propriété");
+			final CodeDescriptionPairCustomizer<InsuranceSubjectAttribute> customizer = new CodeDescriptionPairCustomizer<>(element, title, description);
 			final CustomizerDialog dialog = new CustomizerDialog(parent.getShell(), customizer);
-			
 			if (dialog.open() == Window.OK) {
-				// Update the code in the warranty formulas
-				if (!oldCode.equals(element.getCode())) {
-					insuranceType.getFormulas().forEach(formula -> {
-						final List<String> warrantyCodes = formula.getWarrantyCodes();
-						final int index = warrantyCodes.indexOf(oldCode);
-						if (index >= 0) {
-							warrantyCodes.remove(index);
-							warrantyCodes.add(element.getCode());
-						}
-					});
-				}
 				return element;
 			}
 			return null;
 		};
 		
 		final IAction deleteAction = (event) -> {
-			final Warranty element = (Warranty) event.getTarget();
-			insuranceType.getWarranties().remove(element);
-			// Update the code from all the warranty formulas it used
-			insuranceType.getFormulas().forEach(formula -> formula.getWarrantyCodes().remove(element.getCode()));
+			final InsuranceSubjectAttribute element = (InsuranceSubjectAttribute) event.getTarget();
+			insuranceType.getAttributes().remove(element);
 			return element;
 		};
 		
 		actionModel = new DataListActionModel(createAction, editAction, deleteAction);
 		
-		dataList = new WritableList<Object>(new ArrayList<>(insuranceType.getWarranties()), Warranty.class) {
+		dataList = new WritableList<Object>(new ArrayList<>(insuranceType.getAttributes()), InsuranceSubjectAttribute.class) {
 			@Override
 			public boolean add(final Object element) {
 				return super.add(element);
@@ -104,7 +88,7 @@ public class WarrantyDataListModel extends DataListModel {
 		
 		@Override
 		public String getColumnText(final Object object, final int column) {
-			final Warranty warranty = (Warranty) object;
+			final InsuranceSubjectAttribute warranty = (InsuranceSubjectAttribute) object;
 			switch (column) {
 				case 0:
 					return warranty.getCode();

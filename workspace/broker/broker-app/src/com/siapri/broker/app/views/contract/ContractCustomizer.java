@@ -41,10 +41,10 @@ import com.siapri.broker.business.model.Warranty;
 import com.siapri.broker.business.model.WarrantyFormula;
 
 public class ContractCustomizer extends AbstractCustomizer<Contract> {
-	
+
 	private final ContractCustomizerModel customizerModel;
 	private final List<InsuranceType> insuranceTypes;
-
+	
 	public ContractCustomizer(final Contract contract, final List<InsuranceType> insuranceTypes, final String title, final String description) {
 		super(contract, title, description);
 		final WarrantyFormula formula = contract.getWarrantyFormula();
@@ -55,22 +55,22 @@ public class ContractCustomizer extends AbstractCustomizer<Contract> {
 		customizerModel = ProxyFactory.createProxy(new ContractCustomizerModel(contract, insuranceType));
 		this.insuranceTypes = insuranceTypes;
 	}
-
+	
 	@Override
 	public Composite createArea(final Composite parent, final int style) {
 		parent.setLayout(new GridLayout());
 		final Composite composite = new Composite(parent, SWT.NONE);
 		final GridLayout gridLayout = new GridLayout(6, false);
 		composite.setLayout(gridLayout);
-		
+
 		final Label numberLabel = new Label(composite, SWT.NONE);
 		numberLabel.setText("Number: ");
 		final Text codeText = new Text(composite, SWT.BORDER);
 		bindingSupport.bindText(customizerModel, "number", codeText, IValidationSupport.NON_EMPTY_VALIDATOR);
 		codeText.setLayoutData(new GridData(SWT.FILL, SWT.DEFAULT, true, false, 3, 1));
-		
-		// new Label(composite, SWT.NONE).setLayoutData(new GridData(SWT.FILL, SWT.DEFAULT, true, false, 3, 1));
 
+		// new Label(composite, SWT.NONE).setLayoutData(new GridData(SWT.FILL, SWT.DEFAULT, true, false, 3, 1));
+		
 		final Label subscriptionDateLabel = new Label(composite, SWT.NONE);
 		subscriptionDateLabel.setText("Date de souscription: ");
 		final DateTime subscriptionDateField = new DateTime(composite, SWT.BORDER | SWT.DATE | SWT.DROP_DOWN);
@@ -78,10 +78,10 @@ public class ContractCustomizer extends AbstractCustomizer<Contract> {
 		final GridData gridData = new GridData(SWT.FILL, SWT.DEFAULT, true, false);
 		subscriptionDateField.setLayoutData(gridData);
 		bindingSupport.bindDateTimeChooserComboWidget(customizerModel, "subscriptionDate", subscriptionDateField, IValidationSupport.NON_EMPTY_VALIDATOR);
-
+		
 		final Label clientLabel = new Label(composite, SWT.NONE);
 		clientLabel.setText("Client:");
-
+		
 		final LabelProvider clientLabelProvider = new LabelProvider() {
 			@Override
 			public String getText(final Object element) {
@@ -98,12 +98,12 @@ public class ContractCustomizer extends AbstractCustomizer<Contract> {
 		final ObjectSeekComposite clientSeekComposite = new ObjectSeekComposite(composite, cleintSearchContext);
 		clientSeekComposite.setLayoutData(new GridData(SWT.FILL, SWT.DEFAULT, true, false, 5, 1));
 		bindingSupport.bindObjectSeekComposite(customizerModel, "client", clientSeekComposite, IValidationSupport.NON_EMPTY_VALIDATOR);
-
+		
 		new TitledSeparator(composite, "Type d'assurance et garanties").setLayoutData(new GridData(SWT.FILL, SWT.DEFAULT, true, false, 6, 1));
-
+		
 		final Label insuranceTypeLabel = new Label(composite, SWT.NONE);
 		insuranceTypeLabel.setText("Type d'assurance: ");
-		
+
 		final ComboViewer insuranceTypeComboViewer = new ComboViewer(composite, SWT.READ_ONLY);
 		insuranceTypeComboViewer.getCombo().setLayoutData(new GridData(SWT.FILL, SWT.DEFAULT, true, false, 5, 1));
 		insuranceTypeComboViewer.setContentProvider(ArrayContentProvider.getInstance());
@@ -115,10 +115,10 @@ public class ContractCustomizer extends AbstractCustomizer<Contract> {
 		});
 		insuranceTypeComboViewer.setInput(insuranceTypes.toArray());
 		bindingSupport.bindComboViewer(customizerModel, "insuranceType", insuranceTypeComboViewer, IValidationSupport.NON_EMPTY_VALIDATOR);
-
+		
 		final Label formulaLabel = new Label(composite, SWT.NONE);
 		formulaLabel.setText("Formule de garanties: ");
-		
+
 		final ComboViewer formulaComboViewer = new ComboViewer(composite, SWT.READ_ONLY);
 		formulaComboViewer.getCombo().setLayoutData(new GridData(SWT.FILL, SWT.DEFAULT, true, false, 5, 1));
 		formulaComboViewer.setContentProvider(new ObservableListContentProvider());
@@ -134,7 +134,7 @@ public class ContractCustomizer extends AbstractCustomizer<Contract> {
 			formulaList.addAll(customizerModel.getInsuranceType().getFormulas());
 		}
 		bindingSupport.bindComboViewer(customizerModel, "warrantyFormula", formulaComboViewer, IValidationSupport.NON_EMPTY_VALIDATOR);
-
+		
 		((IProxy) customizerModel).addPropertyChangeListener(event -> {
 			if (event.getPropertyName().equals("insuranceType")) {
 				formulaList.clear();
@@ -142,34 +142,34 @@ public class ContractCustomizer extends AbstractCustomizer<Contract> {
 				formulaComboViewer.refresh();
 			}
 		});
-
+		
 		final Composite warrantyTableComposite = new Composite(composite, SWT.NONE);
 		final GridData wrrantyGridData = new GridData(SWT.FILL, SWT.FILL, true, true, 6, 1);
 		warrantyTableComposite.setLayoutData(wrrantyGridData);
 		warrantyTableComposite.setLayout(new FillLayout());
 		wrrantyGridData.heightHint = 300;
 		createWarrantyTable(warrantyTableComposite);
-		
+
 		return composite;
 	}
-	
+
 	private void createWarrantyTable(final Composite parent) {
-
+		
 		final TableViewer tableViewer = new TableViewer(parent, SWT.SINGLE | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
-
+		
 		final Table table = tableViewer.getTable();
 		table.setHeaderVisible(true);
 		table.setLinesVisible(true);
-
+		
 		final TableLayout tableLayout = new TableLayout();
 		table.setLayout(tableLayout);
-
+		
 		tableViewer.setContentProvider(new ObservableListContentProvider());
-
+		
 		final TableViewerColumn columnName = new TableViewerColumn(tableViewer, SWT.NONE);
 		columnName.getColumn().setText("Garanties");
 		columnName.getColumn().setWidth(700);
-
+		
 		tableViewer.setLabelProvider(new LabelProvider() {
 			@Override
 			public Image getImage(final Object element) {
@@ -181,7 +181,7 @@ public class ContractCustomizer extends AbstractCustomizer<Contract> {
 				}
 				return null;
 			}
-			
+
 			@Override
 			public final String getText(final Object element) {
 				return super.getText(((Warranty) element).getDescription());
@@ -192,7 +192,7 @@ public class ContractCustomizer extends AbstractCustomizer<Contract> {
 			writableList.addAll(customizerModel.getInsuranceType().getWarranties());
 		}
 		tableViewer.setInput(writableList);
-
+		
 		((IProxy) customizerModel).addPropertyChangeListener(event -> {
 			if (event.getPropertyName().equals("insuranceType")) {
 				writableList.clear();
@@ -203,14 +203,14 @@ public class ContractCustomizer extends AbstractCustomizer<Contract> {
 			}
 		});
 	}
-
+	
 	@Override
 	public void validateUpdate() {
 		customizerModel.validate();
 	}
-
+	
 	@Override
 	public void cancelUpdate() {
 	}
-	
+
 }

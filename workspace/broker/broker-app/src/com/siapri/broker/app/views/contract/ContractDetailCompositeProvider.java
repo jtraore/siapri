@@ -28,47 +28,47 @@ import com.siapri.broker.business.model.Warranty;
 import com.siapri.broker.business.model.WarrantyFormula;
 
 public class ContractDetailCompositeProvider extends AbstractDetailCompositeProvider<Contract> {
-	
+
 	private final Map<Contract, ContractDetail> contractDetails;
-
+	
 	private final Map<WarrantyFormula, InsuranceType> warrantyFormulas;
-
-	private final Map<String, Warranty> warranties = new HashMap<>();
-
+	
 	public ContractDetailCompositeProvider(final String id, final Map<Contract, ContractDetail> contractDetails, final Map<WarrantyFormula, InsuranceType> warrantyFormulas) {
 		super(id);
 		this.contractDetails = contractDetails;
 		this.warrantyFormulas = warrantyFormulas;
-		warrantyFormulas.forEach((formula, insuranceType) -> {
-			insuranceType.getWarranties().forEach(warranty -> warranties.put(warranty.getCode(), warranty));
-		});
 	}
-
+	
 	@Override
 	public boolean canProvide(final Object item) {
 		return item instanceof Contract;
 	}
-
+	
 	@Override
 	public Composite createComposite(final Composite parent, final Contract item) {
 		final Composite composite = new Composite(parent, SWT.NONE);
 		final GridLayout layout = new GridLayout(3, true);
 		layout.horizontalSpacing = 25;
 		composite.setLayout(layout);
-
+		
 		createGeneralComposite(composite, item);
 		createClientComposite(composite, item);
 		createSinisterComposite(composite, item);
-
+		
 		return composite;
 	}
-	
+
 	private void createGeneralComposite(final Composite parent, final Contract item) {
 		final Composite composite = createColumnComposite(parent);
-
+		
 		final StyledText clientControl = new StyledText(composite, SWT.WRAP);
 		clientControl.setEditable(false);
-
+		
+		final Map<String, Warranty> warranties = new HashMap<>();
+		warrantyFormulas.forEach((formula, insuranceType) -> {
+			insuranceType.getWarranties().forEach(warranty -> warranties.put(warranty.getCode(), warranty));
+		});
+		
 		// @formatter:off
 		final List<String> warrantiList = item.getWarrantyFormula().getWarrantyCodes()
 				.stream()
@@ -81,15 +81,15 @@ public class ContractDetailCompositeProvider extends AbstractDetailCompositeProv
 						String.join("\n", warrantiList)));
 		// @formatter:on
 		clientControl.setLayoutData(new GridData(GridData.FILL_BOTH));
-		
+
 		StyleRange styleRange = new StyleRange();
 		styleRange.start = "Contrat ".length();
 		styleRange.length = String.format("N°%s", item.getNumber()).length();
 		styleRange.fontStyle = SWT.BOLD;
 		clientControl.setStyleRange(styleRange);
-
+		
 		int index = styleRange.start + styleRange.length;
-
+		
 		styleRange = new StyleRange();
 		styleRange.start = String.format(" du %s\nAssurance ", Util.DATE_TIME_FORMATTER.format(item.getSubscriptionDate())).length() + index;
 		styleRange.length = warrantyFormulas.get(item.getWarrantyFormula()).getName().length();
@@ -99,16 +99,16 @@ public class ContractDetailCompositeProvider extends AbstractDetailCompositeProv
 		final String styleData = "InsuranceType";
 		styleRange.data = styleData;
 		clientControl.setStyleRange(styleRange);
-		
-		index = styleRange.start + styleRange.length;
 
+		index = styleRange.start + styleRange.length;
+		
 		styleRange = new StyleRange();
 		styleRange.start = index;
 		styleRange.length = "Liste des garanties :\n".length();
 		styleRange.fontStyle = SWT.BOLD;
 		styleRange.foreground = Display.getCurrent().getSystemColor(SWT.COLOR_RED);
 		clientControl.setStyleRange(styleRange);
-
+		
 		clientControl.addListener(SWT.MouseDown, event -> {
 			// if ((event.stateMask & SWT.MOD1) != 0) {
 			final int offset = clientControl.getOffsetAtLocation(new Point(event.x, event.y));
@@ -119,13 +119,13 @@ public class ContractDetailCompositeProvider extends AbstractDetailCompositeProv
 			// }
 		});
 	}
-	
+
 	private void createClientComposite(final Composite parent, final Contract item) {
 		final Composite composite = createColumnComposite(parent);
-
+		
 		final StyledText clientControl = new StyledText(composite, SWT.WRAP);
 		clientControl.setEditable(false);
-
+		
 		final Person client = (Person) item.getClient();
 		// @formatter:off
 		clientControl.setText(String.format("%s %s %s, né(e) le %s\nAdresse domicile : %s,\nTél. : %s",
@@ -137,7 +137,7 @@ public class ContractDetailCompositeProvider extends AbstractDetailCompositeProv
 						client.getPhones().get(EPhoneType.MOBILE.name())));
 		// @formatter:on
 		clientControl.setLayoutData(new GridData(GridData.FILL_BOTH));
-
+		
 		StyleRange styleRange = new StyleRange();
 		styleRange.start = Util.getGenderAsString(client.getGender()).length() + 1;
 		styleRange.length = String.format("%s %s", client.getFirstName(), client.getLastName()).length();
@@ -147,23 +147,23 @@ public class ContractDetailCompositeProvider extends AbstractDetailCompositeProv
 		styleRange.data = styleData;
 		styleRange.fontStyle = SWT.BOLD;
 		clientControl.setStyleRange(styleRange);
-		
-		int index = styleRange.start + styleRange.length;
 
+		int index = styleRange.start + styleRange.length;
+		
 		styleRange = new StyleRange();
 		styleRange.start = String.format(", né(e) le %s\n", Util.DATE_TIME_FORMATTER.format(client.getBirthdate())).length() + index;
 		styleRange.length = "Adresse domicile".length();
 		styleRange.fontStyle = SWT.BOLD;
 		clientControl.setStyleRange(styleRange);
-		
+
 		index = styleRange.start + styleRange.length;
-		
+
 		styleRange = new StyleRange();
 		styleRange.start = String.format(" : %s,\n", Util.formatAddress(client.getAddresses().get(EAddressType.HOME.name()))).length() + index;
 		styleRange.length = "Tél.".length();
 		styleRange.fontStyle = SWT.BOLD;
 		clientControl.setStyleRange(styleRange);
-		
+
 		clientControl.addListener(SWT.MouseDown, event -> {
 			// if ((event.stateMask & SWT.MOD1) != 0) {
 			final int offset = clientControl.getOffsetAtLocation(new Point(event.x, event.y));
@@ -174,11 +174,11 @@ public class ContractDetailCompositeProvider extends AbstractDetailCompositeProv
 			// }
 		});
 	}
-	
+
 	private void createSinisterComposite(final Composite parent, final Contract item) {
 		final Composite composite = createColumnComposite(parent);
 	}
-
+	
 	private Composite createColumnComposite(final Composite parent) {
 		final Composite columnComposite = new Composite(parent, SWT.NONE);
 		columnComposite.setLayoutData(new GridData(GridData.FILL_BOTH));

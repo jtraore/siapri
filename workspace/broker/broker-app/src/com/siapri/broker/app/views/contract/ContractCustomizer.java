@@ -94,8 +94,8 @@ public class ContractCustomizer extends AbstractCustomizer<Contract> {
 			}
 		};
 		final DataListModel clientListModel = new ClientDataListModel(parent);
-		final SearchContext cleintSearchContext = new SearchContext(clientListModel, clientLabelProvider, "Recherche client", "Cette fenetre permet de rechercher un client");
-		final ObjectSeekComposite clientSeekComposite = new ObjectSeekComposite(composite, cleintSearchContext);
+		final SearchContext clientSearchContext = new SearchContext(clientListModel, clientLabelProvider, "Recherche client", "Cette fenetre permet de rechercher un client");
+		final ObjectSeekComposite clientSeekComposite = new ObjectSeekComposite(composite, clientSearchContext);
 		clientSeekComposite.setLayoutData(new GridData(SWT.FILL, SWT.DEFAULT, true, false, 5, 1));
 		bindingSupport.bindObjectSeekComposite(customizerModel, "client", clientSeekComposite, IValidationSupport.NON_EMPTY_VALIDATOR);
 		

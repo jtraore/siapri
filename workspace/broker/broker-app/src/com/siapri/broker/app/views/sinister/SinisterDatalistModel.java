@@ -1,5 +1,6 @@
 package com.siapri.broker.app.views.sinister;
 
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +13,6 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 
 import com.siapri.broker.app.BundleUtil;
-import com.siapri.broker.app.views.common.action.DataListActionEvent;
 import com.siapri.broker.app.views.common.action.IAction;
 import com.siapri.broker.app.views.common.customizer.CustomizerDialog;
 import com.siapri.broker.app.views.common.customizer.DialogBox;
@@ -46,6 +46,7 @@ public class SinisterDatalistModel extends DataListModel {
 
 		final IAction createAction = (event) -> {
 			final Sinister sinister = new Sinister();
+			sinister.setOccuredDate(ZonedDateTime.now());
 			sinister.setAddress(new Address());
 			final String title = "Nouveau sinistre";
 			final String description = String.format("Cette fenêtre permet de déclarer un sinistre");
@@ -53,35 +54,20 @@ public class SinisterDatalistModel extends DataListModel {
 			final DocumentList documentList = new DocumentList(sinister.getDocuments());
 			final DialogBox dialog = new CustomizerDialog(parent.getShell(), customizer, documentList);
 			if (dialog.open() == Window.OK) {
-				// Save to DB
-				final Contract contract = sinister.getContract();
-				contract.getSinisters().add(sinister);
-				final Contract savedContract = BundleUtil.getService(IBasicDaoService.class).save(contract);
-				final Sinister savedSinister = savedContract.getSinisters().get(savedContract.getSinisters().size() - 1); //BundleUtil.getService(IBasicDaoService.class).save(sinister);
-				savedSinister.setContract(contract);
-				//				((DataListActionEvent) event).getDataListModel().getDataList().add(savedSinister);
-				return savedSinister;
+				return BundleUtil.getService(IBasicDaoService.class).save(sinister);
 			}
 			return null;
 		};
 
 		final IAction editAction = (event) -> {
 			final Sinister sinister = (Sinister) event.getTarget();
-
 			final String title = "Edition d'un sinistre";
 			final String description = String.format("Cette fenêtre permet d'éditer un sinistre");
 			final SinisterCustomizer customizer = new SinisterCustomizer(sinister, title, description);
 			final DocumentList documentList = new DocumentList(sinister.getDocuments());
 			final CustomizerDialog dialog = new CustomizerDialog(parent.getShell(), customizer, documentList);
 			if (dialog.open() == Window.OK) {
-				// Merge
-				final Contract contract = sinister.getContract();
-				final Contract savedContract = BundleUtil.getService(IBasicDaoService.class).save(contract);
-				final List<Sinister> contractSinisters = savedContract.getSinisters();
-				final Sinister savedSinister = contractSinisters.get(contractSinisters.indexOf(sinister));
-				savedSinister.setContract(contract);
-
-				return savedSinister;
+				return BundleUtil.getService(IBasicDaoService.class).save(sinister);
 			}
 			return null;
 		};
@@ -89,7 +75,6 @@ public class SinisterDatalistModel extends DataListModel {
 		final IAction deleteAction = (event) -> {
 			final Sinister sinister = (Sinister) event.getTarget();
 			BundleUtil.getService(IBasicDaoService.class).delete(sinister);
-			((DataListActionEvent) event).getDataListModel().getDataList().remove(sinister);
 			return sinister;
 		};
 
@@ -104,26 +89,12 @@ public class SinisterDatalistModel extends DataListModel {
 	}
 
 	private List<Sinister> retrieveSinisters() {
-		//		final List<Sinister> sinister = BundleUtil.getService(IBasicDaoService.class).getAll(Sinister.class);
-		//		sinister.forEach(s -> s.setContract(getContractFromSinister(s)));
-		//		return sinister;
-		final List<Sinister> sinisters = new ArrayList<>();
-		final List<Contract> contracts = BundleUtil.getService(IBasicDaoService.class).getAll(Contract.class);
-		contracts.forEach(c -> {
-			sinisters.addAll(c.getSinisters());
-			c.getSinisters().forEach(s -> s.setContract(c));
-		});
-		return sinisters;
+		return BundleUtil.getService(IBasicDaoService.class).getAll(Sinister.class);
 	}
 
 	public List<Sinister> getSinisters() {
 		return sinisters;
 	}
-
-	//	private static Contract getContractFromSinister(final Sinister sinister) {
-	//		final List<Contract> contracts = BundleUtil.getService(IBasicDaoService.class).getAll(Contract.class);
-	//		return contracts.stream().filter(contract -> contract.getSinisters().contains(sinister)).findFirst().get();
-	//	}
 
 	private static final class DataListLabelProvider extends LabelProvider implements ITableLabelProvider {
 
@@ -137,14 +108,14 @@ public class SinisterDatalistModel extends DataListModel {
 			final Sinister sinister = (Sinister) object;
 			final Contract contract = sinister.getContract();
 			switch (column) {
-			case 0:
-				return contract.getClient().getId().toString();
-			case 1:
-				return contract.getNumber();
-			case 2:
-				return sinister.getOccuredDate().format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss"));
-			case 3:
-				return sinister.getDescription();
+				case 0:
+					return contract.getClient().getId().toString();
+				case 1:
+					return contract.getNumber();
+				case 2:
+					return sinister.getOccuredDate().format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss"));
+				case 3:
+					return sinister.getDescription();
 			}
 			return null;
 		}

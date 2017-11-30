@@ -35,6 +35,12 @@ public abstract class Client extends AbstractDocumentProvider {
 	@ElementCollection(fetch = FetchType.EAGER)
 	@CollectionTable(name = "CUSTOMER_ADDRESSES")
 	private final Map<String, Address> addresses = new HashMap<>();
+
+	@ElementCollection(fetch = FetchType.EAGER)
+	@MapKeyColumn(name = "EMAIL_TYPE")
+	@Column(name = "EMAIL")
+	@CollectionTable(name = "CUSTOMER_EMAILS")
+	private final Map<String, String> emails = new HashMap<>();
 	
 	@Column(name = "FAX")
 	private String fax;
@@ -42,13 +48,17 @@ public abstract class Client extends AbstractDocumentProvider {
 	@ManyToOne
 	@JoinColumn(name = "BROKER_ID", referencedColumnName = "ID")
 	private Broker broker;
-	
+
 	public Map<String, String> getPhones() {
 		return phones;
 	}
 
 	public Map<String, Address> getAddresses() {
 		return addresses;
+	}
+
+	public Map<String, String> getEmails() {
+		return emails;
 	}
 	
 	public String getFax() {
@@ -57,5 +67,13 @@ public abstract class Client extends AbstractDocumentProvider {
 	
 	public void setFax(final String fax) {
 		this.fax = fax;
+	}
+	
+	public Broker getBroker() {
+		return broker;
+	}
+	
+	public void setBroker(final Broker broker) {
+		this.broker = broker;
 	}
 }

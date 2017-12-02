@@ -23,7 +23,7 @@ public class ProxyCallback implements MethodInterceptor {
 			Object oldValue = null;
 			
 			if (method.getName().startsWith("set") && args != null && args.length == 1) {
-				final String getterName = "g" + method.getName().substring(1);
+				final String getterName = (args[0] instanceof Boolean ? "is" : "get") + method.getName().substring(3);
 				final Method getter = target.getClass().getMethod(getterName);
 				oldValue = getter.invoke(target);
 			}

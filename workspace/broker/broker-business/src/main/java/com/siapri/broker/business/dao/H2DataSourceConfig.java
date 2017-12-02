@@ -13,7 +13,7 @@ import org.springframework.jdbc.datasource.DriverManagerDataSource;
 @Configuration
 @Profile("dev")
 public class H2DataSourceConfig implements IDataSourceConfig {
-	
+
 	@Override
 	public DataSource getDataSource() {
 		final DriverManagerDataSource dataSource = new DriverManagerDataSource();
@@ -23,7 +23,7 @@ public class H2DataSourceConfig implements IDataSourceConfig {
 		dataSource.setPassword("admin");
 		return dataSource;
 	}
-
+	
 	@Override
 	public Properties getServerConnectionProperties() {
 		final Properties properties = new Properties();

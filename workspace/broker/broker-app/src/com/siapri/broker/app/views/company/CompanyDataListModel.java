@@ -1,6 +1,5 @@
-package com.siapri.broker.app.views.client;
+package com.siapri.broker.app.views.company;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,106 +23,105 @@ import com.siapri.broker.app.views.common.datalist.DataListActionModel;
 import com.siapri.broker.app.views.common.datalist.DataListModel;
 import com.siapri.broker.business.model.Address;
 import com.siapri.broker.business.model.Client;
-import com.siapri.broker.business.model.Person;
+import com.siapri.broker.business.model.Company;
 import com.siapri.broker.business.service.IBasicDaoService;
 
-public class ClientDataListModel extends DataListModel {
-
-	private List<Person> clients;
-
-	public ClientDataListModel(final Composite parent) {
+public class CompanyDataListModel extends DataListModel {
+	
+	private List<Company> companies;
+	
+	public CompanyDataListModel(final Composite parent) {
 		inititalize(parent);
 	}
-
+	
 	private void inititalize(final Composite parent) {
-
+		
 		labelProvider = new DataListLabelProvider();
-
-		xPathExpressions = new String[] { "firstName", "lastName", "phones[@name='MOBILE']", "phones[@name='LAND']" };
-
+		
+		xPathExpressions = new String[] { "siret", "name", "phones[@name='MOBILE']", "phones[@name='LAND']" };
+		
 		columnDescriptors = new ColumnDescriptor[4];
-		columnDescriptors[0] = new ColumnDescriptor("Nom", 0.30, 125);
-		columnDescriptors[1] = new ColumnDescriptor("Prénom", 0.30, 125);
+		columnDescriptors[0] = new ColumnDescriptor("siret", 0.15, 125);
+		columnDescriptors[1] = new ColumnDescriptor("name", 0.45, 125);
 		columnDescriptors[2] = new ColumnDescriptor("Téléphone", 0.10, 125);
 		columnDescriptors[3] = new ColumnDescriptor("Adresse", 0.30, 125);
-
+		
 		final IAction createAction = (event) -> {
-			final Person client = new Person();
-			client.setBirthdate(LocalDate.now());
-			final String title = "Nouveau client";
-			final String description = String.format("Cette fenêtre permet de créer un nouveau client");
-			final ClientCustomizer customizer = new ClientCustomizer(client, title, description);
-			final DocumentList documentList = new DocumentList(client.getDocuments());
+			final Company company = new Company();
+			final String title = "Nouvelle société";
+			final String description = String.format("Cette fenêtre permet de créer une nouvelle société");
+			final CompanyCustomizer customizer = new CompanyCustomizer(company, title, description);
+			final DocumentList documentList = new DocumentList(company.getDocuments());
 			final DialogBox dialog = new CustomizerDialog(parent.getShell(), customizer, documentList);
 			if (dialog.open() == Window.OK) {
 				// Save to DB
-				return BundleUtil.getService(IBasicDaoService.class).save(client);
+				return BundleUtil.getService(IBasicDaoService.class).save(company);
 			}
 			return null;
 		};
-
+		
 		final IAction editAction = (event) -> {
-			final Person client = (Person) event.getTarget();
-			final String title = "Edition d'un client";
-			final String description = String.format("Cette fenêtre permet d'éditer un client");
-			final ClientCustomizer customizer = new ClientCustomizer(client, title, description);
-			final DocumentList documentList = new DocumentList(client.getDocuments());
+			final Company company = (Company) event.getTarget();
+			final String title = "Edition d'une société";
+			final String description = String.format("Cette fenêtre permet d'éditer une société");
+			final CompanyCustomizer customizer = new CompanyCustomizer(company, title, description);
+			final DocumentList documentList = new DocumentList(company.getDocuments());
 			final CustomizerDialog dialog = new CustomizerDialog(parent.getShell(), customizer, documentList);
-
+			
 			if (dialog.open() == Window.OK) {
 				// Merge to DB
-				return BundleUtil.getService(IBasicDaoService.class).save(client);
+				return BundleUtil.getService(IBasicDaoService.class).save(company);
 			}
 			return null;
 		};
-
+		
 		final IAction deleteAction = (event) -> {
 			final Client client = (Client) event.getTarget();
 			// Delete from DB
 			BundleUtil.getService(IBasicDaoService.class).delete(client);
 			return client;
 		};
-
+		
 		actionModel = new DataListActionModel(createAction, editAction, deleteAction);
-
-		clients = retrieveClients();
-		dataList = new WritableList<Object>(new ArrayList<>(clients), Person.class) {
+		
+		companies = retrieveClients();
+		dataList = new WritableList<Object>(new ArrayList<>(companies), Company.class) {
 			@Override
 			public boolean add(final Object element) {
 				return super.add(element);
 			}
 		};
-
+		
 	}
-
-	private List<Person> retrieveClients() {
-		return BundleUtil.getService(IBasicDaoService.class).getAll(Person.class);
+	
+	private List<Company> retrieveClients() {
+		return BundleUtil.getService(IBasicDaoService.class).getAll(Company.class);
 	}
-
-	public List<Person> getClients() {
-		return clients;
+	
+	public List<Company> getCompanies() {
+		return companies;
 	}
-
+	
 	private static final class DataListLabelProvider extends LabelProvider implements ITableLabelProvider {
-
+		
 		@Override
 		public Image getColumnImage(final Object arg0, final int arg1) {
 			return null;
 		}
-
+		
 		@Override
 		public String getColumnText(final Object object, final int column) {
-			final Person client = (Person) object;
+			final Company client = (Company) object;
 			switch (column) {
 				case 0:
-					return client.getFirstName();
+					return client.getSiret();
 				case 1:
-					return client.getLastName();
+					return client.getName();
 				case 2:
-					return client.getPhones().get(EPhoneType.MOBILE.name());
+					return client.getPhones().get(EPhoneType.LAND.name());
 				case 3:
-					final Address homeAddress = client.getAddresses().get(EAddressType.HOME.name());
-					return Util.formatAddress(homeAddress);
+					final Address address = client.getAddresses().get(EAddressType.WORK.name());
+					return Util.formatAddress(address);
 			}
 			return null;
 		}

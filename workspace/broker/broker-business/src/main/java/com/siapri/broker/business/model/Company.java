@@ -17,6 +17,9 @@ public class Company extends Client {
 	
 	@Column(name = "NAME")
 	private String name;
+	
+	@Column(name = "ACTIVITY")
+	private String activity;
 
 	@Column(name = "INSURER")
 	private boolean insurer;
@@ -42,6 +45,14 @@ public class Company extends Client {
 	
 	public void setName(final String name) {
 		this.name = name;
+	}
+
+	public String getActivity() {
+		return activity;
+	}
+	
+	public void setActivity(final String activity) {
+		this.activity = activity;
 	}
 
 	public boolean isInsurer() {

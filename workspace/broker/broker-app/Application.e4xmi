@@ -47,6 +47,10 @@
           <persistedState key="viewClass" value="com.siapri.broker.app.views.insurancetype.InsuranceTypeView"/>
           <tags>FORCE_TEXT</tags>
         </children>
+        <children xsi:type="menu:DirectToolItem" xmi:id="_Z-9iwNe6EeeAg6h8ZaGLyg" elementId="broker-app.toolbar.main.item.insurers" label="Assureurs" iconURI="platform:/plugin/broker-app/icons/clients.png" tooltip="Affiche la liste des assureurs" type="Check" contributionURI="bundleclass://broker-app/com.siapri.broker.app.ShowPart">
+          <persistedState key="viewClass" value="com.siapri.broker.app.views.company.CompanyView"/>
+          <tags>FORCE_TEXT</tags>
+        </children>
       </children>
       <children xsi:type="menu:ToolControl" xmi:id="_CXCaMJHaEeSgvvVqkSKOdQ" elementId="broker-app.toolcontrol.1" contributionURI="bundleclass://broker-app/com.siapri.broker.app.views.ToolbarSeperator">
         <tags>stretch</tags>

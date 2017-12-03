@@ -30,6 +30,10 @@ public class CompanyCustomizerModel extends AbstractCustomizerModel<Company> {
 	private String landPhone;
 
 	private String mobilePhone;
+	
+	protected CompanyCustomizerModel() {
+		super(null);
+	}
 
 	public CompanyCustomizerModel(final Company target) {
 		super(target);
@@ -51,7 +55,7 @@ public class CompanyCustomizerModel extends AbstractCustomizerModel<Company> {
 		}
 		target.getPhones().put(EPhoneType.LAND.name(), landPhone);
 		if (StringUtils.isNotBlank(mobilePhone)) {
-			target.getPhones().put(EPhoneType.LAND.name(), mobilePhone);
+			target.getPhones().put(EPhoneType.MOBILE.name(), mobilePhone);
 		}
 	}
 

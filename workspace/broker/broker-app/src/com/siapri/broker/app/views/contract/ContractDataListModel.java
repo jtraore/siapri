@@ -53,7 +53,7 @@ public class ContractDataListModel extends DataListModel {
 			contract.setSubscriptionDate(ZonedDateTime.now());
 			final String title = "Nouveau contrat";
 			final String description = String.format("Cette fenêtre permet de créer un nouveau contrat");
-			final ContractCustomizer customizer = new ContractCustomizer(contract, retrieveInsuranceTypes(), title, description);
+			final ContractCustomizer customizer = new ContractCustomizer(contract, retrieveInsurers(), retrieveInsuranceTypes(), title, description);
 			final DocumentList documentList = new DocumentList(contract.getDocuments());
 			final DialogBox dialog = new CustomizerDialog(parent.getShell(), customizer, documentList);
 			if (dialog.open() == Window.OK) {
@@ -67,7 +67,7 @@ public class ContractDataListModel extends DataListModel {
 			final Contract contract = (Contract) event.getTarget();
 			final String title = "Edition d'un contrat";
 			final String description = String.format("Cette fenêtre permet d'éditer un contrat");
-			final ContractCustomizer customizer = new ContractCustomizer(contract, retrieveInsuranceTypes(), title, description);
+			final ContractCustomizer customizer = new ContractCustomizer(contract, retrieveInsurers(), retrieveInsuranceTypes(), title, description);
 			final DocumentList documentList = new DocumentList(contract.getDocuments());
 			final CustomizerDialog dialog = new CustomizerDialog(parent.getShell(), customizer, documentList);
 
@@ -114,6 +114,10 @@ public class ContractDataListModel extends DataListModel {
 
 	protected List<Contract> retrieveContracts() {
 		return BundleUtil.getService(IBasicDaoService.class).getAll(Contract.class);
+	}
+	
+	private List<Company> retrieveInsurers() {
+		return BundleUtil.getService(IBasicDaoService.class).getInsurers();
 	}
 	
 	private List<InsuranceType> retrieveInsuranceTypes() {

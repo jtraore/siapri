@@ -48,6 +48,7 @@ public class CompanyDataListModel extends DataListModel {
 		
 		final IAction createAction = (event) -> {
 			final Company company = new Company();
+			company.setInsurer(true);
 			final String title = "Nouvelle société";
 			final String description = String.format("Cette fenêtre permet de créer une nouvelle société");
 			final CompanyCustomizer customizer = new CompanyCustomizer(company, title, description);

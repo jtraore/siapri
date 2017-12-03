@@ -5,6 +5,7 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 import com.siapri.broker.business.model.AbstractEntity;
+import com.siapri.broker.business.model.Company;
 
 public interface IBasicDaoService {
 
@@ -25,4 +26,6 @@ public interface IBasicDaoService {
 	<T extends AbstractEntity> Optional<T> find(Class<T> clazz, long entityId);
 
 	<T extends AbstractEntity> List<T> getLatestElements(Class<T> clazz, int limit);
+
+	List<Company> getInsurers();
 }

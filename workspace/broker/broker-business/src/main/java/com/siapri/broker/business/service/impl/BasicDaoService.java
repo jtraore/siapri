@@ -5,7 +5,10 @@ import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -17,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import com.siapri.broker.business.dao.repository.IBasicRepository;
 import com.siapri.broker.business.model.AbstractEntity;
+import com.siapri.broker.business.model.Company;
 import com.siapri.broker.business.service.IBasicDaoService;
 
 @Service
@@ -104,6 +108,12 @@ public class BasicDaoService implements IBasicDaoService {
 	public <T extends AbstractEntity> List<T> getLatestElements(final Class<T> clazz, final int limit) {
 		final Page<T> page = getRepository(clazz).findAll(new PageRequest(0, limit, Direction.DESC, "lastModifiedDate"));
 		return page.getContent();
+	}
+	
+	@Override
+	@Transactional
+	public List<Company> getInsurers() {
+		return getAllAsStream(Company.class).filter(c -> c.isInsurer()).collect(Collectors.toList());
 	}
 
 }

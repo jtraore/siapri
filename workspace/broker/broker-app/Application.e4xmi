@@ -28,8 +28,20 @@
     </children>
     <trimBars xmi:id="_HbuvQGU8EeS8lKRWVsNI-w" elementId="broker-app.trimbar.0">
       <children xsi:type="menu:ToolBar" xmi:id="_KESs8GU8EeS8lKRWVsNI-w" elementId="broker-app.toolbar.main">
-        <children xsi:type="menu:DirectToolItem" xmi:id="_pRE5EGU8EeS8lKRWVsNI-w" elementId="broker-app.toolbar.main.item.clients" label="Clients" iconURI="platform:/plugin/broker-app/icons/clients.png" tooltip="Affiche les clients" type="Check" contributionURI="bundleclass://broker-app/com.siapri.broker.app.ShowPart">
+        <children xsi:type="menu:DirectToolItem" xmi:id="_tnvKgMFQEee_XNBMVVCVqA" elementId="broker-app.toolbar.main.item.insurancetypes" label="Type d'assurance" iconURI="platform:/plugin/broker-app/icons/cases.png" tooltip="Affiche les type d'assurance" type="Check" contributionURI="bundleclass://broker-app/com.siapri.broker.app.ShowPart">
+          <persistedState key="viewClass" value="com.siapri.broker.app.views.insurancetype.InsuranceTypeView"/>
+          <tags>FORCE_TEXT</tags>
+        </children>
+        <children xsi:type="menu:DirectToolItem" xmi:id="_pRE5EGU8EeS8lKRWVsNI-w" elementId="broker-app.toolbar.main.item.clients" label="Particuliers" iconURI="platform:/plugin/broker-app/icons/clients.png" tooltip="Affiche la liste des particuliers" type="Check" contributionURI="bundleclass://broker-app/com.siapri.broker.app.ShowPart">
           <persistedState key="viewClass" value="com.siapri.broker.app.views.client.ClientView"/>
+          <tags>FORCE_TEXT</tags>
+        </children>
+        <children xsi:type="menu:DirectToolItem" xmi:id="_83hc0NhZEeeNzOPZwX1v-A" elementId="broker-app.toolbar.main.item.entreprises" label="Entreprises" iconURI="platform:/plugin/broker-app/icons/clients.png" tooltip="Affiche la liste des entreprises" type="Check" contributionURI="bundleclass://broker-app/com.siapri.broker.app.ShowPart">
+          <persistedState key="viewClass" value="com.siapri.broker.app.views.entreprise.EnterpriseView"/>
+          <tags>FORCE_TEXT</tags>
+        </children>
+        <children xsi:type="menu:DirectToolItem" xmi:id="_Z-9iwNe6EeeAg6h8ZaGLyg" elementId="broker-app.toolbar.main.item.insurers" label="Assureurs" iconURI="platform:/plugin/broker-app/icons/clients.png" tooltip="Affiche la liste des assureurs" type="Check" contributionURI="bundleclass://broker-app/com.siapri.broker.app.ShowPart">
+          <persistedState key="viewClass" value="com.siapri.broker.app.views.insurer.InsurerView"/>
           <tags>FORCE_TEXT</tags>
         </children>
         <children xsi:type="menu:DirectToolItem" xmi:id="_9QHaYGU8EeS8lKRWVsNI-w" elementId="broker-app.toolbar.main.item.contracts" label="Contrats" iconURI="platform:/plugin/broker-app/icons/cases.png" tooltip="Affiche les contrats" type="Check" contributionURI="bundleclass://broker-app/com.siapri.broker.app.ShowPart">
@@ -41,14 +53,6 @@
           <tags>FORCE_TEXT</tags>
         </children>
         <children xsi:type="menu:DirectToolItem" xmi:id="_PKq58PIIEeW7ltzVlyt5_A" elementId="broker-app.toolbar.main.item.payments" label="Règlements" iconURI="platform:/plugin/broker-app/icons/payments.png" tooltip="Affiche les règlements" type="Check" contributionURI="bundleclass://broker-app/com.siapri.broker.app.ShowPart">
-          <tags>FORCE_TEXT</tags>
-        </children>
-        <children xsi:type="menu:DirectToolItem" xmi:id="_tnvKgMFQEee_XNBMVVCVqA" elementId="broker-app.toolbar.main.item.insurancetypes" label="Type d'assurance" iconURI="platform:/plugin/broker-app/icons/cases.png" tooltip="Affiche les type d'assurance" type="Check" contributionURI="bundleclass://broker-app/com.siapri.broker.app.ShowPart">
-          <persistedState key="viewClass" value="com.siapri.broker.app.views.insurancetype.InsuranceTypeView"/>
-          <tags>FORCE_TEXT</tags>
-        </children>
-        <children xsi:type="menu:DirectToolItem" xmi:id="_Z-9iwNe6EeeAg6h8ZaGLyg" elementId="broker-app.toolbar.main.item.insurers" label="Assureurs" iconURI="platform:/plugin/broker-app/icons/clients.png" tooltip="Affiche la liste des assureurs" type="Check" contributionURI="bundleclass://broker-app/com.siapri.broker.app.ShowPart">
-          <persistedState key="viewClass" value="com.siapri.broker.app.views.company.CompanyView"/>
           <tags>FORCE_TEXT</tags>
         </children>
       </children>

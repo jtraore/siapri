@@ -30,7 +30,10 @@ public class CompanyDataListModel extends DataListModel {
 	
 	private List<Company> companies;
 	
-	public CompanyDataListModel(final Composite parent) {
+	private final boolean isInsurer;
+	
+	public CompanyDataListModel(final Composite parent, final boolean isInsurer) {
+		this.isInsurer = isInsurer;
 		inititalize(parent);
 	}
 	
@@ -48,7 +51,7 @@ public class CompanyDataListModel extends DataListModel {
 		
 		final IAction createAction = (event) -> {
 			final Company company = new Company();
-			company.setInsurer(true);
+			company.setInsurer(isInsurer);
 			final String title = "Nouvelle société";
 			final String description = String.format("Cette fenêtre permet de créer une nouvelle société");
 			final CompanyCustomizer customizer = new CompanyCustomizer(company, title, description);
@@ -96,7 +99,10 @@ public class CompanyDataListModel extends DataListModel {
 	}
 	
 	private List<Company> retrieveClients() {
-		return BundleUtil.getService(IBasicDaoService.class).getAll(Company.class);
+		if (isInsurer) {
+			return BundleUtil.getService(IBasicDaoService.class).getInsurers();
+		}
+		return BundleUtil.getService(IBasicDaoService.class).getEntreprises();
 	}
 	
 	public List<Company> getCompanies() {

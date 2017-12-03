@@ -1,8 +1,10 @@
 package com.siapri.broker.app.views.overview;
 
 import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Stream;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -93,7 +95,8 @@ public class Overview {
 
 	private void refreshOverview(final Object item) {
 		overviewExpandItems.forEach((overviewGroupProvider, expandItem) -> {
-			if (((ParameterizedType) overviewGroupProvider.getClass().getGenericInterfaces()[0]).getActualTypeArguments()[0].equals(item.getClass())) {
+			final java.util.Optional<Type> providerInterface = findOverviewProviderInterface(overviewGroupProvider.getClass());
+			if (providerInterface.isPresent() && ((ParameterizedType) providerInterface.get()).getActualTypeArguments()[0].equals(item.getClass())) {
 				expandItem.getControl().dispose();
 				final OverviewGroupComposite overviewGroupComposite = new OverviewGroupComposite(expandItem.getParent(), overviewGroupProvider);
 				expandItem.setHeight(overviewGroupComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT).y);
@@ -101,5 +104,17 @@ public class Overview {
 				return;
 			}
 		});
+	}
+	
+	private java.util.Optional<Type> findOverviewProviderInterface(final Class<?> clazz) {
+		final java.util.Optional<Type> providerInterface = Stream.of(clazz.getGenericInterfaces()).filter(t -> t instanceof ParameterizedType && ((ParameterizedType) clazz.getGenericInterfaces()[0]).getRawType().equals(IOverviewGroupProvider.class))
+				.findFirst();
+		if (providerInterface.isPresent()) {
+			return providerInterface;
+		}
+		if (clazz.getSuperclass() != null) {
+			return findOverviewProviderInterface(clazz.getSuperclass());
+		}
+		return java.util.Optional.empty();
 	}
 }

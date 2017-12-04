@@ -3,6 +3,7 @@ package com.siapri.broker.app.views.common.customizer;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
+import org.eclipse.core.databinding.observable.list.WritableList;
 import org.eclipse.jface.databinding.viewers.ObservableListContentProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.LabelProvider;
@@ -27,21 +28,21 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.Text;
 
 public class ObjectSeekComposite extends Composite {
-	
+
 	public static final String VALUE_PROPERTY = "value";
-	
+
 	private final PropertyChangeSupport propertyChangeSupport;
-	
+
 	private final SearchContext searchContext;
 	private Object value;
 	private Text searchText;
 	private Button searchButton;
-	
+
 	private Shell popupShell;
 	private TableViewer tableViewer;
-	
+
 	private boolean textModifyListenerEnabled;
-	
+
 	public ObjectSeekComposite(final Composite parent, final SearchContext searchContext) {
 		super(parent, SWT.NONE);
 		this.searchContext = searchContext;
@@ -49,7 +50,7 @@ public class ObjectSeekComposite extends Composite {
 		propertyChangeSupport = new PropertyChangeSupport(this);
 		buildUI();
 	}
-	
+
 	private void buildUI() {
 		final GridLayout gridLayout = new GridLayout(2, false);
 		gridLayout.marginHeight = 0;
@@ -65,20 +66,22 @@ public class ObjectSeekComposite extends Composite {
 		setupSearchListener();
 		setupContentAssist();
 	}
-	
+
 	private void setupContentAssist() {
 		popupShell = new Shell(getShell(), SWT.ON_TOP);
 		popupShell.setLayout(new FillLayout());
-		
+
 		final LabelProvider labelProvider = searchContext.getLabelProvider();
 		tableViewer = new TableViewer(popupShell, SWT.SINGLE | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
 		tableViewer.setContentProvider(new ObservableListContentProvider());
 		tableViewer.getControl().setLayoutData(new GridData(GridData.FILL, GridData.FILL, true, true));
 		tableViewer.setLabelProvider(labelProvider);
 		tableViewer.setContentProvider(new ObservableListContentProvider());
-		tableViewer.setInput(searchContext.getDataListModel().getDataList());
+		final WritableList<Object> list = new WritableList<>();
+		searchContext.getDataListModels().forEach(dataListModel -> list.addAll(dataListModel.getDataList()));
+		tableViewer.setInput(list);
 		final Table table = tableViewer.getTable();
-		
+
 		final ViewerFilter filter = new ViewerFilter() {
 			@Override
 			public boolean select(final Viewer viewer, final Object parentElement, final Object element) {
@@ -87,7 +90,7 @@ public class ObjectSeekComposite extends Composite {
 			}
 		};
 		tableViewer.setFilters(new ViewerFilter[] { filter });
-		
+
 		searchText.addListener(SWT.KeyDown, event -> {
 			switch (event.keyCode) {
 				case SWT.ARROW_DOWN:
@@ -115,7 +118,7 @@ public class ObjectSeekComposite extends Composite {
 					break;
 			}
 		});
-		
+
 		searchText.addListener(SWT.Modify, event -> {
 			if (!textModifyListenerEnabled) {
 				return;
@@ -132,18 +135,18 @@ public class ObjectSeekComposite extends Composite {
 				popupShell.setVisible(true);
 			}
 		});
-		
+
 		table.addListener(SWT.DefaultSelection, event -> {
 			updateValue();
 			popupShell.setVisible(false);
 		});
-		
+
 		table.addListener(SWT.KeyDown, event -> {
 			if (event.keyCode == SWT.ESC) {
 				popupShell.setVisible(false);
 			}
 		});
-		
+
 		final Listener focusOutListener = event -> Display.getCurrent().asyncExec(() -> {
 			if (Display.getCurrent().isDisposed()) {
 				return;
@@ -155,10 +158,10 @@ public class ObjectSeekComposite extends Composite {
 		});
 		table.addListener(SWT.FocusOut, focusOutListener);
 		searchText.addListener(SWT.FocusOut, focusOutListener);
-		
+
 		getShell().addListener(SWT.Move, event -> popupShell.setVisible(false));
 	}
-	
+
 	private void updateValue() {
 		final IStructuredSelection selection = (IStructuredSelection) tableViewer.getSelection();
 		if (selection.isEmpty()) {
@@ -166,13 +169,13 @@ public class ObjectSeekComposite extends Composite {
 		}
 		setValue(selection.getFirstElement());
 	}
-	
+
 	private void setupSearchListener() {
 		searchButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(final SelectionEvent e) {
-				final FindDialog dialog = new FindDialog(getShell(), searchContext.getDataListModel(), searchContext.getTitle(), searchContext.getDescription());
-				searchContext.getDataListModel().getActionModel().setDefaultAction(event -> dialog.close());
+				final FindDialog dialog = new FindDialog(getShell(), searchContext.getDataListModels(), searchContext.getTitle(), searchContext.getDescription());
+				searchContext.getDataListModels().forEach(dataListModel -> dataListModel.getActionModel().setDefaultAction(event -> dialog.close()));
 				if (dialog.open() != Window.OK) {
 					return;
 				}
@@ -182,11 +185,11 @@ public class ObjectSeekComposite extends Composite {
 			}
 		});
 	}
-	
+
 	public final Object getValue() {
 		return value;
 	}
-	
+
 	public final void setValue(final Object value) {
 		final Object oldValue = this.value;
 		this.value = value;
@@ -197,16 +200,16 @@ public class ObjectSeekComposite extends Composite {
 		}
 		propertyChangeSupport.firePropertyChange(VALUE_PROPERTY, oldValue, value);
 	}
-	
+
 	public final void addValueChangeListener(final PropertyChangeListener listener) {
 		propertyChangeSupport.addPropertyChangeListener(VALUE_PROPERTY, listener);
 	}
-	
+
 	public final void removeValueChangeListener(final PropertyChangeListener listener) {
 		propertyChangeSupport.removePropertyChangeListener(VALUE_PROPERTY, listener);
 	}
-	
+
 	public Object getElementType() {
-		return searchContext.getDataListModel().getElementType();
+		return searchContext.getElementType();
 	}
 }

@@ -19,8 +19,11 @@ import com.siapri.broker.app.views.common.EAddressType;
 import com.siapri.broker.app.views.common.EPhoneType;
 import com.siapri.broker.app.views.common.Util;
 import com.siapri.broker.app.views.detail.AbstractDetailCompositeProvider;
+import com.siapri.broker.app.views.entreprise.EnterpriseOverviewItemLocator;
 import com.siapri.broker.app.views.insurancetype.InsuranceTypeOverviewItemLocator;
 import com.siapri.broker.app.views.overview.OverviewItem;
+import com.siapri.broker.business.model.Client;
+import com.siapri.broker.business.model.Company;
 import com.siapri.broker.business.model.Contract;
 import com.siapri.broker.business.model.InsuranceType;
 import com.siapri.broker.business.model.Person;
@@ -119,31 +122,39 @@ public class ContractDetailCompositeProvider extends AbstractDetailCompositeProv
 			// }
 		});
 	}
-
+	
 	private void createClientComposite(final Composite parent, final Contract item) {
+		final Client client = item.getClient();
+		if (client instanceof Person) {
+			createPersonComposite(parent, (Person) client);
+		} else {
+			createEntrpriseComposite(parent, (Company) client);
+		}
+	}
+
+	private void createPersonComposite(final Composite parent, final Person person) {
 		final Composite composite = createColumnComposite(parent);
 		
 		final StyledText clientControl = new StyledText(composite, SWT.WRAP);
 		clientControl.setEditable(false);
 		
-		final Person client = (Person) item.getClient();
 		// @formatter:off
 		clientControl.setText(String.format("%s %s %s, né(e) le %s\nAdresse domicile : %s,\nTél. : %s",
-						Util.getGenderAsString(client.getGender()),
-						client.getFirstName(),
-						client.getLastName(),
-						Util.DATE_TIME_FORMATTER.format(client.getBirthdate()),
-						Util.formatAddress(client.getAddresses().get(EAddressType.HOME.name())),
-						client.getPhones().get(EPhoneType.MOBILE.name())));
+						Util.getGenderAsString(person.getGender()),
+						person.getFirstName(),
+						person.getLastName(),
+						Util.DATE_TIME_FORMATTER.format(person.getBirthdate()),
+						Util.formatAddress(person.getAddresses().get(EAddressType.HOME.name())),
+						person.getPhones().get(EPhoneType.MOBILE.name())));
 		// @formatter:on
 		clientControl.setLayoutData(new GridData(GridData.FILL_BOTH));
 		
 		StyleRange styleRange = new StyleRange();
-		styleRange.start = Util.getGenderAsString(client.getGender()).length() + 1;
-		styleRange.length = String.format("%s %s", client.getFirstName(), client.getLastName()).length();
+		final String styleData = "Client";
+		styleRange.start = Util.getGenderAsString(person.getGender()).length() + 1;
+		styleRange.length = String.format("%s %s", person.getFirstName(), person.getLastName()).length();
 		styleRange.underline = true;
 		styleRange.underlineStyle = SWT.UNDERLINE_LINK;
-		final String styleData = "Client";
 		styleRange.data = styleData;
 		styleRange.fontStyle = SWT.BOLD;
 		clientControl.setStyleRange(styleRange);
@@ -151,7 +162,7 @@ public class ContractDetailCompositeProvider extends AbstractDetailCompositeProv
 		int index = styleRange.start + styleRange.length;
 		
 		styleRange = new StyleRange();
-		styleRange.start = String.format(", né(e) le %s\n", Util.DATE_TIME_FORMATTER.format(client.getBirthdate())).length() + index;
+		styleRange.start = String.format(", né(e) le %s\n", Util.DATE_TIME_FORMATTER.format(person.getBirthdate())).length() + index;
 		styleRange.length = "Adresse domicile".length();
 		styleRange.fontStyle = SWT.BOLD;
 		clientControl.setStyleRange(styleRange);
@@ -159,7 +170,7 @@ public class ContractDetailCompositeProvider extends AbstractDetailCompositeProv
 		index = styleRange.start + styleRange.length;
 
 		styleRange = new StyleRange();
-		styleRange.start = String.format(" : %s,\n", Util.formatAddress(client.getAddresses().get(EAddressType.HOME.name()))).length() + index;
+		styleRange.start = String.format(" : %s,\n", Util.formatAddress(person.getAddresses().get(EAddressType.HOME.name()))).length() + index;
 		styleRange.length = "Tél.".length();
 		styleRange.fontStyle = SWT.BOLD;
 		clientControl.setStyleRange(styleRange);
@@ -169,7 +180,59 @@ public class ContractDetailCompositeProvider extends AbstractDetailCompositeProv
 			final int offset = clientControl.getOffsetAtLocation(new Point(event.x, event.y));
 			final StyleRange selectedStyleRange = clientControl.getStyleRangeAtOffset(offset);
 			if (selectedStyleRange != null && styleData.equals(selectedStyleRange.data)) {
-				new ClientOverviewItemLocator().locate(new OverviewItem<>(client, ""));
+				new ClientOverviewItemLocator().locate(new OverviewItem<>(person, ""));
+			}
+			// }
+		});
+	}
+	
+	private void createEntrpriseComposite(final Composite parent, final Company company) {
+		final Composite composite = createColumnComposite(parent);
+		
+		final StyledText clientControl = new StyledText(composite, SWT.WRAP);
+		clientControl.setEditable(false);
+		
+		// @formatter:off
+			clientControl.setText(String.format("%s - %s\nAdresse : %s,\nTél. : %s",
+							company.getSiret(),
+							company.getName(),
+							Util.formatAddress(company.getAddresses().get(EAddressType.WORK.name())),
+							company.getPhones().get(EPhoneType.LAND.name())));
+		// @formatter:on
+		clientControl.setLayoutData(new GridData(GridData.FILL_BOTH));
+		
+		StyleRange styleRange = new StyleRange();
+		final String styleData = "Client";
+		styleRange.start = 0;
+		styleRange.length = String.format("%s - %s", company.getSiret(), company.getName()).length();
+		styleRange.underline = true;
+		styleRange.underlineStyle = SWT.UNDERLINE_LINK;
+		styleRange.data = styleData;
+		styleRange.fontStyle = SWT.BOLD;
+		clientControl.setStyleRange(styleRange);
+
+		int index = styleRange.start + styleRange.length;
+		
+		styleRange = new StyleRange();
+		styleRange.start = index + 1;
+		styleRange.length = "Adresse".length();
+		styleRange.fontStyle = SWT.BOLD;
+		clientControl.setStyleRange(styleRange);
+
+		index = styleRange.start + styleRange.length;
+
+		styleRange = new StyleRange();
+		styleRange.start = String.format(" : %s,\n", Util.formatAddress(company.getAddresses().get(EAddressType.WORK.name()))).length() + index;
+		styleRange.length = "Tél.".length();
+		styleRange.fontStyle = SWT.BOLD;
+		clientControl.setStyleRange(styleRange);
+
+		clientControl.addListener(SWT.MouseDown, event -> {
+			// if ((event.stateMask & SWT.MOD1) != 0) {
+			final int offset = clientControl.getOffsetAtLocation(new Point(event.x, event.y));
+			final StyleRange selectedStyleRange = clientControl.getStyleRangeAtOffset(offset);
+			if (selectedStyleRange != null && styleData.equals(selectedStyleRange.data)) {
+				new EnterpriseOverviewItemLocator().locate(new OverviewItem<>(company, ""));
 			}
 			// }
 		});

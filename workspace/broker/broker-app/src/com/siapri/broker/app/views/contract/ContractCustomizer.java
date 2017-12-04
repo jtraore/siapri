@@ -1,6 +1,7 @@
 package com.siapri.broker.app.views.contract;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.eclipse.core.databinding.observable.list.WritableList;
@@ -36,10 +37,11 @@ import com.siapri.broker.app.views.common.customizer.AbstractCustomizer;
 import com.siapri.broker.app.views.common.customizer.IValidationSupport;
 import com.siapri.broker.app.views.common.customizer.ObjectSeekComposite;
 import com.siapri.broker.app.views.common.customizer.SearchContext;
-import com.siapri.broker.app.views.common.datalist.DataListModel;
 import com.siapri.broker.app.views.common.proxy.IProxy;
 import com.siapri.broker.app.views.common.proxy.ProxyFactory;
+import com.siapri.broker.app.views.company.CompanyDataListModel;
 import com.siapri.broker.app.views.contract.ContractCustomizerModel.SubjectAttributeValue;
+import com.siapri.broker.business.model.Client;
 import com.siapri.broker.business.model.Company;
 import com.siapri.broker.business.model.Contract;
 import com.siapri.broker.business.model.InsuranceType;
@@ -107,8 +109,11 @@ public class ContractCustomizer extends AbstractCustomizer<Contract> {
 				return String.format("%s - %s", company.getSiret(), company.getName());
 			}
 		};
-		final DataListModel clientListModel = new ClientDataListModel(parent);
-		final SearchContext clientSearchContext = new SearchContext(clientListModel, clientLabelProvider, "Recherche client", "Cette fenetre permet de rechercher un client");
+		final ClientDataListModel clientListModel = new ClientDataListModel(parent);
+		clientListModel.setTitle("Particuliers");
+		final CompanyDataListModel entrpriseListModel = new CompanyDataListModel(composite, false);
+		entrpriseListModel.setTitle("Entreprises");
+		final SearchContext clientSearchContext = new SearchContext(Arrays.asList(clientListModel, entrpriseListModel), Client.class, clientLabelProvider, "Recherche client", "Cette fenetre permet de rechercher un client");
 		final ObjectSeekComposite clientSeekComposite = new ObjectSeekComposite(composite, clientSearchContext);
 		clientSeekComposite.setLayoutData(new GridData(SWT.FILL, SWT.DEFAULT, true, false, 5, 1));
 		bindingSupport.bindObjectSeekComposite(customizerModel, "client", clientSeekComposite, IValidationSupport.NON_EMPTY_VALIDATOR);

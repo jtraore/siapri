@@ -36,7 +36,7 @@
           <persistedState key="viewClass" value="com.siapri.broker.app.views.client.ClientView"/>
           <tags>FORCE_TEXT</tags>
         </children>
-        <children xsi:type="menu:DirectToolItem" xmi:id="_83hc0NhZEeeNzOPZwX1v-A" elementId="broker-app.toolbar.main.item.entreprises" label="Entreprises" iconURI="platform:/plugin/broker-app/icons/clients.png" tooltip="Affiche la liste des entreprises" type="Check" contributionURI="bundleclass://broker-app/com.siapri.broker.app.ShowPart">
+        <children xsi:type="menu:DirectToolItem" xmi:id="_83hc0NhZEeeNzOPZwX1v-A" elementId="broker-app.toolbar.main.item.enterprises" accessibilityPhrase="" label="Entreprises" iconURI="platform:/plugin/broker-app/icons/clients.png" tooltip="Affiche la liste des entreprises" type="Check" contributionURI="bundleclass://broker-app/com.siapri.broker.app.ShowPart">
           <persistedState key="viewClass" value="com.siapri.broker.app.views.entreprise.EnterpriseView"/>
           <tags>FORCE_TEXT</tags>
         </children>

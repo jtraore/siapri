@@ -1,7 +1,6 @@
 package com.siapri.broker.app.views.common.customizer;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.eclipse.jface.dialogs.IMessageProvider;
@@ -28,10 +27,6 @@ public class FindDialog extends DialogBox {
 	
 	private DataListComposite composite;
 	
-	public FindDialog(final Shell parentShell, final DataListModel dataListModel, final String title, final String description) {
-		this(parentShell, Arrays.asList(dataListModel), title, description);
-	}
-	
 	public FindDialog(final Shell parentShell, final List<DataListModel> dataListModels, final String title, final String description) {
 		super(parentShell);
 		this.dataListModels.addAll(dataListModels);
@@ -54,7 +49,10 @@ public class FindDialog extends DialogBox {
 		final Composite area = (Composite) super.createDialogArea(parent);
 
 		final CTabFolder tabFolder = new CTabFolder(area, SWT.NONE);
-		tabFolder.setLayoutData(new GridData(GridData.FILL_BOTH));
+		final GridData gridData = new GridData(GridData.FILL_BOTH);
+		gridData.heightHint = 500;
+		tabFolder.setLayoutData(gridData);
+		// tabFolder.setLayoutData(new GridData(GridData.FILL_BOTH));
 		
 		dataListModels.forEach(dataListModel -> {
 			final DataListComposite content = createContent(tabFolder, dataListModel);

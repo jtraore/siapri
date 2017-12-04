@@ -14,23 +14,23 @@ import com.siapri.broker.app.views.overview.IOverviewItemLocator;
 import com.siapri.broker.app.views.overview.OverviewItem;
 
 public abstract class DataListItemLocator<T> implements IOverviewItemLocator<T> {
-	
+
 	protected abstract Class<? extends PartView<T>> getPartViewClass();
-	
+
 	protected abstract String getToolItemId();
-	
+
 	@Override
 	public void locate(final OverviewItem<T> item) {
 		final String partId = showView();
 		BundleUtil.getService(PartViewService.class).getPartView(partId).select(item.getTarget());
 	}
-	
+
 	private String showView() {
 		final E4Service e4Service = BundleUtil.getService(E4Service.class);
 		final MPartStack partStack = (MPartStack) e4Service.getModelService().find(Activator.MAIN_PART_STACK_ID, e4Service.getApplication());
 		final MDirectToolItem directToolItem = (MDirectToolItem) e4Service.getModelService().find(getToolItemId(), e4Service.getApplication());
 		final String partId = partStack.getElementId() + "." + getToolItemId().substring(Activator.MAIN_TOOLBAR_ID.length() + "item.".length() + 1);
-		
+
 		if (!directToolItem.isSelected()) {
 			final MPart newPart = e4Service.getPartService().createPart(Activator.MAIN_PART_DESCRIPTOR_ID);
 			newPart.setElementId(partId);
@@ -45,7 +45,7 @@ public abstract class DataListItemLocator<T> implements IOverviewItemLocator<T> 
 		}
 		return partId;
 	}
-	
+
 	private String getContributionUri() {
 		return Activator.BUNDLE_URI_PREFIX + getPartViewClass().getName();
 	}

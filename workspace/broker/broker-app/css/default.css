@@ -59,7 +59,7 @@ ColorDefinition#org-eclipse-ui-workbench-ACTIVE_TAB_OUTER_KEYLINE_COLOR {
 }
 
 .MTrimBar {
-  background-color: #ffffff #9797ff #ffffff;
+  background-color: #ffffff;
   color: white;
   font: Verdana 8px;
 }
@@ -79,6 +79,11 @@ ColorDefinition#org-eclipse-ui-workbench-ACTIVE_TAB_OUTER_KEYLINE_COLOR {
 
 .MToolControl.Draggable {
 	handle-image:  url(./dragHandle.png);
+}
+
+.MToolBar {
+	color: blue;
+	font: 10px;
 }
 
 #TitledSeparatorLabelStyle {

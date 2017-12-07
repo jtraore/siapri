@@ -27,28 +27,28 @@ import com.siapri.broker.business.model.Company;
 import com.siapri.broker.business.service.IBasicDaoService;
 
 public class CompanyDataListModel extends DataListModel {
-	
+
 	private List<Company> companies;
-	
+
 	private final boolean isInsurer;
-	
+
 	public CompanyDataListModel(final Composite parent, final boolean isInsurer) {
 		this.isInsurer = isInsurer;
 		inititalize(parent);
 	}
-	
+
 	private void inititalize(final Composite parent) {
-		
+
 		labelProvider = new DataListLabelProvider();
-		
+
 		xPathExpressions = new String[] { "siret", "name", "phones[@name='MOBILE']", "phones[@name='LAND']" };
-		
+
 		columnDescriptors = new ColumnDescriptor[4];
 		columnDescriptors[0] = new ColumnDescriptor("siret", 0.15, 125);
 		columnDescriptors[1] = new ColumnDescriptor("name", 0.45, 125);
 		columnDescriptors[2] = new ColumnDescriptor("Téléphone", 0.10, 125);
 		columnDescriptors[3] = new ColumnDescriptor("Adresse", 0.30, 125);
-		
+
 		final IAction createAction = (event) -> {
 			final Company company = new Company();
 			company.setInsurer(isInsurer);
@@ -63,7 +63,7 @@ public class CompanyDataListModel extends DataListModel {
 			}
 			return null;
 		};
-		
+
 		final IAction editAction = (event) -> {
 			final Company company = (Company) event.getTarget();
 			final String title = "Edition d'une société";
@@ -71,51 +71,51 @@ public class CompanyDataListModel extends DataListModel {
 			final CompanyCustomizer customizer = new CompanyCustomizer(company, title, description);
 			final DocumentList documentList = new DocumentList(company.getDocuments());
 			final CustomizerDialog dialog = new CustomizerDialog(parent.getShell(), customizer, documentList);
-			
+
 			if (dialog.open() == Window.OK) {
 				// Merge to DB
 				return BundleUtil.getService(IBasicDaoService.class).save(company);
 			}
 			return null;
 		};
-		
+
 		final IAction deleteAction = (event) -> {
 			final Client client = (Client) event.getTarget();
 			// Delete from DB
 			BundleUtil.getService(IBasicDaoService.class).delete(client);
 			return client;
 		};
-		
+
 		actionModel = new DataListActionModel(createAction, editAction, deleteAction);
-		
-		companies = retrieveClients();
+
+		companies = retrieveElements();
 		dataList = new WritableList<Object>(new ArrayList<>(companies), Company.class) {
 			@Override
 			public boolean add(final Object element) {
 				return super.add(element);
 			}
 		};
-		
+
 	}
-	
-	private List<Company> retrieveClients() {
+
+	private List<Company> retrieveElements() {
 		if (isInsurer) {
-			return BundleUtil.getService(IBasicDaoService.class).getInsurers();
+			return BundleUtil.getService(IBasicDaoService.class).getInsurers(-1);
 		}
-		return BundleUtil.getService(IBasicDaoService.class).getEntreprises();
+		return BundleUtil.getService(IBasicDaoService.class).getEntreprises(-1);
 	}
-	
+
 	public List<Company> getCompanies() {
 		return companies;
 	}
-	
+
 	private static final class DataListLabelProvider extends LabelProvider implements ITableLabelProvider {
-		
+
 		@Override
 		public Image getColumnImage(final Object arg0, final int arg1) {
 			return null;
 		}
-		
+
 		@Override
 		public String getColumnText(final Object object, final int column) {
 			final Company client = (Company) object;

@@ -16,35 +16,35 @@ import com.siapri.broker.business.model.Gender;
 import com.siapri.broker.business.model.Person;
 
 public class ClientCustomizerModel extends AbstractCustomizerModel<Person> {
-	
+
 	@EntityProperty
 	private String firstName;
-	
+
 	@EntityProperty
 	private String lastName;
-	
+
 	@EntityProperty
 	private Gender gender;
-	
+
 	@EntityProperty(converter = LocalDateToDateConverter.class)
 	private Date birthdate;
-	
+
 	@EntityProperty
 	private String fax;
-
+	
 	private Address homeAddress;
 	private Address workAddress;
 	private String landPhone;
 	private String mobilePhone;
-	
+
 	protected ClientCustomizerModel() {
 		super(null);
 	}
-	
+
 	public ClientCustomizerModel(final Person target) {
 		super(target);
 	}
-	
+
 	@Override
 	public void synchronize() {
 		super.synchronize();
@@ -53,7 +53,7 @@ public class ClientCustomizerModel extends AbstractCustomizerModel<Person> {
 		mobilePhone = target.getPhones().get(EPhoneType.MOBILE.name());
 		landPhone = target.getPhones().get(EPhoneType.LAND.name());
 	}
-	
+
 	@Override
 	public void validate() {
 		super.validate();
@@ -68,69 +68,69 @@ public class ClientCustomizerModel extends AbstractCustomizerModel<Person> {
 			target.getPhones().put(EPhoneType.LAND.name(), landPhone);
 		}
 	}
-
+	
 	public String getFirstName() {
 		return firstName;
 	}
-
+	
 	public void setFirstName(final String firstName) {
 		this.firstName = firstName;
 	}
-
+	
 	public String getLastName() {
 		return lastName;
 	}
-
+	
 	public void setLastName(final String lastName) {
 		this.lastName = lastName;
 	}
-
+	
 	public Gender getGender() {
 		return gender;
 	}
-
+	
 	public void setGender(final Gender gender) {
 		this.gender = gender;
 	}
-
+	
 	public Date getBirthdate() {
 		return birthdate;
 	}
-
+	
 	public void setBirthdate(final Date birthdate) {
 		this.birthdate = birthdate;
 	}
-
+	
 	public String getLandPhone() {
 		return landPhone;
 	}
-
+	
 	public void setLandPhone(final String landPhone) {
 		this.landPhone = landPhone;
 	}
-
+	
 	public String getMobilePhone() {
 		return mobilePhone;
 	}
-
+	
 	public void setMobilePhone(final String mobilePhone) {
 		this.mobilePhone = mobilePhone;
 	}
-
+	
 	public Address getHomeAddress() {
 		return homeAddress;
 	}
-
+	
 	public Address getWorkAddress() {
 		return workAddress;
 	}
-	
+
 	public String getFax() {
 		return fax;
 	}
-	
+
 	public void setFax(final String fax) {
 		this.fax = fax;
 	}
-	
+
 }

@@ -6,11 +6,13 @@ import com.siapri.broker.app.views.common.EAddressType;
 import com.siapri.broker.app.views.common.EPhoneType;
 import com.siapri.broker.app.views.common.customizer.AbstractCustomizerModel;
 import com.siapri.broker.app.views.common.customizer.propertybinding.EntityProperty;
+import com.siapri.broker.app.views.common.proxy.Data;
 import com.siapri.broker.app.views.common.proxy.IProxy;
 import com.siapri.broker.app.views.common.proxy.ProxyFactory;
 import com.siapri.broker.business.model.Address;
 import com.siapri.broker.business.model.Company;
 
+@Data
 public class CompanyCustomizerModel extends AbstractCustomizerModel<Company> {
 	
 	@EntityProperty
@@ -57,62 +59,6 @@ public class CompanyCustomizerModel extends AbstractCustomizerModel<Company> {
 		if (StringUtils.isNotBlank(mobilePhone)) {
 			target.getPhones().put(EPhoneType.MOBILE.name(), mobilePhone);
 		}
-	}
-
-	public String getSiret() {
-		return siret;
-	}
-
-	public void setSiret(final String siret) {
-		this.siret = siret;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(final String name) {
-		this.name = name;
-	}
-
-	public String getActivity() {
-		return activity;
-	}
-
-	public void setActivity(final String activity) {
-		this.activity = activity;
-	}
-
-	public Address getAddress() {
-		return address;
-	}
-
-	public void setAddress(final Address address) {
-		this.address = address;
-	}
-
-	public String getLandPhone() {
-		return landPhone;
-	}
-
-	public void setLandPhone(final String landPhone) {
-		this.landPhone = landPhone;
-	}
-
-	public String getMobilePhone() {
-		return mobilePhone;
-	}
-
-	public void setMobilePhone(final String mobilePhone) {
-		this.mobilePhone = mobilePhone;
-	}
-
-	public String getFax() {
-		return fax;
-	}
-
-	public void setFax(final String fax) {
-		this.fax = fax;
 	}
 
 }

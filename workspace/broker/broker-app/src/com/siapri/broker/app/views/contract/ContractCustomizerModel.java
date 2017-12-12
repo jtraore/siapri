@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 import com.siapri.broker.app.views.common.customizer.AbstractCustomizerModel;
 import com.siapri.broker.app.views.common.customizer.propertybinding.EntityProperty;
 import com.siapri.broker.app.views.common.customizer.propertybinding.converter.ZonedDateTimeToDateConverter;
+import com.siapri.broker.app.views.common.proxy.Data;
 import com.siapri.broker.business.model.Client;
 import com.siapri.broker.business.model.Company;
 import com.siapri.broker.business.model.Contract;
@@ -15,6 +16,7 @@ import com.siapri.broker.business.model.InsuranceSubjectAttribute;
 import com.siapri.broker.business.model.InsuranceType;
 import com.siapri.broker.business.model.WarrantyFormula;
 
+@Data
 public class ContractCustomizerModel extends AbstractCustomizerModel<Contract> {
 
 	@EntityProperty
@@ -56,38 +58,6 @@ public class ContractCustomizerModel extends AbstractCustomizerModel<Contract> {
 		attributeValues.forEach(av -> target.getSubjectAttributeCodes().put(av.getAttribute().getCode(), av.getValue()));
 	}
 	
-	public String getNumber() {
-		return number;
-	}
-	
-	public void setNumber(final String number) {
-		this.number = number;
-	}
-	
-	public Date getSubscriptionDate() {
-		return subscriptionDate;
-	}
-	
-	public void setSubscriptionDate(final Date subscriptionDate) {
-		this.subscriptionDate = subscriptionDate;
-	}
-
-	public Company getInsurer() {
-		return insurer;
-	}
-
-	public void setInsurer(final Company insurer) {
-		this.insurer = insurer;
-	}
-	
-	public Client getClient() {
-		return client;
-	}
-	
-	public void setClient(final Client client) {
-		this.client = client;
-	}
-	
 	public InsuranceType getInsuranceType() {
 		return insuranceType;
 	}
@@ -101,20 +71,8 @@ public class ContractCustomizerModel extends AbstractCustomizerModel<Contract> {
 		return warrantyFormula;
 	}
 
-	public void setWarrantyFormula(final WarrantyFormula warrantyFormula) {
-		this.warrantyFormula = warrantyFormula;
-	}
-
 	public List<SubjectAttributeValue> getAttributeValues() {
 		return attributeValues;
-	}
-	
-	public boolean isSigned() {
-		return signed;
-	}
-	
-	public void setSigned(final boolean signed) {
-		this.signed = signed;
 	}
 
 	private void updateAttributeValues() {

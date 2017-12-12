@@ -9,12 +9,14 @@ import com.siapri.broker.app.views.common.EPhoneType;
 import com.siapri.broker.app.views.common.customizer.AbstractCustomizerModel;
 import com.siapri.broker.app.views.common.customizer.propertybinding.EntityProperty;
 import com.siapri.broker.app.views.common.customizer.propertybinding.converter.LocalDateToDateConverter;
+import com.siapri.broker.app.views.common.proxy.Data;
 import com.siapri.broker.app.views.common.proxy.IProxy;
 import com.siapri.broker.app.views.common.proxy.ProxyFactory;
 import com.siapri.broker.business.model.Address;
 import com.siapri.broker.business.model.Gender;
 import com.siapri.broker.business.model.Person;
 
+@Data
 public class ClientCustomizerModel extends AbstractCustomizerModel<Person> {
 
 	@EntityProperty
@@ -69,68 +71,4 @@ public class ClientCustomizerModel extends AbstractCustomizerModel<Person> {
 		}
 	}
 	
-	public String getFirstName() {
-		return firstName;
-	}
-	
-	public void setFirstName(final String firstName) {
-		this.firstName = firstName;
-	}
-	
-	public String getLastName() {
-		return lastName;
-	}
-	
-	public void setLastName(final String lastName) {
-		this.lastName = lastName;
-	}
-	
-	public Gender getGender() {
-		return gender;
-	}
-	
-	public void setGender(final Gender gender) {
-		this.gender = gender;
-	}
-	
-	public Date getBirthdate() {
-		return birthdate;
-	}
-	
-	public void setBirthdate(final Date birthdate) {
-		this.birthdate = birthdate;
-	}
-	
-	public String getLandPhone() {
-		return landPhone;
-	}
-	
-	public void setLandPhone(final String landPhone) {
-		this.landPhone = landPhone;
-	}
-	
-	public String getMobilePhone() {
-		return mobilePhone;
-	}
-	
-	public void setMobilePhone(final String mobilePhone) {
-		this.mobilePhone = mobilePhone;
-	}
-	
-	public Address getHomeAddress() {
-		return homeAddress;
-	}
-	
-	public Address getWorkAddress() {
-		return workAddress;
-	}
-
-	public String getFax() {
-		return fax;
-	}
-
-	public void setFax(final String fax) {
-		this.fax = fax;
-	}
-
 }

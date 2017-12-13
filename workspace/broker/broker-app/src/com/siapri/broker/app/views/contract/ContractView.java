@@ -19,6 +19,7 @@ import com.siapri.broker.app.IApplicationEvent;
 import com.siapri.broker.app.views.PartView;
 import com.siapri.broker.business.model.Contract;
 import com.siapri.broker.business.model.InsuranceType;
+import com.siapri.broker.business.model.Sinister;
 import com.siapri.broker.business.model.WarrantyFormula;
 import com.siapri.broker.business.service.IBasicDaoService;
 
@@ -48,7 +49,7 @@ public class ContractView extends PartView<Contract> {
 	}
 	
 	private ContractDetail createContractDetail(final Contract contract) {
-		return new ContractDetail(contract);
+		return new ContractDetail(contract, BundleUtil.getService(IBasicDaoService.class).getSinistersByContract(contract));
 	}
 
 	private Map<WarrantyFormula, InsuranceType> getWarrantyFormulas() {
@@ -72,6 +73,9 @@ public class ContractView extends PartView<Contract> {
 		} else if (item instanceof InsuranceType) {
 			final InsuranceType insuranceType = (InsuranceType) item;
 			insuranceType.getFormulas().forEach(formula -> formulaMap.put(formula, insuranceType));
+		} else if (item instanceof Sinister) {
+			final Sinister sinister = (Sinister) item;
+			contractDetails.get(sinister.getContract()).getSinisters().add(sinister);
 		}
 	}
 	
@@ -87,6 +91,10 @@ public class ContractView extends PartView<Contract> {
 		} else if (item instanceof InsuranceType) {
 			final InsuranceType insuranceType = (InsuranceType) item;
 			insuranceType.getFormulas().forEach(formula -> formulaMap.put(formula, insuranceType));
+		} else if (item instanceof Sinister) {
+			final Sinister sinister = (Sinister) item;
+			contractDetails.get(sinister.getContract()).getSinisters().remove(sinister);
+			contractDetails.get(sinister.getContract()).getSinisters().add(sinister);
 		}
 	}
 	
@@ -101,6 +109,9 @@ public class ContractView extends PartView<Contract> {
 		} else if (item instanceof InsuranceType) {
 			final InsuranceType insuranceType = (InsuranceType) item;
 			insuranceType.getFormulas().forEach(formula -> formulaMap.remove(formula));
+		} else if (item instanceof Sinister) {
+			final Sinister sinister = (Sinister) item;
+			contractDetails.get(sinister.getContract()).getSinisters().remove(sinister);
 		}
 	}
 }

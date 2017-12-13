@@ -6,7 +6,6 @@ import java.util.Map;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
@@ -33,38 +32,38 @@ import com.siapri.broker.business.model.Person;
 import com.siapri.broker.business.model.Sinister;
 
 public class ClientDetailCompositeProvider extends AbstractDetailCompositeProvider<Person> {
-	
+
 	private final Map<Person, ClientDetail> clientDetails;
-	
+
 	private Person currentClient;
-	
+
 	public ClientDetailCompositeProvider(final String id, final Map<Person, ClientDetail> clientDetails) {
 		super(id);
 		this.clientDetails = clientDetails;
 	}
-	
+
 	@Override
 	public boolean canProvide(final Object item) {
 		return item instanceof Person;
 	}
-	
+
 	@Override
 	public Composite createComposite(final Composite parent, final Person item) {
-		
+
 		currentClient = item;
-		
+
 		final Composite composite = new Composite(parent, SWT.NONE);
 		final GridLayout layout = new GridLayout(3, true);
 		layout.horizontalSpacing = 25;
 		composite.setLayout(layout);
-
+		
 		createGeneralComposite(composite, item);
 		createContractComposite(composite, item);
 		createSinisterComposite(composite, item);
-
+		
 		return composite;
 	}
-	
+
 	private void createGeneralComposite(final Composite parent, final Person item) {
 		final Composite composite = createColumnComposite(parent);
 		final StyledText clientControl = new StyledText(composite, SWT.WRAP | SWT.MULTI);
@@ -80,33 +79,16 @@ public class ClientDetailCompositeProvider extends AbstractDetailCompositeProvid
 		// @formatter:on
 		clientControl.setLayoutData(new GridData(GridData.FILL_BOTH));
 		
-		StyleRange styleRange = new StyleRange();
-		styleRange.start = Util.getGenderAsString(item.getGender()).length() + 1;
-		styleRange.length = String.format("%s %s", item.getFirstName(), item.getLastName()).length();
-		styleRange.fontStyle = SWT.BOLD | SWT.ITALIC;
-		clientControl.setStyleRange(styleRange);
+		clientControl.setStyleRange(Util.createStyleRange(clientControl.getText(), String.format("%s %s", item.getFirstName(), item.getLastName()), SWT.BOLD | SWT.ITALIC));
+		clientControl.setStyleRange(Util.createStyleRange(clientControl.getText(), "Adresse domicile", SWT.BOLD));
+		clientControl.setStyleRange(Util.createStyleRange(clientControl.getText(), "Tél.", SWT.BOLD));
 
-		int index = styleRange.start + styleRange.length;
-
-		styleRange = new StyleRange();
-		styleRange.start = String.format(", né(e) le %s\n", Util.DATE_TIME_FORMATTER.format(item.getBirthdate())).length() + index;
-		styleRange.length = "Adresse domicile".length();
-		styleRange.fontStyle = SWT.BOLD;
-		clientControl.setStyleRange(styleRange);
-		
-		index = styleRange.start + styleRange.length;
-		
-		styleRange = new StyleRange();
-		styleRange.start = String.format(" : %s,\n", Util.formatAddress(item.getAddresses().get(EAddressType.HOME.name()))).length() + index;
-		styleRange.length = "Tél.".length();
-		styleRange.fontStyle = SWT.BOLD;
-		clientControl.setStyleRange(styleRange);
 	}
-
+	
 	private void createContractComposite(final Composite parent, final Person item) {
 		final Composite composite = createColumnComposite(parent);
 		new TitledSeparator(composite, "Liste des contrats").setLayoutData(new GridData(SWT.FILL, SWT.DEFAULT, true, false));
-
+		
 		final ContractDataListModel dataListModel = new ClientContractDataListModel(composite);
 		dataListModel.setFilterDisplayed(false);
 		dataListModel.setReportButtonDisplayed(false);
@@ -114,11 +96,11 @@ public class ClientDetailCompositeProvider extends AbstractDetailCompositeProvid
 		final GridData gridData = new GridData(GridData.FILL, GridData.FILL, true, true);
 		dataListComposite.setLayoutData(gridData);
 	}
-	
+
 	private void createSinisterComposite(final Composite parent, final Person item) {
 		final Composite composite = createColumnComposite(parent);
 		new TitledSeparator(composite, "Liste des sinistres").setLayoutData(new GridData(SWT.FILL, SWT.DEFAULT, true, false));
-
+		
 		final SinisterDatalistModel dataListModel = new ClientSinisterDataListModel(composite);
 		dataListModel.setFilterDisplayed(false);
 		dataListModel.setReportButtonDisplayed(false);
@@ -126,75 +108,75 @@ public class ClientDetailCompositeProvider extends AbstractDetailCompositeProvid
 		final GridData gridData = new GridData(GridData.FILL, GridData.FILL, true, true);
 		dataListComposite.setLayoutData(gridData);
 	}
-
+	
 	private Composite createColumnComposite(final Composite parent) {
 		final Composite columnComposite = new Composite(parent, SWT.NONE);
 		columnComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
 		columnComposite.setLayout(new GridLayout());
 		return columnComposite;
 	}
-
+	
 	private class ClientContractDataListModel extends ContractDataListModel {
-
+		
 		public ClientContractDataListModel(final Composite parent) {
 			super(parent);
 			columnDescriptors = new ColumnDescriptor[] { new ColumnDescriptor("Number", 0.15, 125), new ColumnDescriptor("Date", 0.15, 125), new ColumnDescriptor("Assurance", 0.60, 125) };
 			labelProvider = new ContractDataListLabelProvider();
 			selectionEventActivated = false;
 		}
-		
+
 		@Override
 		protected List<Contract> retrieveContracts() {
 			return clientDetails.get(currentClient).getContracts();
 		}
-
+		
 		@Override
 		protected ContextualAction[] createDatalistMenuActions(final Composite parent) {
 			final IAction navigateToAction = event -> {
 				new ContractOverviewItemLocator().locate(new OverviewItem<>((Contract) event.getTarget(), ""));
 				return null;
 			};
-
+			
 			final ContextualActionPathElement[] navigateToPath = new ContextualActionPathElement[] { new ContextualActionPathElement("Afficher dans la vue Contrats", null) };
-
+			
 			return new ContextualAction[] { new ContextualAction(navigateToAction, navigateToPath) };
 		}
 	}
-	
-	private class ClientSinisterDataListModel extends SinisterDatalistModel {
 
+	private class ClientSinisterDataListModel extends SinisterDatalistModel {
+		
 		public ClientSinisterDataListModel(final Composite parent) {
 			super(parent);
 			columnDescriptors = new ColumnDescriptor[] { new ColumnDescriptor("Date", 0.15, 125), new ColumnDescriptor("Contrat", 0.15, 125), new ColumnDescriptor("Adresse", 0.35, 125), new ColumnDescriptor("Description", 0.35, 125) };
 			labelProvider = new SinisterDataListLabelProvider();
 			selectionEventActivated = false;
 		}
-		
+
 		@Override
 		protected List<Sinister> retrieveSinisters() {
 			return clientDetails.get(currentClient).getSinisters();
 		}
-
+		
 		@Override
 		protected ContextualAction[] createDatalistMenuActions(final Composite parent) {
 			final IAction navigateToAction = event -> {
 				new SinisterOverviewItemLocator().locate(new OverviewItem<>((Sinister) event.getTarget(), ""));
 				return null;
 			};
-
+			
 			final ContextualActionPathElement[] navigateToPath = new ContextualActionPathElement[] { new ContextualActionPathElement("Afficher dans la vue Sinistres", null) };
-
+			
 			return new ContextualAction[] { new ContextualAction(navigateToAction, navigateToPath) };
 		}
 	}
-	
+
 	private final class ContractDataListLabelProvider extends LabelProvider implements ITableLabelProvider {
-		
+
 		@Override
 		public Image getColumnImage(final Object arg0, final int arg1) {
 			return null;
 		}
-		
+
 		@Override
 		public String getColumnText(final Object object, final int column) {
 			final Contract contract = (Contract) object;
@@ -209,14 +191,14 @@ public class ClientDetailCompositeProvider extends AbstractDetailCompositeProvid
 			return null;
 		}
 	}
-	
+
 	private final class SinisterDataListLabelProvider extends LabelProvider implements ITableLabelProvider {
-		
+
 		@Override
 		public Image getColumnImage(final Object arg0, final int arg1) {
 			return null;
 		}
-		
+
 		@Override
 		public String getColumnText(final Object object, final int column) {
 			final Sinister sinister = (Sinister) object;
@@ -233,5 +215,5 @@ public class ClientDetailCompositeProvider extends AbstractDetailCompositeProvid
 			return null;
 		}
 	}
-	
+
 }

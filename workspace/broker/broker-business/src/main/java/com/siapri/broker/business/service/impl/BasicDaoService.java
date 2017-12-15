@@ -18,12 +18,14 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
+import com.google.common.eventbus.EventBus;
 import com.siapri.broker.business.dao.repository.IBasicRepository;
 import com.siapri.broker.business.model.AbstractEntity;
 import com.siapri.broker.business.model.Company;
 import com.siapri.broker.business.model.Contract;
 import com.siapri.broker.business.model.Sinister;
 import com.siapri.broker.business.service.IBasicDaoService;
+import com.siapri.broker.business.service.impl.DaoEvent.EventType;
 
 @Service
 // @org.springframework.context.annotation.Profile("prod")
@@ -32,6 +34,9 @@ public class BasicDaoService implements IBasicDaoService {
 	
 	@Autowired
 	private ApplicationContext appContext;
+	
+	@Autowired
+	private EventBus daoEventBus;
 	
 	@SuppressWarnings("rawtypes")
 	private <T extends AbstractEntity> Optional<IBasicRepository> getBean(final Class<T> clazz) {
@@ -61,14 +66,18 @@ public class BasicDaoService implements IBasicDaoService {
 	
 	@Override
 	public <T extends AbstractEntity> T save(final T entity) {
-		return getRepository((Class<T>) entity.getClass()).saveAndFlush(entity);
+		final T entitySaved = getRepository((Class<T>) entity.getClass()).saveAndFlush(entity);
+		daoEventBus.post(new DaoEvent(entity.getId() == null ? EventType.CREATE : EventType.UPDATE, entitySaved));
+		return entitySaved;
 	}
 	
 	@Override
 	public <T extends AbstractEntity> List<T> saveAll(final List<T> entities) {
 		final Class<T> entityClass = (Class<T>) entities.get(0).getClass();
-		final List<T> result = getRepository(entityClass).save(entities);
-		getRepository(entityClass).flush();
+		final IBasicRepository<T, Long> repository = getRepository(entityClass);
+		final List<T> result = repository.save(entities);
+		repository.flush();
+		daoEventBus.post(new DaoEvent(entities.get(0).getId() == null ? EventType.CREATE : EventType.UPDATE, result.toArray(new AbstractEntity[result.size()])));
 		return result;
 	}
 	

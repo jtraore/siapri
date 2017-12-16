@@ -27,17 +27,19 @@ import com.siapri.broker.app.views.detail.AbstractDetailCompositeProvider;
 import com.siapri.broker.app.views.overview.OverviewItem;
 import com.siapri.broker.app.views.sinister.SinisterDatalistModel;
 import com.siapri.broker.app.views.sinister.SinisterOverviewItemLocator;
+import com.siapri.broker.business.model.Client;
+import com.siapri.broker.business.model.Company;
 import com.siapri.broker.business.model.Contract;
 import com.siapri.broker.business.model.Person;
 import com.siapri.broker.business.model.Sinister;
 
-public class ClientDetailCompositeProvider extends AbstractDetailCompositeProvider<Person> {
+public class ClientDetailCompositeProvider extends AbstractDetailCompositeProvider<Client> {
 
-	private final Map<Person, ClientDetail> clientDetails;
+	private final Map<Client, ClientDetail> clientDetails;
 
-	private Person currentClient;
+	private Client currentClient;
 
-	public ClientDetailCompositeProvider(final String id, final Map<Person, ClientDetail> clientDetails) {
+	public ClientDetailCompositeProvider(final String id, final Map<Client, ClientDetail> clientDetails) {
 		super(id);
 		this.clientDetails = clientDetails;
 	}
@@ -48,7 +50,7 @@ public class ClientDetailCompositeProvider extends AbstractDetailCompositeProvid
 	}
 
 	@Override
-	public Composite createComposite(final Composite parent, final Person item) {
+	public Composite createComposite(final Composite parent, final Client item) {
 
 		currentClient = item;
 
@@ -57,7 +59,11 @@ public class ClientDetailCompositeProvider extends AbstractDetailCompositeProvid
 		layout.horizontalSpacing = 25;
 		composite.setLayout(layout);
 		
-		createGeneralComposite(composite, item);
+		if (item instanceof Person) {
+			createGeneralComposite(composite, (Person) item);
+		} else {
+			createGeneralComposite(composite, (Company) item);
+		}
 		createContractComposite(composite, item);
 		createSinisterComposite(composite, item);
 		
@@ -82,10 +88,29 @@ public class ClientDetailCompositeProvider extends AbstractDetailCompositeProvid
 		clientControl.setStyleRange(Util.createStyleRange(clientControl.getText(), String.format("%s %s", item.getFirstName(), item.getLastName()), SWT.BOLD | SWT.ITALIC));
 		clientControl.setStyleRange(Util.createStyleRange(clientControl.getText(), "Adresse domicile", SWT.BOLD));
 		clientControl.setStyleRange(Util.createStyleRange(clientControl.getText(), "Tél.", SWT.BOLD));
-
 	}
 	
-	private void createContractComposite(final Composite parent, final Person item) {
+	private void createGeneralComposite(final Composite parent, final Company item) {
+		final Composite composite = createColumnComposite(parent);
+		final StyledText clientControl = new StyledText(composite, SWT.WRAP | SWT.MULTI);
+		clientControl.setEditable(false);
+		// @formatter:off
+		clientControl.setText(String.format("%s - %s\nActivité : %s\nAdresse : %s,\nTél. : %s",
+						item.getSiret(),
+						item.getName(),
+						item.getActivity(),
+						Util.formatAddress(item.getAddresses().get(EAddressType.WORK.name())),
+						item.getPhones().get(EPhoneType.LAND.name())));
+		// @formatter:on
+		clientControl.setLayoutData(new GridData(GridData.FILL_BOTH));
+		
+		clientControl.setStyleRange(Util.createStyleRange(clientControl.getText(), String.format("%s - %s", item.getSiret(), item.getName()), SWT.BOLD | SWT.ITALIC));
+		clientControl.setStyleRange(Util.createStyleRange(clientControl.getText(), "Activité", SWT.BOLD));
+		clientControl.setStyleRange(Util.createStyleRange(clientControl.getText(), "Adresse", SWT.BOLD));
+		clientControl.setStyleRange(Util.createStyleRange(clientControl.getText(), "Tél.", SWT.BOLD));
+	}
+	
+	private void createContractComposite(final Composite parent, final Client item) {
 		final Composite composite = createColumnComposite(parent);
 		new TitledSeparator(composite, "Liste des contrats").setLayoutData(new GridData(SWT.FILL, SWT.DEFAULT, true, false));
 		
@@ -97,7 +122,7 @@ public class ClientDetailCompositeProvider extends AbstractDetailCompositeProvid
 		dataListComposite.setLayoutData(gridData);
 	}
 
-	private void createSinisterComposite(final Composite parent, final Person item) {
+	private void createSinisterComposite(final Composite parent, final Client item) {
 		final Composite composite = createColumnComposite(parent);
 		new TitledSeparator(composite, "Liste des sinistres").setLayoutData(new GridData(SWT.FILL, SWT.DEFAULT, true, false));
 		

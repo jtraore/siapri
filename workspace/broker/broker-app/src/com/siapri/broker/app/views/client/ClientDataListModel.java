@@ -26,27 +26,28 @@ import com.siapri.broker.business.model.Address;
 import com.siapri.broker.business.model.Client;
 import com.siapri.broker.business.model.Person;
 import com.siapri.broker.business.service.IBasicDaoService;
+import com.siapri.broker.business.service.impl.DaoCacheService;
 
 public class ClientDataListModel extends DataListModel {
-
+	
 	private List<Person> clients;
-
+	
 	public ClientDataListModel(final Composite parent) {
 		inititalize(parent);
 	}
-
+	
 	private void inititalize(final Composite parent) {
-
+		
 		labelProvider = new DataListLabelProvider();
-
+		
 		xPathExpressions = new String[] { "firstName", "lastName", "phones[@name='MOBILE']", "phones[@name='LAND']" };
-
+		
 		columnDescriptors = new ColumnDescriptor[4];
 		columnDescriptors[0] = new ColumnDescriptor("Nom", 0.30, 125);
 		columnDescriptors[1] = new ColumnDescriptor("Prénom", 0.30, 125);
 		columnDescriptors[2] = new ColumnDescriptor("Téléphone", 0.10, 125);
 		columnDescriptors[3] = new ColumnDescriptor("Adresse", 0.30, 125);
-
+		
 		final IAction createAction = (event) -> {
 			final Person client = new Person();
 			client.setBirthdate(LocalDate.now());
@@ -61,7 +62,7 @@ public class ClientDataListModel extends DataListModel {
 			}
 			return null;
 		};
-
+		
 		final IAction editAction = (event) -> {
 			final Person client = (Person) event.getTarget();
 			final String title = "Edition d'un client";
@@ -69,23 +70,23 @@ public class ClientDataListModel extends DataListModel {
 			final ClientCustomizer customizer = new ClientCustomizer(client, title, description);
 			final DocumentList documentList = new DocumentList(client.getDocuments());
 			final CustomizerDialog dialog = new CustomizerDialog(parent.getShell(), customizer, documentList);
-
+			
 			if (dialog.open() == Window.OK) {
 				// Merge to DB
 				return BundleUtil.getService(IBasicDaoService.class).save(client);
 			}
 			return null;
 		};
-
+		
 		final IAction deleteAction = (event) -> {
 			final Client client = (Client) event.getTarget();
 			// Delete from DB
 			BundleUtil.getService(IBasicDaoService.class).delete(client);
 			return client;
 		};
-
+		
 		actionModel = new DataListActionModel(createAction, editAction, deleteAction);
-
+		
 		clients = retrieveClients();
 		dataList = new WritableList<Object>(new ArrayList<>(clients), Person.class) {
 			@Override
@@ -93,24 +94,24 @@ public class ClientDataListModel extends DataListModel {
 				return super.add(element);
 			}
 		};
-
+		
 	}
-
+	
 	private List<Person> retrieveClients() {
-		return BundleUtil.getService(IBasicDaoService.class).getAll(Person.class);
+		return BundleUtil.getService(DaoCacheService.class).getPersons();
 	}
-
+	
 	public List<Person> getClients() {
 		return clients;
 	}
-
+	
 	private static final class DataListLabelProvider extends LabelProvider implements ITableLabelProvider {
-
+		
 		@Override
 		public Image getColumnImage(final Object arg0, final int arg1) {
 			return null;
 		}
-
+		
 		@Override
 		public String getColumnText(final Object object, final int column) {
 			final Person client = (Person) object;

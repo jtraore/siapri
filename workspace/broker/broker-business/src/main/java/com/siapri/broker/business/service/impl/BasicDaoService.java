@@ -31,13 +31,13 @@ import com.siapri.broker.business.service.impl.DaoEvent.EventType;
 // @org.springframework.context.annotation.Profile("prod")
 @SuppressWarnings("unchecked")
 public class BasicDaoService implements IBasicDaoService {
-	
+
 	@Autowired
 	private ApplicationContext appContext;
-	
+
 	@Autowired
 	private EventBus daoEventBus;
-	
+
 	@SuppressWarnings("rawtypes")
 	private <T extends AbstractEntity> Optional<IBasicRepository> getBean(final Class<T> clazz) {
 		for (final Entry<String, IBasicRepository> entry : appContext.getBeansOfType(IBasicRepository.class).entrySet()) {
@@ -54,7 +54,7 @@ public class BasicDaoService implements IBasicDaoService {
 		}
 		return Optional.empty();
 	}
-	
+
 	@SuppressWarnings("rawtypes")
 	private <T extends AbstractEntity> IBasicRepository<T, Long> getRepository(final Class<T> clazz) {
 		final Optional<IBasicRepository> result = getBean(clazz);
@@ -63,14 +63,14 @@ public class BasicDaoService implements IBasicDaoService {
 		}
 		return result.get();
 	}
-	
+
 	@Override
 	public <T extends AbstractEntity> T save(final T entity) {
 		final T entitySaved = getRepository((Class<T>) entity.getClass()).saveAndFlush(entity);
 		daoEventBus.post(new DaoEvent(entity.getId() == null ? EventType.CREATE : EventType.UPDATE, entitySaved));
 		return entitySaved;
 	}
-	
+
 	@Override
 	public <T extends AbstractEntity> List<T> saveAll(final List<T> entities) {
 		final Class<T> entityClass = (Class<T>) entities.get(0).getClass();
@@ -80,32 +80,37 @@ public class BasicDaoService implements IBasicDaoService {
 		daoEventBus.post(new DaoEvent(entities.get(0).getId() == null ? EventType.CREATE : EventType.UPDATE, result.toArray(new AbstractEntity[result.size()])));
 		return result;
 	}
-	
+
 	@Override
 	public <T extends AbstractEntity> List<T> getAll(final Class<T> clazz) {
 		return getRepository(clazz).findAll(new Sort(Direction.DESC, "lastModifiedDate"));
 	}
-	
+
 	@Override
 	public <T extends AbstractEntity> Stream<T> getAllAsStream(final Class<T> clazz) {
 		return getRepository(clazz).getAllAsStream();
 	}
-	
+
 	@Override
 	public <T extends AbstractEntity> void delete(final T entity) {
 		getRepository((Class<T>) entity.getClass()).delete(entity);
+		daoEventBus.post(new DaoEvent(EventType.DELETE, entity));
 	}
-	
+
 	@Override
 	public <T extends AbstractEntity> void delete(final Class<T> clazz, final long id) {
+		final T entity = getRepository(clazz).getOne(id);
 		getRepository(clazz).delete(id);
+		daoEventBus.post(new DaoEvent(EventType.DELETE, entity));
 	}
-	
+
 	@Override
 	public <T extends AbstractEntity> void deleteAll(final Class<T> clazz) {
+		final List<T> entities = getRepository(clazz).findAll();
 		getRepository(clazz).deleteAll();
+		daoEventBus.post(new DaoEvent(EventType.DELETE, entities.toArray(new AbstractEntity[entities.size()])));
 	}
-	
+
 	@Override
 	public <T extends AbstractEntity> Optional<T> find(final Class<T> clazz, final long entityId) {
 		final T entity = getRepository(clazz).findOne(entityId);
@@ -114,13 +119,13 @@ public class BasicDaoService implements IBasicDaoService {
 		}
 		return Optional.empty();
 	}
-
+	
 	@Override
 	public <T extends AbstractEntity> List<T> getLatestElements(final Class<T> clazz, final int limit) {
 		final Page<T> page = getRepository(clazz).findAll(new PageRequest(0, limit, Direction.DESC, "lastModifiedDate"));
 		return page.getContent();
 	}
-
+	
 	@Transactional
 	@Override
 	public List<Company> getInsurers(final int limit) {
@@ -129,7 +134,7 @@ public class BasicDaoService implements IBasicDaoService {
 		}
 		return getAllAsStream(Company.class).filter(c -> c.isInsurer()).limit(limit).collect(Collectors.toList());
 	}
-
+	
 	@Transactional
 	@Override
 	public List<Company> getEntreprises(final int limit) {
@@ -138,11 +143,11 @@ public class BasicDaoService implements IBasicDaoService {
 		}
 		return getAllAsStream(Company.class).filter(c -> !c.isInsurer()).limit(limit).collect(Collectors.toList());
 	}
-
+	
 	@Transactional
 	@Override
 	public List<Sinister> getSinistersByContract(final Contract contract) {
 		return getAllAsStream(Sinister.class).filter(sinister -> sinister.getContract().equals(contract)).collect(Collectors.toList());
 	}
-	
+
 }

@@ -19,25 +19,26 @@ import com.siapri.broker.app.views.common.datalist.DataListActionModel;
 import com.siapri.broker.app.views.common.datalist.DataListModel;
 import com.siapri.broker.business.model.InsuranceType;
 import com.siapri.broker.business.service.IBasicDaoService;
+import com.siapri.broker.business.service.impl.DaoCacheService;
 
 public class InsuranceTypeDataListModel extends DataListModel {
-	
+
 	private List<InsuranceType> insuranceTypes;
-	
+
 	public InsuranceTypeDataListModel(final Composite parent) {
 		inititalize(parent);
 	}
-	
+
 	private void inititalize(final Composite parent) {
-		
+
 		labelProvider = new DataListLabelProvider();
-		
+
 		xPathExpressions = new String[] { "code", "name" };
-		
+
 		columnDescriptors = new ColumnDescriptor[2];
 		columnDescriptors[0] = new ColumnDescriptor("code", 0.30, 125);
 		columnDescriptors[1] = new ColumnDescriptor("Name", 0.70, 125);
-		
+
 		final IAction createAction = (event) -> {
 			final InsuranceType insuranceType = new InsuranceType();
 			final String title = "Nouveau type d'assurance";
@@ -51,7 +52,7 @@ public class InsuranceTypeDataListModel extends DataListModel {
 			}
 			return null;
 		};
-		
+
 		final IAction editAction = (event) -> {
 			final InsuranceType insuranceType = (InsuranceType) event.getTarget();
 			final String title = "Edition d'un type d'assurance";
@@ -59,7 +60,7 @@ public class InsuranceTypeDataListModel extends DataListModel {
 			final InsuranceTypeCustomizer customizer = new InsuranceTypeCustomizer(insuranceType, title, description);
 			// final DocumentList documentList = new DocumentList(insuranceType.getDocuments());
 			final CustomizerDialog dialog = new CustomizerDialog(parent.getShell(), customizer);
-			
+
 			if (dialog.open() == Window.OK) {
 				// Merge to DB
 				return BundleUtil.getService(IBasicDaoService.class).save(insuranceType);
@@ -71,19 +72,19 @@ public class InsuranceTypeDataListModel extends DataListModel {
 					insuranceType.getAttributes().addAll(entity.getAttributes());
 				});
 			}
-			
+
 			return null;
 		};
-		
+
 		final IAction deleteAction = (event) -> {
 			final InsuranceType insuranceType = (InsuranceType) event.getTarget();
 			// Delete from DB
 			BundleUtil.getService(IBasicDaoService.class).delete(insuranceType);
 			return insuranceType;
 		};
-		
+
 		actionModel = new DataListActionModel(createAction, editAction, deleteAction);
-		
+
 		insuranceTypes = retrieveInsuranceTypes();
 		dataList = new WritableList<Object>(new ArrayList<>(insuranceTypes), InsuranceType.class) {
 			@Override
@@ -91,24 +92,24 @@ public class InsuranceTypeDataListModel extends DataListModel {
 				return super.add(element);
 			}
 		};
-		
+
 	}
-	
+
 	private List<InsuranceType> retrieveInsuranceTypes() {
-		return BundleUtil.getService(IBasicDaoService.class).getAll(InsuranceType.class);
+		return BundleUtil.getService(DaoCacheService.class).getInsuranceTypes();
 	}
-	
+
 	public List<InsuranceType> getInsuranceTypes() {
 		return insuranceTypes;
 	}
-	
+
 	private static final class DataListLabelProvider extends LabelProvider implements ITableLabelProvider {
-		
+
 		@Override
 		public Image getColumnImage(final Object arg0, final int arg1) {
 			return null;
 		}
-		
+
 		@Override
 		public String getColumnText(final Object object, final int column) {
 			final InsuranceType insuranceType = (InsuranceType) object;

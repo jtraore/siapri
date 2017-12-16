@@ -17,6 +17,10 @@ import org.hibernate.annotations.Type;
 public class Sinister extends AbstractDocumentProvider {
 	
 	private static final long serialVersionUID = 1L;
+
+	@NotNull
+	@Column(name = "SINISTER_NUMBER", nullable = false)
+	private String number;
 	
 	@Type(type = "org.jadira.usertype.dateandtime.threeten.PersistentZonedDateTime")
 	@Column(name = "OCCURRED_DATE")
@@ -41,6 +45,14 @@ public class Sinister extends AbstractDocumentProvider {
 	public Sinister(final ZonedDateTime occurredDate, final String description) {
 		occuredDate = occurredDate;
 		this.description = description;
+	}
+
+	public String getNumber() {
+		return number;
+	}
+
+	public void setNumber(final String number) {
+		this.number = number;
 	}
 	
 	public ZonedDateTime getOccuredDate() {

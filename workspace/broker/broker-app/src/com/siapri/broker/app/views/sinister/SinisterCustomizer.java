@@ -19,18 +19,21 @@ import com.siapri.broker.app.views.common.customizer.SearchContext;
 import com.siapri.broker.app.views.common.datalist.DataListModel;
 import com.siapri.broker.app.views.common.proxy.ProxyFactory;
 import com.siapri.broker.app.views.contract.ContractDataListModel;
+import com.siapri.broker.business.model.Client;
+import com.siapri.broker.business.model.Company;
 import com.siapri.broker.business.model.Contract;
+import com.siapri.broker.business.model.Person;
 import com.siapri.broker.business.model.Sinister;
 
 public class SinisterCustomizer extends AbstractCustomizer<Sinister> {
-
+	
 	private final SinisterCustomizerModel customizerModel;
-
+	
 	public SinisterCustomizer(final Sinister sinister, final String title, final String description) {
 		super(sinister, title, description);
 		customizerModel = ProxyFactory.createProxy(new SinisterCustomizerModel(sinister));
 	}
-
+	
 	@Override
 	public Composite createArea(final Composite parent, final int style) {
 		parent.setLayout(new GridLayout());
@@ -38,26 +41,27 @@ public class SinisterCustomizer extends AbstractCustomizer<Sinister> {
 		final GridLayout gridLayout = new GridLayout(6, false);
 		composite.setLayout(gridLayout);
 
-		// TODO
-		// SearchContext searchContext = new
-		// ObjectSeekComposite contractComposite = new ObjectSeekComposite(composite, searchContext)
+		final Label numberLabel = new Label(composite, SWT.NONE);
+		numberLabel.setText("Number: ");
+		final Text numberText = new Text(composite, SWT.BORDER);
+		bindingSupport.bindText(customizerModel, "number", numberText, IValidationSupport.NON_EMPTY_VALIDATOR);
+		numberText.setLayoutData(new GridData(SWT.FILL, SWT.DEFAULT, false, false, 2, 1));
 
-		final Label clientLabel = new Label(composite, SWT.NONE);
-		clientLabel.setText("Client");
-
-		final Label clientLabelValue = new Label(composite, SWT.NONE);
-		clientLabelValue.setText("clientLabelValue");
-		clientLabelValue.setLayoutData(new GridData(SWT.FILL, SWT.DEFAULT, true, false,5,1));
-
+		new Label(composite, SWT.NONE).setLayoutData(new GridData(SWT.FILL, SWT.DEFAULT, true, false, 3, 1));
+		
 		final Label contractLabel = new Label(composite, SWT.NONE);
 		contractLabel.setText("Contrat:");
-
+		
 		final LabelProvider contractLabelProvider = new LabelProvider() {
 			@Override
 			public String getText(final Object element) {
 				if (element instanceof Contract) {
 					final Contract contract = (Contract) element;
-					return String.format("%s", contract.getNumber());
+					final Client client = contract.getClient();
+					if (client instanceof Person) {
+						return String.format("%s - %s %s", contract.getNumber(), ((Person) client).getFirstName(), ((Person) client).getLastName());
+					}
+					return String.format("%s - %s", contract.getNumber(), ((Company) client).getName());
 				}
 				return "";
 			}
@@ -67,8 +71,7 @@ public class SinisterCustomizer extends AbstractCustomizer<Sinister> {
 		final ObjectSeekComposite contractSeekComposite = new ObjectSeekComposite(composite, contractSearchContext);
 		contractSeekComposite.setLayoutData(new GridData(SWT.FILL, SWT.DEFAULT, true, false, 5, 1));
 		bindingSupport.bindObjectSeekComposite(customizerModel, "contract", contractSeekComposite, IValidationSupport.NON_EMPTY_VALIDATOR);
-
-
+		
 		final Label occuredDateLabel = new Label(composite, SWT.NONE);
 		occuredDateLabel.setText("Date de l'événement");
 		final DateTime occuredDateField = new DateTime(composite, SWT.BORDER | SWT.DATE | SWT.DROP_DOWN);
@@ -77,33 +80,33 @@ public class SinisterCustomizer extends AbstractCustomizer<Sinister> {
 		gridData.widthHint = 150;
 		occuredDateField.setLayoutData(gridData);
 		bindingSupport.bindDateTimeChooserComboWidget(customizerModel, "occuredDate", occuredDateField, IValidationSupport.NON_EMPTY_VALIDATOR);
-
+		
 		// Filler
 		new Label(composite, SWT.NONE).setLayoutData(new GridData(SWT.FILL, SWT.DEFAULT, true, false, 4, 1));
-
+		
 		final Label descriptionLabel = new Label(composite, SWT.NONE);
 		descriptionLabel.setText("Description");
 		final Text descriptionText = new Text(composite, SWT.BORDER);
 		bindingSupport.bindText(customizerModel, "description", descriptionText, IValidationSupport.NON_EMPTY_VALIDATOR);
 		descriptionText.setLayoutData(new GridData(SWT.FILL, SWT.DEFAULT, true, false, 5, 1));
-
+		
 		new TitledSeparator(composite, "Adresse").setLayoutData(new GridData(SWT.FILL, SWT.DEFAULT, true, false, 6, 1));
-
+		
 		CustomizerUtil.setUpAddressComposite(composite, customizerModel, bindingSupport, "address", true);
-
+		
 		return composite;
 	}
-
+	
 	@Override
 	public void validateUpdate() {
 		customizerModel.validate();
-
+		
 	}
-
+	
 	@Override
 	public void cancelUpdate() {
 		// TODO Auto-generated method stub
-
+		
 	}
-
+	
 }

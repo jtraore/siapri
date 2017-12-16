@@ -11,25 +11,25 @@ import com.siapri.broker.business.model.Client;
 import com.siapri.broker.business.model.Company;
 import com.siapri.broker.business.model.Contract;
 import com.siapri.broker.business.model.Person;
-import com.siapri.broker.business.service.IBasicDaoService;
+import com.siapri.broker.business.service.impl.DaoCacheService;
 
 public class ContractOverviewGroupProvider implements IOverviewGroupProvider<Contract> {
-	
+
 	@Override
 	public String getTitle() {
 		return "Derniers contrats enregistrés";
 	}
-	
+
 	@Override
 	public List<OverviewItem<Contract>> getOverviewItems() {
 		return getOverviewClients().stream().map(client -> createOverviewItem(client)).collect(Collectors.toList());
 	}
-	
+
 	@Override
 	public IOverviewItemLocator<Contract> getItemLocator() {
 		return new ContractOverviewItemLocator();
 	}
-	
+
 	public static OverviewItem<Contract> createOverviewItem(final Contract contract) {
 		final Client client = contract.getClient();
 		if (client instanceof Person) {
@@ -38,8 +38,8 @@ public class ContractOverviewGroupProvider implements IOverviewGroupProvider<Con
 		}
 		return new OverviewItem<>(contract, String.format("%s - %s", contract.getNumber(), ((Company) client).getName()));
 	}
-	
+
 	protected List<Contract> getOverviewClients() {
-		return BundleUtil.getService(IBasicDaoService.class).getLatestElements(Contract.class, 10);
+		return BundleUtil.getService(DaoCacheService.class).getContracts(10);
 	}
 }

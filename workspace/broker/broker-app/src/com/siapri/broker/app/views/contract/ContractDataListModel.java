@@ -27,6 +27,7 @@ import com.siapri.broker.business.model.Contract;
 import com.siapri.broker.business.model.InsuranceType;
 import com.siapri.broker.business.model.Person;
 import com.siapri.broker.business.service.IBasicDaoService;
+import com.siapri.broker.business.service.impl.DaoCacheService;
 
 public class ContractDataListModel extends DataListModel {
 
@@ -113,15 +114,15 @@ public class ContractDataListModel extends DataListModel {
 	}
 	
 	protected List<Contract> retrieveContracts() {
-		return BundleUtil.getService(IBasicDaoService.class).getAll(Contract.class);
+		return BundleUtil.getService(DaoCacheService.class).getContracts();
 	}
 
 	private List<Company> retrieveInsurers() {
-		return BundleUtil.getService(IBasicDaoService.class).getInsurers(-1);
+		return BundleUtil.getService(DaoCacheService.class).getInsurers();
 	}
 
 	private List<InsuranceType> retrieveInsuranceTypes() {
-		return BundleUtil.getService(IBasicDaoService.class).getAll(InsuranceType.class);
+		return BundleUtil.getService(DaoCacheService.class).getInsuranceTypes();
 	}
 
 	private static final class DataListLabelProvider extends LabelProvider implements ITableLabelProvider {

@@ -27,21 +27,21 @@ import com.siapri.broker.business.model.Sinister;
 
 @Service
 public class DaoCacheService {
-
+	
 	@Autowired
 	private EventBus daoEventBus;
-	
+
 	@Autowired
 	private List<IBasicRepository<? extends AbstractEntity, ? extends Serializable>> repositories;
-	
+
 	private final ArrayListValuedHashMap<Class<?>, AbstractEntity> data = new ArrayListValuedHashMap<>();
-	
+
 	@PostConstruct
 	private void init() {
 		daoEventBus.register(this);
 		reload();
 	}
-
+	
 	@Subscribe
 	public void onDaoEvent(final DaoEvent event) {
 		final Class<? extends AbstractEntity> entityClass = event.getEntities()[0].getClass();
@@ -64,53 +64,81 @@ public class DaoCacheService {
 				break;
 		}
 	}
-	
+
 	private void reload() {
 		data.clear();
 		repositories.forEach(repository -> data.putAll(getEntityType(repository), repository.findAll()));
 	}
-
+	
 	public List<InsuranceType> getInsuranceTypes() {
 		return getAll(InsuranceType.class);
 	}
 
+	public List<InsuranceType> getInsuranceTypes(final int limit) {
+		return getInsuranceTypes().stream().limit(limit).collect(Collectors.toList());
+	}
+	
 	public List<Person> getPersons() {
 		return getAll(Person.class);
 	}
 	
+	public List<Person> getPersons(final int limit) {
+		return getPersons().stream().limit(limit).collect(Collectors.toList());
+	}
+
 	public List<Company> getCompanies() {
 		return getAll(Company.class);
 	}
-	
+
 	public List<Company> getInsurers() {
 		return getCompanies().stream().filter(Company::isInsurer).collect(Collectors.toList());
 	}
-	
+
+	public List<Company> getInsurers(final int limit) {
+		return getInsurers().stream().limit(limit).collect(Collectors.toList());
+	}
+
 	public List<Company> getEntreprises() {
 		return getCompanies().stream().filter(c -> !c.isInsurer()).collect(Collectors.toList());
 	}
-	
+
+	public List<Company> getEntreprises(final int limit) {
+		return getEntreprises().stream().limit(limit).collect(Collectors.toList());
+	}
+
 	public List<Contract> getContracts() {
 		return getAll(Contract.class);
 	}
 	
+	public List<Contract> getContracts(final int limit) {
+		return getContracts().stream().limit(limit).collect(Collectors.toList());
+	}
+
 	public List<Sinister> getSinisters() {
 		return getAll(Sinister.class);
 	}
-	
+
+	public List<Sinister> getSinisters(final int limit) {
+		return getSinisters().stream().limit(limit).collect(Collectors.toList());
+	}
+
 	public List<Broker> getBrokers() {
 		return getAll(Broker.class);
 	}
-	
+
+	public List<Broker> getBrokers(final int limit) {
+		return getBrokers().stream().limit(limit).collect(Collectors.toList());
+	}
+
 	public List<Preference> getPreferences() {
 		return getAll(Preference.class);
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	private <T extends AbstractEntity> List<T> getAll(final Class<T> clazz) {
 		return (List<T>) data.get(clazz);
 	}
-
+	
 	private Class<?> getEntityType(final IBasicRepository<? extends AbstractEntity, ? extends Serializable> interfaze) {
 		for (final Class<?> subInterface : interfaze.getClass().getInterfaces()) {
 			for (final Type type : subInterface.getGenericInterfaces()) {

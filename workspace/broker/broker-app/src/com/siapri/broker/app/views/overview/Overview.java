@@ -25,14 +25,14 @@ import com.siapri.broker.app.views.common.EImage;
 
 @Singleton
 public class Overview {
-
+	
 	@Inject
 	private Composite parent;
-
+	
 	private ExpandBar expandBar;
-
+	
 	private final Map<IOverviewGroupProvider<?>, ExpandItem> overviewExpandItems = new HashMap<>();
-
+	
 	@Execute
 	public void expandOrCollapseAll(final MDirectToolItem directToolItem) {
 		final boolean tag = Boolean.parseBoolean(directToolItem.getTags().get(0));
@@ -40,23 +40,19 @@ public class Overview {
 			item.setExpanded(tag);
 		}
 	}
-
+	
 	@Inject
 	@Optional
 	private void createGui(@UIEventTopic(IApplicationEvent.E4_SERVICES_AVAILABLE) final Object obj) {
 		parent.setBackgroundMode(SWT.INHERIT_FORCE);
 		final Composite composite = new Composite(parent, SWT.NONE);
 		composite.setLayout(new FillLayout());
-
+		
 		expandBar = new ExpandBar(composite, SWT.V_SCROLL);
 		expandBar.setSpacing(6);
 		expandBar.setLayoutData(new GridData(SWT.FILL, SWT.DEFAULT, true, true));
 		expandBar.setBackground(parent.getBackground());
-
-		final ExpandItem latestCasesItem = new ExpandItem(expandBar, SWT.NONE);
-		latestCasesItem.setText("Dernières affaires jugées");
-		latestCasesItem.setImage(EImage.DESKTOP.getSwtImage());
-
+		
 		for (final IOverviewGroupProvider<?> overviewGroupProvider : OverviewProvider.INSTANCE.getOverviewGroupProviders()) {
 			final ExpandItem groupItem = new ExpandItem(expandBar, SWT.NONE);
 			groupItem.setText(overviewGroupProvider.getTitle());
@@ -64,35 +60,35 @@ public class Overview {
 			final OverviewGroupComposite overviewGroupComposite = new OverviewGroupComposite(expandBar, overviewGroupProvider);
 			groupItem.setHeight(overviewGroupComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT).y);
 			groupItem.setControl(overviewGroupComposite);
-
+			
 			overviewExpandItems.put(overviewGroupProvider, groupItem);
 		}
-
+		
 		final ExpandItem tasksItem = new ExpandItem(expandBar, SWT.NONE);
 		tasksItem.setText("Taches plannifiées");
 		tasksItem.setImage(EImage.DESKTOP.getSwtImage());
-
+		
 		parent.layout();
 	}
-
+	
 	@Inject
 	@Optional
 	private void itemCreated(@UIEventTopic(IApplicationEvent.ITEM_CREATED) final Object item) {
 		refreshOverview(item);
 	}
-
+	
 	@Inject
 	@Optional
 	private void itemEdited(@UIEventTopic(IApplicationEvent.ITEM_EDITED) final Object item) {
 		refreshOverview(item);
 	}
-
+	
 	@Inject
 	@Optional
 	private void itemRemoved(@UIEventTopic(IApplicationEvent.ITEM_REMOVED) final Object item) {
 		refreshOverview(item);
 	}
-
+	
 	private void refreshOverview(final Object item) {
 		overviewExpandItems.forEach((overviewGroupProvider, expandItem) -> {
 			final java.util.Optional<Type> providerInterface = findOverviewProviderInterface(overviewGroupProvider.getClass());
@@ -105,7 +101,7 @@ public class Overview {
 			}
 		});
 	}
-	
+
 	private java.util.Optional<Type> findOverviewProviderInterface(final Class<?> clazz) {
 		final java.util.Optional<Type> providerInterface = Stream.of(clazz.getGenericInterfaces()).filter(t -> t instanceof ParameterizedType && ((ParameterizedType) clazz.getGenericInterfaces()[0]).getRawType().equals(IOverviewGroupProvider.class))
 				.findFirst();

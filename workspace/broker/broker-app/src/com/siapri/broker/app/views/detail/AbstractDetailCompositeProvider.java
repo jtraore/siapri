@@ -26,6 +26,7 @@ import com.siapri.broker.app.views.common.action.ContextualActionPathElement;
 import com.siapri.broker.app.views.common.action.IAction;
 import com.siapri.broker.app.views.common.datalist.ColumnDescriptor;
 import com.siapri.broker.app.views.common.datalist.DataListComposite;
+import com.siapri.broker.app.views.common.datalist.DataListItemLocator;
 import com.siapri.broker.app.views.contract.ContractDataListModel;
 import com.siapri.broker.app.views.contract.ContractOverviewItemLocator;
 import com.siapri.broker.app.views.entreprise.EnterpriseOverviewItemLocator;
@@ -33,6 +34,7 @@ import com.siapri.broker.app.views.insurancetype.InsuranceTypeOverviewItemLocato
 import com.siapri.broker.app.views.overview.OverviewItem;
 import com.siapri.broker.app.views.sinister.SinisterDatalistModel;
 import com.siapri.broker.app.views.sinister.SinisterOverviewItemLocator;
+import com.siapri.broker.business.model.AbstractEntity;
 import com.siapri.broker.business.model.Company;
 import com.siapri.broker.business.model.Contract;
 import com.siapri.broker.business.model.InsuranceType;
@@ -61,11 +63,11 @@ public abstract class AbstractDetailCompositeProvider<T> implements IDetailCompo
 	protected void createPersonComposite(final Composite parent, final Person item, final boolean navigationEnabled) {
 		final Composite composite = createColumnComposite(parent);
 		
-		final StyledText clientControl = new StyledText(composite, SWT.WRAP);
-		clientControl.setEditable(false);
+		final StyledText control = new StyledText(composite, SWT.WRAP);
+		control.setEditable(false);
 		
 		// @formatter:off
-		clientControl.setText(String.format("%s %s %s, né(e) le %s\nAdresse domicile : %s,\nTél. : %s",
+		control.setText(String.format("%s %s %s, né(e) le %s\nAdresse domicile : %s,\nTél. : %s",
 						Util.getGenderAsString(item.getGender()),
 						item.getFirstName(),
 						item.getLastName(),
@@ -73,64 +75,50 @@ public abstract class AbstractDetailCompositeProvider<T> implements IDetailCompo
 						Util.formatAddress(item.getAddresses().get(EAddressType.HOME.name())),
 						item.getPhones().get(EPhoneType.MOBILE.name())));
 		// @formatter:on
-		clientControl.setLayoutData(new GridData(GridData.FILL_BOTH));
-
-		final String styleData = "Client";
-		clientControl.setStyleRange(Util.createStyleRange(clientControl.getText(), String.format("%s %s", item.getFirstName(), item.getLastName()), SWT.BOLD, styleData));
-		clientControl.setStyleRange(Util.createStyleRange(clientControl.getText(), "Adresse domicile", SWT.BOLD));
-		clientControl.setStyleRange(Util.createStyleRange(clientControl.getText(), "Tél.", SWT.BOLD));
+		control.setLayoutData(new GridData(GridData.FILL_BOTH));
 
 		if (navigationEnabled) {
-			clientControl.addListener(SWT.MouseDown, event -> {
-				// if ((event.stateMask & SWT.MOD1) != 0) {
-				final int offset = clientControl.getOffsetAtLocation(new Point(event.x, event.y));
-				final StyleRange selectedStyleRange = clientControl.getStyleRangeAtOffset(offset);
-				if (selectedStyleRange != null && styleData.equals(selectedStyleRange.data)) {
-					new ClientOverviewItemLocator().locate(new OverviewItem<>(item, ""));
-				}
-				// }
-			});
+			final String styleData = "Client";
+			control.setStyleRange(Util.createStyleRange(control.getText(), String.format("%s %s", item.getFirstName(), item.getLastName()), SWT.BOLD, styleData));
+			addLocationListener(new ClientOverviewItemLocator(), item, control, styleData);
+		} else {
+			control.setStyleRange(Util.createStyleRange(control.getText(), String.format("%s %s", item.getFirstName(), item.getLastName()), SWT.BOLD));
 		}
+		control.setStyleRange(Util.createStyleRange(control.getText(), "Adresse domicile", SWT.BOLD));
+		control.setStyleRange(Util.createStyleRange(control.getText(), "Tél.", SWT.BOLD));
 	}
 	
-	protected void createEntrepriseComposite(final Composite parent, final Company item, final boolean navigationEnabled) {
+	protected void createCompanyComposite(final Composite parent, final Company item, final boolean navigationEnabled) {
 		final Composite composite = createColumnComposite(parent);
-		final StyledText clientControl = new StyledText(composite, SWT.WRAP | SWT.MULTI);
-		clientControl.setEditable(false);
+		final StyledText control = new StyledText(composite, SWT.WRAP | SWT.MULTI);
+		control.setEditable(false);
 		// @formatter:off
-		clientControl.setText(String.format("%s - %s\nActivité : %s\nAdresse : %s,\nTél. : %s",
+		control.setText(String.format("%s - %s\nActivité : %s\nAdresse : %s,\nTél. : %s",
 						item.getSiret(),
 						item.getName(),
 						item.getActivity(),
 						Util.formatAddress(item.getAddresses().get(EAddressType.WORK.name())),
 						item.getPhones().get(EPhoneType.LAND.name())));
 		// @formatter:on
-		clientControl.setLayoutData(new GridData(GridData.FILL_BOTH));
+		control.setLayoutData(new GridData(GridData.FILL_BOTH));
 		
-		final String styleData = "Client";
-		clientControl.setStyleRange(Util.createStyleRange(clientControl.getText(), String.format("%s - %s", item.getSiret(), item.getName()), SWT.BOLD | SWT.ITALIC, styleData));
-		clientControl.setStyleRange(Util.createStyleRange(clientControl.getText(), "Activité", SWT.BOLD));
-		clientControl.setStyleRange(Util.createStyleRange(clientControl.getText(), "Adresse", SWT.BOLD));
-		clientControl.setStyleRange(Util.createStyleRange(clientControl.getText(), "Tél.", SWT.BOLD));
-
 		if (navigationEnabled) {
-			clientControl.addListener(SWT.MouseDown, event -> {
-				// if ((event.stateMask & SWT.MOD1) != 0) {
-				final int offset = clientControl.getOffsetAtLocation(new Point(event.x, event.y));
-				final StyleRange selectedStyleRange = clientControl.getStyleRangeAtOffset(offset);
-				if (selectedStyleRange != null && styleData.equals(selectedStyleRange.data)) {
-					new EnterpriseOverviewItemLocator().locate(new OverviewItem<>(item, ""));
-				}
-				// }
-			});
+			final String styleData = "Client";
+			control.setStyleRange(Util.createStyleRange(control.getText(), String.format("%s - %s", item.getSiret(), item.getName()), SWT.BOLD | SWT.ITALIC, styleData));
+			addLocationListener(new EnterpriseOverviewItemLocator(), item, control, styleData);
+		} else {
+			control.setStyleRange(Util.createStyleRange(control.getText(), String.format("%s - %s", item.getSiret(), item.getName()), SWT.BOLD | SWT.ITALIC));
 		}
+		control.setStyleRange(Util.createStyleRange(control.getText(), "Activité", SWT.BOLD));
+		control.setStyleRange(Util.createStyleRange(control.getText(), "Adresse", SWT.BOLD));
+		control.setStyleRange(Util.createStyleRange(control.getText(), "Tél.", SWT.BOLD));
 	}
 	
 	protected void createContractComposite(final Composite parent, final Contract item, final Map<WarrantyFormula, InsuranceType> warrantyFormulas, final boolean navigationEnabled) {
 		final Composite composite = createColumnComposite(parent);
 		
-		final StyledText clientControl = new StyledText(composite, SWT.WRAP);
-		clientControl.setEditable(false);
+		final StyledText control = new StyledText(composite, SWT.WRAP);
+		control.setEditable(false);
 		
 		final Map<String, Warranty> warranties = new HashMap<>();
 		warrantyFormulas.forEach((formula, insuranceType) -> {
@@ -142,28 +130,66 @@ public abstract class AbstractDetailCompositeProvider<T> implements IDetailCompo
 				.stream()
 				.map(code -> String.format("\t> %s", warranties.get(code).getDescription()))
 				.collect(Collectors.toList());
-		clientControl.setText(String.format("Contrat N°%s du %s\nAssurance %s\nListe des garanties :\n%s",
+		control.setText(String.format("Contrat N°%s du %s\nAssurance %s\nListe des garanties :\n%s",
 						item.getNumber(),
 						Util.DATE_TIME_FORMATTER.format(item.getSubscriptionDate()),
 						warrantyFormulas.get(item.getWarrantyFormula()).getName(),
 						String.join("\n", warrantiList)));
 		// @formatter:on
-		clientControl.setLayoutData(new GridData(GridData.FILL_BOTH));
+		control.setLayoutData(new GridData(GridData.FILL_BOTH));
 
-		final String styleData = "InsuranceType";
+		if (navigationEnabled) {
+			final String styleData = "contract";
+			control.setStyleRange(Util.createStyleRange(control.getText(), String.format("N°%s", item.getNumber()), SWT.BOLD, styleData));
+			addLocationListener(new ContractOverviewItemLocator(), item, control, styleData);
+		} else {
+			control.setStyleRange(Util.createStyleRange(control.getText(), String.format("N°%s", item.getNumber()), SWT.BOLD));
+		}
+		final String insuranceTypeStyleData = "InsuranceType";
+		control.setStyleRange(Util.createStyleRange(control.getText(), warrantyFormulas.get(item.getWarrantyFormula()).getName(), SWT.BOLD, insuranceTypeStyleData));
+		control.setStyleRange(Util.createStyleRange(control.getText(), "Liste des garanties :\n", SWT.BOLD, Display.getCurrent().getSystemColor(SWT.COLOR_RED)));
+
+		addLocationListener(new InsuranceTypeOverviewItemLocator(), warrantyFormulas.get(item.getWarrantyFormula()), control, insuranceTypeStyleData);
+	}
+	
+	protected void createSinisterComposite(final Composite parent, final Sinister item, final boolean navigationEnabled) {
+		final Composite composite = createColumnComposite(parent);
+		final StyledText control = new StyledText(composite, SWT.WRAP | SWT.MULTI);
+		control.setEditable(false);
+		// @formatter:off
+		control.setText(String.format("Numéro : %s\nDate : %s\nDescription : %s\nAdresse : %s",
+						item.getNumber(),
+						Util.DATE_TIME_FORMATTER.format(item.getOccuredDate()),
+						item.getDescription(),
+						Util.formatAddress(item.getAddress())));
+		// @formatter:on
+		control.setLayoutData(new GridData(GridData.FILL_BOTH));
 		
-		clientControl.setStyleRange(Util.createStyleRange(clientControl.getText(), String.format("N°%s", item.getNumber()), SWT.BOLD));
-		clientControl.setStyleRange(Util.createStyleRange(clientControl.getText(), warrantyFormulas.get(item.getWarrantyFormula()).getName(), SWT.BOLD, styleData));
-		clientControl.setStyleRange(Util.createStyleRange(clientControl.getText(), "Liste des garanties :\n", SWT.BOLD, Display.getCurrent().getSystemColor(SWT.COLOR_RED)));
-
-		clientControl.addListener(SWT.MouseDown, event -> {
-			// if ((event.stateMask & SWT.MOD1) != 0) {
-			final int offset = clientControl.getOffsetAtLocation(new Point(event.x, event.y));
-			final StyleRange selectedStyleRange = clientControl.getStyleRangeAtOffset(offset);
-			if (selectedStyleRange != null && styleData.equals(selectedStyleRange.data)) {
-				new InsuranceTypeOverviewItemLocator().locate(new OverviewItem<>(warrantyFormulas.get(item.getWarrantyFormula()), ""));
+		if (navigationEnabled) {
+			final String styleData = "Sinister";
+			control.setStyleRange(Util.createStyleRange(control.getText(), item.getNumber(), SWT.BOLD | SWT.ITALIC, styleData));
+			addLocationListener(new SinisterOverviewItemLocator(), item, control, styleData);
+		} else {
+			control.setStyleRange(Util.createStyleRange(control.getText(), item.getNumber(), SWT.BOLD | SWT.ITALIC));
+		}
+		control.setStyleRange(Util.createStyleRange(control.getText(), "Numéro", SWT.BOLD));
+		control.setStyleRange(Util.createStyleRange(control.getText(), "Date", SWT.BOLD));
+		control.setStyleRange(Util.createStyleRange(control.getText(), "Description", SWT.BOLD));
+		control.setStyleRange(Util.createStyleRange(control.getText(), "Adresse", SWT.BOLD));
+	}
+	
+	protected <EntityType extends AbstractEntity> void addLocationListener(final DataListItemLocator<EntityType> locator, final EntityType item, final StyledText control, final String styleData) {
+		control.addListener(SWT.MouseDown, event -> {
+			try {
+				// if ((event.stateMask & SWT.MOD1) != 0) {
+				final int offset = control.getOffsetAtLocation(new Point(event.x, event.y));
+				final StyleRange selectedStyleRange = control.getStyleRangeAtOffset(offset);
+				if (selectedStyleRange != null && styleData.equals(selectedStyleRange.data)) {
+					locator.locate(new OverviewItem<>(item, ""));
+				}
+				// }
+			} catch (final Exception e) {
 			}
-			// }
 		});
 	}
 

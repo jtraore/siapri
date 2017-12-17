@@ -18,6 +18,6 @@ public class InsuranceTypeView extends PartView<InsuranceType> {
 		// final Map<Client, ClientDetail> clientDetails = ((CompanyDataListModel) dataListModel).getClients().stream().map(client -> new
 		// ClientDetail(client)).collect(Collectors.toMap(ClientDetail::getClient, clientDetail -> clientDetail));
 		
-		// partViewService.addDetailCompositeProvider(new ClientDetailCompositeProvider(currentPart.getElementId(), clientDetails, geClientType()));
+		// partViewService.addDetailCompositeProvider(new InsurerDetailCompositeProvider(currentPart.getElementId(), clientDetails, geClientType()));
 	}
 }

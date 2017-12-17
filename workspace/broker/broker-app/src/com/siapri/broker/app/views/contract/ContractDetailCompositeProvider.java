@@ -74,7 +74,7 @@ public class ContractDetailCompositeProvider extends AbstractDetailCompositeProv
 	}
 
 	private void createEntrpriseComposite(final Composite parent, final Company company) {
-		createEntrepriseComposite(parent, company, true);
+		createCompanyComposite(parent, company, true);
 	}
 	
 	private void createSinisterListComposite(final Composite composite, final Contract item) {

@@ -60,7 +60,7 @@ public class ClientDetailCompositeProvider extends AbstractDetailCompositeProvid
 	}
 	
 	private void createGeneralComposite(final Composite parent, final Company item) {
-		createEntrepriseComposite(parent, item, false);
+		createCompanyComposite(parent, item, false);
 	}
 	
 	private void createContractComposite(final Composite parent, final Client item) {

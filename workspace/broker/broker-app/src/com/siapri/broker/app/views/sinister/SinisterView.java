@@ -1,9 +1,9 @@
 package com.siapri.broker.app.views.sinister;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
@@ -12,18 +12,28 @@ import org.eclipse.e4.ui.di.UIEventTopic;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 
+import com.siapri.broker.app.BundleUtil;
 import com.siapri.broker.app.IApplicationEvent;
 import com.siapri.broker.app.views.PartView;
+import com.siapri.broker.business.model.InsuranceType;
 import com.siapri.broker.business.model.Sinister;
+import com.siapri.broker.business.model.WarrantyFormula;
+import com.siapri.broker.business.service.IBasicDaoService;
 
 public class SinisterView extends PartView<Sinister> {
 
+	private Map<WarrantyFormula, InsuranceType> formulaMap;
+	
 	@Override
 	protected void createGui(final Composite parent) {
 		parent.setLayout(new FillLayout());
 		dataListModel = new SinisterDatalistModel(parent);
-		final Map<Sinister, SinisterDetail> sinisterDetails = ((SinisterDatalistModel) dataListModel).getSinisters().stream().map(sinister -> new SinisterDetail(sinister))
-				.collect(Collectors.toMap(SinisterDetail::getSinister, sinisterDetail -> sinisterDetail));
+		// final Map<Sinister, SinisterDetail> sinisterDetails = ((SinisterDatalistModel) dataListModel).getSinisters().stream().map(sinister -> new SinisterDetail(sinister))
+		// .collect(Collectors.toMap(SinisterDetail::getSinister, sinisterDetail -> sinisterDetail));
+		
+		formulaMap = getWarrantyFormulas();
+
+		partViewService.addDetailCompositeProvider(new SinisterDetailCompositeProvider(currentPart.getElementId(), formulaMap));
 	}
 
 	@Inject
@@ -60,6 +70,14 @@ public class SinisterView extends PartView<Sinister> {
 			dataListModel.getDataList().remove(sinister);
 			dataListModel.setSelectionEventActivated(true);
 		}
+	}
+	
+	private Map<WarrantyFormula, InsuranceType> getWarrantyFormulas() {
+		final Map<WarrantyFormula, InsuranceType> formulaMap = new HashMap<>();
+		BundleUtil.getService(IBasicDaoService.class).getAll(InsuranceType.class).forEach(insuranceType -> {
+			insuranceType.getFormulas().forEach(formula -> formulaMap.put(formula, insuranceType));
+		});
+		return formulaMap;
 	}
 	
 }

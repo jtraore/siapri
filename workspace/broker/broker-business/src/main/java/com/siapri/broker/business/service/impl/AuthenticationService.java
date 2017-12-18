@@ -24,13 +24,17 @@ public class AuthenticationService implements IAuthenticationService {
 	
 	@Override
 	public Optional<User> connect(final String login, final String password) {
-		Optional<User> result = repository.findAll().stream().filter(user -> user.getLogin().equalsIgnoreCase(login) && user.getPassword().equals(password)).findFirst();
+		Optional<User> result = getUser(login, password);
 		if (!result.isPresent()) {
-			result = repository.getAllAsStream().filter(user -> user.getLogin().equalsIgnoreCase(login) && user.getPassword().equals(password)).findFirst();
 			repository.saveAndFlush(new User("admin", PasswordUtils.hash("admin".toCharArray()), "admin", "admin", "", Profile.ADMIN));
+			result = getUser(login, password);
 		}
 		result.ifPresent(user -> SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(user, user.getPassword())));
 		return result;
+	}
+
+	private Optional<User> getUser(final String login, final String password) {
+		return repository.findAll().stream().filter(user -> user.getLogin().equalsIgnoreCase(login) && user.getPassword().equals(PasswordUtils.hash(password.toCharArray()))).findFirst();
 	}
 	
 	@Override

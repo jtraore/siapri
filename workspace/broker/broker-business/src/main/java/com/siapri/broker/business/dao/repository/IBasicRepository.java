@@ -11,7 +11,8 @@ import com.siapri.broker.business.model.AbstractEntity;
 
 @NoRepositoryBean
 public interface IBasicRepository<T extends AbstractEntity, ID extends Serializable> extends JpaRepository<T, ID> {
+
 	@Query("select entity from #{#entityName} entity")
 	Stream<T> getAllAsStream();
-
+	
 }

@@ -1,7 +1,6 @@
 package com.siapri.broker.app.views.taskbar;
 
 import javax.annotation.PostConstruct;
-import javax.inject.Inject;
 
 import org.eclipse.e4.ui.services.IStylingEngine;
 import org.eclipse.swt.SWT;
@@ -9,13 +8,10 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 
-import com.siapri.broker.business.security.User;
-import com.siapri.broker.business.service.IAuthenticationService;
-
 public class ConnectedUserTask {
 	
-	@Inject
-	private IAuthenticationService authService;
+	// @Inject
+	// private IAuthenticationService authService;
 	
 	@PostConstruct
 	public void createGui(final Composite parent, final IStylingEngine stylingEngine) {
@@ -26,7 +22,7 @@ public class ConnectedUserTask {
 		final Label label = new Label(composite, SWT.NONE);
 		stylingEngine.setId(parent, "Taskbar");
 		stylingEngine.setId(label, "TaskbarLabel");
-		final User currentUser = authService.getCurrentUser();
+		// final User currentUser = authService.getCurrentUser();
 		label.setText(String.format("Connecté en tant que %s   ", "admin" /* currentUser.getLogin() */));
 	}
 }

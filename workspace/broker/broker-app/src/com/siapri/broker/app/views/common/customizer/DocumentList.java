@@ -51,12 +51,12 @@ public class DocumentList {
 	
 	private final List<Document> documents;
 	private final List<Document> documentsTemp;
-	private final WritableList writableList;
+	private final WritableList<Document> writableList;
 	
 	public DocumentList(final List<Document> documents) {
 		this.documents = documents;
 		documentsTemp = documents.stream().map(doc -> new Document(doc.getPath(), doc.getDescription())).collect(Collectors.toList());
-		writableList = new WritableList(documentsTemp, Document.class);
+		writableList = new WritableList<>(documentsTemp, Document.class);
 	}
 	
 	public Composite createComposite(final Composite parent, final int style) {
@@ -83,9 +83,8 @@ public class DocumentList {
 		final Table table = documentViewer.getTable();
 		table.setHeaderVisible(true);
 		table.setLinesVisible(true);
-		
-		final TableLayout tableLayout = new TableLayout();
-		table.setLayout(tableLayout);
+		table.setLayout(new TableLayout());
+
 		table.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseDoubleClick(final MouseEvent e) {

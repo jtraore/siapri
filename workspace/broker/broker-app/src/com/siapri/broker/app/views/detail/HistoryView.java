@@ -61,8 +61,8 @@ public class HistoryView {
 		final String history = String.format("Date de création : %s\nDate de dernière modification : %s\nCréateur : %s\nModificateur : %s",
 				Util.DATE_TIME_FORMATTER.format(item.getCreatedDate()),
 				item.getLastModifiedDate() != null ? Util.DATE_TIME_FORMATTER.format(item.getLastModifiedDate()) : "",
-				item.getCreatedBy() != null ? String.format("%s %s", item.getCreatedBy().getFirstName(), item.getCreatedBy().getLastName()) : "",
-				item.getLastModifiedBy() != null ? String.format("%s %s", item.getLastModifiedBy().getFirstName(), item.getLastModifiedBy().getLastName()) : "");
+				item.getCreatedBy() != null ? item.getCreatedBy().getLogin() : "",
+				item.getLastModifiedBy() != null ? item.getLastModifiedBy().getLogin() : "");
 		// @formatter:on
 
 		final StyledText control = new StyledText(content, SWT.WRAP | SWT.MULTI);

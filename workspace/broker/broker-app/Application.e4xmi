@@ -22,8 +22,9 @@
         </children>
         <children xsi:type="basic:PartStack" xmi:id="_5w1xkJhJEeSgvvVqkSKOdQ" elementId="broker-app.partstack.detail" containerData="35">
           <tags>NoAutoCollapse</tags>
-          <children xsi:type="basic:Part" xmi:id="_F-eyIJhVEeSgvvVqkSKOdQ" elementId="broker-app.partstack.detail.part.default" contributionURI="bundleclass://broker-app/com.siapri.broker.app.views.detail.DetailView" label="Détail de l'élément sélectionné" iconURI="platform:/plugin/broker-app/icons/detail.png"/>
-          <children xsi:type="basic:Part" xmi:id="_7oKuYOQ5EeeSwq0PfM53KQ" elementId="broker-app.partstack.detail.part.historique" contributionURI="bundleclass://broker-app/com.siapri.broker.app.views.detail.HistoryView" label="Historique" iconURI="platform:/plugin/broker-app/icons/detail.png"/>
+          <children xsi:type="basic:Part" xmi:id="_F-eyIJhVEeSgvvVqkSKOdQ" elementId="broker-app.partstack.detail.part.default" contributionURI="bundleclass://broker-app/com.siapri.broker.app.views.detail.DetailView" label="Détails" iconURI="platform:/plugin/broker-app/icons/detail.png"/>
+          <children xsi:type="basic:Part" xmi:id="_xMF0MOUBEee3gM-1DrgANA" elementId="broker-app.partstack.detail.part.document" contributionURI="bundleclass://broker-app/com.siapri.broker.app.views.detail.DocumentView" label="Documents" iconURI="platform:/plugin/broker-app/icons/detail.png"/>
+          <children xsi:type="basic:Part" xmi:id="_7oKuYOQ5EeeSwq0PfM53KQ" elementId="broker-app.partstack.detail.part.history" contributionURI="bundleclass://broker-app/com.siapri.broker.app.views.detail.HistoryView" label="Historique" iconURI="platform:/plugin/broker-app/icons/detail.png"/>
         </children>
       </children>
     </children>

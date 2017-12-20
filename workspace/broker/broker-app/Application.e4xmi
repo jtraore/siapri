@@ -20,7 +20,7 @@
         <children xsi:type="basic:PartStack" xmi:id="_iENX0GU-EeS8lKRWVsNI-w" elementId="broker-app.partstack.main" containerData="65">
           <tags>NoAutoCollapse</tags>
         </children>
-        <children xsi:type="basic:PartStack" xmi:id="_5w1xkJhJEeSgvvVqkSKOdQ" elementId="broker-app.partstack.detail" containerData="35">
+        <children xsi:type="basic:PartStack" xmi:id="_5w1xkJhJEeSgvvVqkSKOdQ" elementId="broker-app.partstack.detail" containerData="35" selectedElement="_F-eyIJhVEeSgvvVqkSKOdQ">
           <tags>NoAutoCollapse</tags>
           <children xsi:type="basic:Part" xmi:id="_F-eyIJhVEeSgvvVqkSKOdQ" elementId="broker-app.partstack.detail.part.default" contributionURI="bundleclass://broker-app/com.siapri.broker.app.views.detail.DetailView" label="Détails" iconURI="platform:/plugin/broker-app/icons/detail.png"/>
           <children xsi:type="basic:Part" xmi:id="_xMF0MOUBEee3gM-1DrgANA" elementId="broker-app.partstack.detail.part.document" contributionURI="bundleclass://broker-app/com.siapri.broker.app.views.detail.DocumentView" label="Documents" iconURI="platform:/plugin/broker-app/icons/detail.png"/>

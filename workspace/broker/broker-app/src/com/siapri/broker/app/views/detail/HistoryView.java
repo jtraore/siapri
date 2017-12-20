@@ -6,6 +6,7 @@ import javax.inject.Singleton;
 
 import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.ui.di.UIEventTopic;
+import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.custom.StyledText;
@@ -18,21 +19,29 @@ import com.siapri.broker.business.model.AbstractEntity;
 
 @Singleton
 public class HistoryView {
+	
+	@Inject
+	private MPart part;
 
 	private Composite parent;
 	private ScrolledComposite sc;
-
+	
 	@Inject
 	public HistoryView() {
 	}
-
+	
 	@PostConstruct
 	public void postConstruct(final Composite parent) {
 		this.parent = parent;
 		parent.setLayout(new FillLayout());
 		parent.setBackgroundMode(SWT.INHERIT_FORCE);
-	}
 
+		final Object item = part.getTransientData().get("item");
+		if (item instanceof AbstractEntity) {
+			displayHistory((AbstractEntity) item);
+		}
+	}
+	
 	@Inject
 	@Optional
 	private void itemSelected(@UIEventTopic(IApplicationEvent.ITEM_SELECTED) final AbstractEntity item) {
@@ -42,10 +51,10 @@ public class HistoryView {
 		if (item == null) {
 			return;
 		}
-
+		
 		displayHistory(item);
 	}
-
+	
 	private void displayHistory(final AbstractEntity item) {
 		sc = new ScrolledComposite(parent, SWT.H_SCROLL | SWT.V_SCROLL);
 		final Composite content = new Composite(sc, SWT.NONE);
@@ -56,7 +65,7 @@ public class HistoryView {
 		sc.setContent(content);
 		sc.setExpandHorizontal(true);
 		sc.setExpandVertical(true);
-
+		
 		// @formatter:off
 		final String history = String.format("Date de création : %s\nDate de dernière modification : %s\nCréateur : %s\nModificateur : %s",
 				Util.DATE_TIME_FORMATTER.format(item.getCreatedDate()),
@@ -64,7 +73,7 @@ public class HistoryView {
 				item.getCreatedBy() != null ? item.getCreatedBy().getLogin() : "",
 				item.getLastModifiedBy() != null ? item.getLastModifiedBy().getLogin() : "");
 		// @formatter:on
-
+		
 		final StyledText control = new StyledText(content, SWT.WRAP | SWT.MULTI);
 		control.setText(history);
 		control.setEditable(false);
@@ -72,7 +81,7 @@ public class HistoryView {
 		control.setStyleRange(Util.createStyleRange(control.getText(), "Date de dernière modification", SWT.BOLD));
 		control.setStyleRange(Util.createStyleRange(control.getText(), "Créateur", SWT.BOLD));
 		control.setStyleRange(Util.createStyleRange(control.getText(), "Modificateur", SWT.BOLD));
-
+		
 		parent.layout();
 	}
 }

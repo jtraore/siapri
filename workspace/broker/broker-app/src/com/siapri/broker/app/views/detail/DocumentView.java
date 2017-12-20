@@ -7,6 +7,7 @@ import javax.inject.Singleton;
 import org.eclipse.core.databinding.observable.list.WritableList;
 import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.ui.di.UIEventTopic;
+import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.jface.databinding.viewers.ObservableListContentProvider;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ITableLabelProvider;
@@ -33,6 +34,9 @@ import com.siapri.broker.business.model.IDocumentProvider;
 @Singleton
 public class DocumentView {
 	
+	@Inject
+	private MPart part;
+	
 	private Composite parent;
 	private ScrolledComposite sc;
 	
@@ -45,6 +49,11 @@ public class DocumentView {
 		this.parent = parent;
 		parent.setLayout(new FillLayout());
 		parent.setBackgroundMode(SWT.INHERIT_FORCE);
+
+		final Object item = part.getTransientData().get("item");
+		if (item instanceof IDocumentProvider) {
+			displayDocumentsTable((IDocumentProvider) item);
+		}
 	}
 	
 	@Inject

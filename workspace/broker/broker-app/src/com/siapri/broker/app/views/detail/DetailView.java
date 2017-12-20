@@ -6,6 +6,9 @@ import javax.inject.Singleton;
 
 import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.ui.di.UIEventTopic;
+import org.eclipse.e4.ui.model.application.MApplication;
+import org.eclipse.e4.ui.model.application.ui.basic.MPartStack;
+import org.eclipse.e4.ui.workbench.modeling.EModelService;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.events.ControlAdapter;
@@ -20,10 +23,17 @@ import com.siapri.broker.app.PartViewService;
 public class DetailView {
 	
 	@Inject
+	private MApplication application;
+	
+	@Inject
+	private EModelService modelService;
+	
+	@Inject
 	@Optional
 	private PartViewService partViewService;
 	
 	private Composite parent;
+
 	private ScrolledComposite sc;
 	
 	@Inject
@@ -31,7 +41,7 @@ public class DetailView {
 	}
 	
 	@PostConstruct
-	public void postConstruct(final Composite parent) {
+	private void postConstruct(final Composite parent) {
 		this.parent = parent;
 		parent.setLayout(new FillLayout());
 		parent.setBackgroundMode(SWT.INHERIT_FORCE);
@@ -40,6 +50,14 @@ public class DetailView {
 	@Inject
 	@Optional
 	private void itemSelected(@UIEventTopic(IApplicationEvent.ITEM_SELECTED) final Object item) {
+		
+		final MPartStack partStack = (MPartStack) modelService.find("broker-app.partstack.detail", application);
+		partStack.getChildren().forEach(part -> {
+			if (part.getRenderer() == null) {
+				part.getTransientData().put("item", item);
+			}
+		});
+		
 		if (sc != null) {
 			sc.dispose();
 		}

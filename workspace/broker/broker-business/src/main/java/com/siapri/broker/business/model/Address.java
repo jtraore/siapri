@@ -1,11 +1,15 @@
 package com.siapri.broker.business.model;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.validation.constraints.Size;
 
 @Embeddable
-public class Address {
+public class Address implements Serializable {
+	
+	private static final long serialVersionUID = 1L;
 	
 	@Column(name = "NUMBER", nullable = true)
 	private String number;

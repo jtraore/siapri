@@ -16,7 +16,7 @@ import com.siapri.broker.app.views.preferences.GeneralPreferencePage;
 import com.siapri.broker.app.views.preferences.ReportPreferencePage;
 
 public class ShowPreferencesHandler {
-
+	
 	@Execute
 	public void execute(@Named(IServiceConstants.ACTIVE_SHELL) final Shell shell) {
 		final PreferenceManager preferenceManager = new PreferenceManager();

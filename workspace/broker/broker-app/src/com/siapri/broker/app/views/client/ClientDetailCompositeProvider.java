@@ -95,7 +95,7 @@ public class ClientDetailCompositeProvider extends AbstractDetailCompositeProvid
 				case 0:
 					return contract.getNumber();
 				case 1:
-					return Util.DATE_TIME_FORMATTER.format(contract.getSubscriptionDate());
+					return Util.DATE_FORMATTER.format(contract.getSubscriptionDate());
 				case 2:
 					return contract.getWarrantyFormula().getName();
 			}
@@ -115,7 +115,7 @@ public class ClientDetailCompositeProvider extends AbstractDetailCompositeProvid
 			final Sinister sinister = (Sinister) object;
 			switch (column) {
 				case 0:
-					return Util.DATE_TIME_FORMATTER.format(sinister.getOccuredDate());
+					return Util.DATE_FORMATTER.format(sinister.getOccuredDate());
 				case 1:
 					return sinister.getContract().getNumber();
 				case 2:

@@ -6,11 +6,13 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 @Entity
-@Table(name = "COVERSATION")
+@Table(name = "CONVERSATION")
 public class Conversation extends AbstractDocumentProvider {
 	
 	private static final long serialVersionUID = 1L;
@@ -31,6 +33,11 @@ public class Conversation extends AbstractDocumentProvider {
 
 	@Column(name = "DESCRIPTION")
 	private String description;
+	
+	@NotNull
+	@ManyToOne
+	@JoinColumn(name = "CONTRACT_ID", nullable = false)
+	private Contract contract;
 	
 	public ZonedDateTime getDate() {
 		return date;
@@ -64,8 +71,12 @@ public class Conversation extends AbstractDocumentProvider {
 		this.description = description;
 	}
 	
-	public static long getSerialversionuid() {
-		return serialVersionUID;
+	public Contract getContract() {
+		return contract;
+	}
+	
+	public void setContract(final Contract contract) {
+		this.contract = contract;
 	}
 	
 	public static enum Direction {

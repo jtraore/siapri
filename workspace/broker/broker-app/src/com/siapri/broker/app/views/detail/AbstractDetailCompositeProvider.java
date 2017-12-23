@@ -71,7 +71,7 @@ public abstract class AbstractDetailCompositeProvider<T> implements IDetailCompo
 						Util.getGenderAsString(item.getGender()),
 						item.getFirstName(),
 						item.getLastName(),
-						Util.DATE_TIME_FORMATTER.format(item.getBirthdate()),
+						Util.DATE_FORMATTER.format(item.getBirthdate()),
 						Util.formatAddress(item.getAddresses().get(EAddressType.HOME.name())),
 						item.getPhones().get(EPhoneType.MOBILE.name())));
 		// @formatter:on
@@ -132,7 +132,7 @@ public abstract class AbstractDetailCompositeProvider<T> implements IDetailCompo
 				.collect(Collectors.toList());
 		control.setText(String.format("Contrat N°%s du %s\nAssurance %s\nListe des garanties :\n%s",
 						item.getNumber(),
-						Util.DATE_TIME_FORMATTER.format(item.getSubscriptionDate()),
+						Util.DATE_FORMATTER.format(item.getSubscriptionDate()),
 						warrantyFormulas.get(item.getWarrantyFormula()).getName(),
 						String.join("\n", warrantiList)));
 		// @formatter:on
@@ -159,7 +159,7 @@ public abstract class AbstractDetailCompositeProvider<T> implements IDetailCompo
 		// @formatter:off
 		control.setText(String.format("Numéro : %s\nDate : %s\nDescription : %s\nAdresse : %s",
 						item.getNumber(),
-						Util.DATE_TIME_FORMATTER.format(item.getOccuredDate()),
+						Util.DATE_FORMATTER.format(item.getOccuredDate()),
 						item.getDescription(),
 						Util.formatAddress(item.getAddress())));
 		// @formatter:on

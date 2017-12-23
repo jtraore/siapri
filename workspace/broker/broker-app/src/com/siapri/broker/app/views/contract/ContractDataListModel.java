@@ -140,7 +140,7 @@ public class ContractDataListModel extends DataListModel {
 				case 0:
 					return contract.getNumber();
 				case 1:
-					return Util.DATE_TIME_FORMATTER.format(contract.getSubscriptionDate());
+					return Util.DATE_FORMATTER.format(contract.getSubscriptionDate());
 				case 2:
 					if (client instanceof Person) {
 						final Person person = (Person) client;

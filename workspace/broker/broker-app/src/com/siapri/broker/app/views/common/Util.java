@@ -25,10 +25,13 @@ import org.eclipse.swt.widgets.MenuItem;
 import com.siapri.broker.business.model.Address;
 import com.siapri.broker.business.model.Document;
 import com.siapri.broker.business.model.Gender;
+import com.siapri.broker.business.security.Profile;
 
 public final class Util {
 	
-	public static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+	public static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+	public static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
 
 	public static String formatAddress(final Address address) {
 		if (StringUtils.isNotBlank(address.getStreet())) {
@@ -42,6 +45,13 @@ public final class Util {
 			return "Mr";
 		}
 		return "Mme";
+	}
+	
+	public static String getProfileAsString(final Profile profile) {
+		if (profile == Profile.ADMIN) {
+			return "Administrateur";
+		}
+		return "Utilisateur";
 	}
 	
 	public static Image getDefaultProgramImage(final Document document) {

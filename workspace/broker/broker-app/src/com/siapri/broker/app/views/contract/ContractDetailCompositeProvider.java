@@ -98,7 +98,7 @@ public class ContractDetailCompositeProvider extends AbstractDetailCompositeProv
 			final Sinister sinister = (Sinister) object;
 			switch (column) {
 				case 0:
-					return Util.DATE_TIME_FORMATTER.format(sinister.getOccuredDate());
+					return Util.DATE_FORMATTER.format(sinister.getOccuredDate());
 				case 1:
 					return sinister.getContract().getNumber();
 				case 2:

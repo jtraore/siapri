@@ -33,6 +33,12 @@ public class BrokerCustomizer extends AbstractCustomizer<Broker> {
 		final Composite composite = new Composite(parent, SWT.NONE);
 		composite.setLayout(new GridLayout(2, false));
 		
+		final Label numberLabel = new Label(composite, SWT.NONE);
+		numberLabel.setText("Numéro: ");
+		final Text numberText = new Text(composite, SWT.BORDER);
+		bindingSupport.bindText(customizerModel, "number", numberText, IValidationSupport.NON_EMPTY_VALIDATOR);
+		numberText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		
 		new TitledSeparator(composite, "Identité").setLayoutData(new GridData(SWT.FILL, SWT.DEFAULT, true, false, 2, 1));
 
 		final Label firstNameLabel = new Label(composite, SWT.NONE);

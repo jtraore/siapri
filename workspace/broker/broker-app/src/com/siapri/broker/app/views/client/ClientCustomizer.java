@@ -12,12 +12,16 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
+import com.siapri.broker.app.views.broker.BrokerDataListModel;
 import com.siapri.broker.app.views.common.TitledSeparator;
 import com.siapri.broker.app.views.common.Util;
 import com.siapri.broker.app.views.common.customizer.AbstractCustomizer;
 import com.siapri.broker.app.views.common.customizer.CustomizerUtil;
 import com.siapri.broker.app.views.common.customizer.IValidationSupport;
+import com.siapri.broker.app.views.common.customizer.ObjectSeekComposite;
+import com.siapri.broker.app.views.common.customizer.SearchContext;
 import com.siapri.broker.app.views.common.proxy.ProxyFactory;
+import com.siapri.broker.business.model.Broker;
 import com.siapri.broker.business.model.Gender;
 import com.siapri.broker.business.model.Person;
 
@@ -103,6 +107,24 @@ public class ClientCustomizer extends AbstractCustomizer<Person> {
 		final Text faxText = new Text(composite, SWT.BORDER);
 		bindingSupport.bindText(customizerModel, "fax", faxText);
 		faxText.setLayoutData(gridData);
+		
+		new TitledSeparator(composite, "Agent référent").setLayoutData(new GridData(SWT.FILL, SWT.DEFAULT, true, false, 6, 1));
+
+		final Label brokerLabel = new Label(composite, SWT.NONE);
+		brokerLabel.setText("Agent:");
+		
+		final LabelProvider brokerLabelProvider = new LabelProvider() {
+			@Override
+			public String getText(final Object element) {
+				final Broker broker = (Broker) element;
+				return String.format("%s %s", broker.getFirstName(), broker.getLastName());
+			}
+		};
+		final BrokerDataListModel brokerListModel = new BrokerDataListModel(parent);
+		final SearchContext brokerSearchContext = new SearchContext(brokerListModel, brokerLabelProvider, "Recherche agent", "Cette fenetre permet de rechercher un agent");
+		final ObjectSeekComposite brokerSeekComposite = new ObjectSeekComposite(composite, brokerSearchContext);
+		brokerSeekComposite.setLayoutData(new GridData(SWT.FILL, SWT.DEFAULT, true, false, 5, 1));
+		bindingSupport.bindObjectSeekComposite(customizerModel, "broker", brokerSeekComposite);
 		
 		return composite;
 	}

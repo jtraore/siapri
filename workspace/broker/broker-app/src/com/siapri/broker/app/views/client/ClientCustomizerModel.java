@@ -13,40 +13,47 @@ import com.siapri.broker.app.views.common.proxy.Data;
 import com.siapri.broker.app.views.common.proxy.IProxy;
 import com.siapri.broker.app.views.common.proxy.ProxyFactory;
 import com.siapri.broker.business.model.Address;
+import com.siapri.broker.business.model.Broker;
 import com.siapri.broker.business.model.Gender;
 import com.siapri.broker.business.model.Person;
 
 @Data
 public class ClientCustomizerModel extends AbstractCustomizerModel<Person> {
-
+	
 	@EntityProperty
 	private String firstName;
-
+	
 	@EntityProperty
 	private String lastName;
-
+	
 	@EntityProperty
 	private Gender gender;
-
+	
 	@EntityProperty(converter = LocalDateToDateConverter.class)
 	private Date birthdate;
 
 	@EntityProperty
-	private String fax;
+	private Broker broker;
 	
-	private Address homeAddress;
-	private Address workAddress;
-	private String landPhone;
-	private String mobilePhone;
+	@EntityProperty
+	private String fax;
 
+	private Address homeAddress;
+
+	private Address workAddress;
+
+	private String landPhone;
+
+	private String mobilePhone;
+	
 	protected ClientCustomizerModel() {
 		super(null);
 	}
-
+	
 	public ClientCustomizerModel(final Person target) {
 		super(target);
 	}
-
+	
 	@Override
 	public void synchronize() {
 		super.synchronize();
@@ -55,7 +62,7 @@ public class ClientCustomizerModel extends AbstractCustomizerModel<Person> {
 		mobilePhone = target.getPhones().get(EPhoneType.MOBILE.name());
 		landPhone = target.getPhones().get(EPhoneType.LAND.name());
 	}
-
+	
 	@Override
 	public void validate() {
 		super.validate();
@@ -70,5 +77,5 @@ public class ClientCustomizerModel extends AbstractCustomizerModel<Person> {
 			target.getPhones().put(EPhoneType.LAND.name(), landPhone);
 		}
 	}
-	
+
 }

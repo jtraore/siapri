@@ -18,8 +18,10 @@ import com.google.common.eventbus.Subscribe;
 import com.siapri.broker.business.dao.repository.IBasicRepository;
 import com.siapri.broker.business.model.AbstractEntity;
 import com.siapri.broker.business.model.Broker;
+import com.siapri.broker.business.model.Client;
 import com.siapri.broker.business.model.Company;
 import com.siapri.broker.business.model.Contract;
+import com.siapri.broker.business.model.Conversation;
 import com.siapri.broker.business.model.InsuranceType;
 import com.siapri.broker.business.model.Person;
 import com.siapri.broker.business.model.Preference;
@@ -132,6 +134,11 @@ public class DaoCacheService {
 
 	public List<Preference> getPreferences() {
 		return getAll(Preference.class);
+	}
+	
+	public List<Conversation> getConversations(final Client client) {
+		final List<Contract> contracts = getAll(Contract.class).stream().filter(c -> c.getClient().equals(client)).collect(Collectors.toList());
+		return getAll(Conversation.class).stream().filter(c -> contracts.contains(c.getContract())).collect(Collectors.toList());
 	}
 
 	@SuppressWarnings("unchecked")

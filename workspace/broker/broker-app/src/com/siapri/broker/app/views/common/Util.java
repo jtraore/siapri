@@ -24,34 +24,18 @@ import org.eclipse.swt.widgets.MenuItem;
 
 import com.siapri.broker.business.model.Address;
 import com.siapri.broker.business.model.Document;
-import com.siapri.broker.business.model.Gender;
-import com.siapri.broker.business.security.Profile;
 
 public final class Util {
-	
+
 	public static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-
+	
 	public static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
-
+	
 	public static String formatAddress(final Address address) {
 		if (StringUtils.isNotBlank(address.getStreet())) {
 			return String.format("%s, %s, %s, %s, %s", address.getNumber(), address.getStreet(), address.getPostalCode(), address.getCity(), address.getCountry());
 		}
 		return "";
-	}
-
-	public static String getGenderAsString(final Gender gender) {
-		if (gender == Gender.MALE) {
-			return "Mr";
-		}
-		return "Mme";
-	}
-	
-	public static String getProfileAsString(final Profile profile) {
-		if (profile == Profile.ADMIN) {
-			return "Administrateur";
-		}
-		return "Utilisateur";
 	}
 	
 	public static Image getDefaultProgramImage(final Document document) {
@@ -65,14 +49,14 @@ public final class Util {
 		}
 		return null;
 	}
-	
+
 	public static void buildMenuItem(final Menu menu, final String name, final Image image, final SelectionListener listener) {
 		final MenuItem item = new MenuItem(menu, SWT.PUSH);
 		item.setText(name);
 		item.setImage(image);
 		item.addSelectionListener(listener);
 	}
-	
+
 	public static void openDocument(final Document document) {
 		final File file = new File(document.getPath());
 		if (file.exists()) {
@@ -83,7 +67,7 @@ public final class Util {
 			MessageDialog.openError(Display.getCurrent().getActiveShell(), "Overture de document", String.format("%s n'existe pas", document.getPath()));
 		}
 	}
-	
+
 	public static List<Document> selectDocuments() {
 		final FileDialog fileDialog = new FileDialog(Display.getCurrent().getActiveShell(), SWT.MULTI);
 		fileDialog.setText("Sélectionnez les fichiers à joindre");
@@ -96,7 +80,7 @@ public final class Util {
 		}
 		return new ArrayList<>();
 	}
-
+	
 	public static StyleRange createStyleRange(final String wholeText, final String portionToStyle, final int fontStyle) {
 		final StyleRange styleRange = new StyleRange();
 		styleRange.start = wholeText.indexOf(portionToStyle);
@@ -104,13 +88,13 @@ public final class Util {
 		styleRange.fontStyle = fontStyle;
 		return styleRange;
 	}
-
+	
 	public static StyleRange createStyleRange(final String wholeText, final String portionToStyle, final int fontStyle, final Color foreground) {
 		final StyleRange styleRange = createStyleRange(wholeText, portionToStyle, fontStyle);
 		styleRange.foreground = foreground;
 		return styleRange;
 	}
-
+	
 	public static StyleRange createStyleRange(final String wholeText, final String portionToStyle, final int fontStyle, final Object data) {
 		final StyleRange styleRange = createStyleRange(wholeText, portionToStyle, fontStyle);
 		styleRange.underline = true;
@@ -118,5 +102,5 @@ public final class Util {
 		styleRange.data = data;
 		return styleRange;
 	}
-
+	
 }

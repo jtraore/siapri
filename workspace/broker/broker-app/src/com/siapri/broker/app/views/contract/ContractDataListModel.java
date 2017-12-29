@@ -96,13 +96,7 @@ public class ContractDataListModel extends DataListModel {
 		actionModel = new DataListActionModel(createAction, editAction, deleteAction, createDatalistMenuActions(parent));
 		
 		contracts = retrieveContracts();
-		dataList = new WritableList<Object>(new ArrayList<>(contracts), InsuranceType.class) {
-			@Override
-			public boolean add(final Object element) {
-				return super.add(element);
-			}
-		};
-		
+		dataList = new WritableList<>(new ArrayList<>(contracts), InsuranceType.class);
 	}
 	
 	protected ContextualAction[] createDatalistMenuActions(final Composite parent) {

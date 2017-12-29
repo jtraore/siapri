@@ -131,13 +131,13 @@ public class DataListComposite extends Composite {
 			editButton.setEnabled(false);
 		}
 
-		if (dataListModel.isSelectionEventActivated()) {
-			if (dataSelected) {
-				selectedItem = ((IStructuredSelection) e.getSelectionProvider().getSelection()).getFirstElement();
+		if (dataSelected) {
+			selectedItem = ((IStructuredSelection) e.getSelectionProvider().getSelection()).getFirstElement();
+			if (dataListModel.isSelectionEventActivated()) {
 				BundleUtil.getService(E4Service.class).getEventBroker().post(IApplicationEvent.ITEM_SELECTED, selectedItem);
-			} else {
-				BundleUtil.getService(E4Service.class).getEventBroker().post(IApplicationEvent.ITEM_SELECTED, null);
 			}
+		} else if (dataListModel.isSelectionEventActivated()) {
+			BundleUtil.getService(E4Service.class).getEventBroker().post(IApplicationEvent.ITEM_SELECTED, null);
 		}
 	};
 

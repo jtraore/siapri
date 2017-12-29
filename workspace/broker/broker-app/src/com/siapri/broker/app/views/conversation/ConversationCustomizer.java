@@ -44,6 +44,9 @@ public class ConversationCustomizer extends AbstractCustomizer<Conversation> {
 		final Composite composite = new Composite(parent, SWT.NONE);
 		final GridLayout gridLayout = new GridLayout(2, false);
 		composite.setLayout(gridLayout);
+		
+		final Label contractLabel = new Label(composite, SWT.NONE);
+		contractLabel.setText("Contrat: ");
 
 		final LabelProvider contractLabelProvider = new LabelProvider() {
 			@Override
@@ -60,9 +63,10 @@ public class ConversationCustomizer extends AbstractCustomizer<Conversation> {
 			}
 		};
 		final DataListModel contractListModel = new ContractDataListModel(parent);
+		contractListModel.setSelectionEventActivated(false);
 		final SearchContext contractSearchContext = new SearchContext(contractListModel, contractLabelProvider, "Recherche contrat", "Cette fenetre permet de rechercher un contrat");
 		final ObjectSeekComposite contractSeekComposite = new ObjectSeekComposite(composite, contractSearchContext);
-		contractSeekComposite.setLayoutData(new GridData(SWT.FILL, SWT.DEFAULT, true, false, 5, 1));
+		contractSeekComposite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		bindingSupport.bindObjectSeekComposite(customizerModel, "contract", contractSeekComposite, IValidationSupport.NON_EMPTY_VALIDATOR);
 		
 		final Label dateLabel = new Label(composite, SWT.NONE);
@@ -77,7 +81,7 @@ public class ConversationCustomizer extends AbstractCustomizer<Conversation> {
 		durationLabel.setText("Durée: ");
 		final Text durationText = new Text(composite, SWT.BORDER);
 		bindingSupport.bindText(customizerModel, "duration", durationText);
-		durationText.setLayoutData(new GridData(SWT.FILL, SWT.DEFAULT, false, false, 5, 1));
+		durationText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
 		final Label directionLabel = new Label(composite, SWT.NONE);
 		directionLabel.setText("Entrant/Sortant: ");
@@ -104,13 +108,20 @@ public class ConversationCustomizer extends AbstractCustomizer<Conversation> {
 		});
 		typeComboViewer.setInput(Type.values());
 		bindingSupport.bindComboViewer(customizerModel, "type", typeComboViewer, IValidationSupport.NON_EMPTY_VALIDATOR);
+		
+		final Label subjectLabel = new Label(composite, SWT.NONE);
+		subjectLabel.setText("Sujet: ");
+		subjectLabel.setLayoutData(new GridData(SWT.DEFAULT, SWT.DEFAULT, false, false));
+		final Text subjectText = new Text(composite, SWT.BORDER);
+		bindingSupport.bindText(customizerModel, "subject", subjectText, IValidationSupport.NON_EMPTY_VALIDATOR);
+		subjectText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		final Label descriptionLabel = new Label(composite, SWT.NONE);
 		descriptionLabel.setText("description: ");
 		descriptionLabel.setLayoutData(new GridData(SWT.DEFAULT, SWT.DEFAULT, false, false));
 		final Text descriptionText = new Text(composite, SWT.MULTI | SWT.BORDER | SWT.WRAP | SWT.V_SCROLL);
-		bindingSupport.bindText(customizerModel, "description", descriptionText, IValidationSupport.NON_EMPTY_VALIDATOR);
-		final GridData descriptionTextGridData = new GridData(SWT.FILL, SWT.DEFAULT, true, false, 5, 1);
+		bindingSupport.bindText(customizerModel, "description", descriptionText);
+		final GridData descriptionTextGridData = new GridData(GridData.FILL_HORIZONTAL);
 		descriptionTextGridData.heightHint = 120;
 		descriptionText.setLayoutData(descriptionTextGridData);
 

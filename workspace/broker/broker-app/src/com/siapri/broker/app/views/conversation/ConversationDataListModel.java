@@ -27,28 +27,25 @@ import com.siapri.broker.business.service.impl.DaoCacheService;
 
 public class ConversationDataListModel extends DataListModel {
 
-	private List<Conversation> conversations;
-
 	private final Client client;
 
 	public ConversationDataListModel(final Composite parent, final Client client) {
-		inititalize(parent);
 		this.client = client;
+		inititalize(parent);
 	}
 
 	private void inititalize(final Composite parent) {
 
 		labelProvider = new DataListLabelProvider();
 
-		xPathExpressions = new String[0];
-
-		columnDescriptors = new ColumnDescriptor[6];
+		columnDescriptors = new ColumnDescriptor[7];
 		columnDescriptors[0] = new ColumnDescriptor("Date", 0.15, 125);
-		columnDescriptors[1] = new ColumnDescriptor("Duration", 0.10, 125);
-		columnDescriptors[2] = new ColumnDescriptor("Entrant/Sortant", 0.15, 125);
-		columnDescriptors[3] = new ColumnDescriptor("Type", 0.15, 125);
-		columnDescriptors[4] = new ColumnDescriptor("Contrat", 0.25, 125);
-		columnDescriptors[5] = new ColumnDescriptor("Description", 0.20, 125);
+		columnDescriptors[1] = new ColumnDescriptor("Durée", 0.05, 125);
+		columnDescriptors[2] = new ColumnDescriptor("Entrant/Sortant", 0.10, 125);
+		columnDescriptors[3] = new ColumnDescriptor("Type", 0.10, 125);
+		columnDescriptors[4] = new ColumnDescriptor("Contrat", 0.20, 125);
+		columnDescriptors[5] = new ColumnDescriptor("Sujet", 0.20, 125);
+		columnDescriptors[6] = new ColumnDescriptor("Description", 0.20, 125);
 
 		final IAction createAction = (event) -> {
 			final Conversation conversation = new Conversation();
@@ -85,14 +82,7 @@ public class ConversationDataListModel extends DataListModel {
 
 		actionModel = new DataListActionModel(createAction, editAction, deleteAction);
 
-		conversations = retrieveConversations();
-		dataList = new WritableList<Object>(new ArrayList<>(conversations), Conversation.class) {
-			@Override
-			public boolean add(final Object element) {
-				return super.add(element);
-			}
-		};
-
+		dataList = new WritableList<>(new ArrayList<>(retrieveConversations()), Conversation.class);
 	}
 
 	private List<Conversation> retrieveConversations() {
@@ -108,20 +98,22 @@ public class ConversationDataListModel extends DataListModel {
 
 		@Override
 		public String getColumnText(final Object object, final int column) {
-			final Conversation client = (Conversation) object;
+			final Conversation conversation = (Conversation) object;
 			switch (column) {
 				case 0:
-					return Util.DATE_TIME_FORMATTER.format(client.getDate());
+					return Util.DATE_TIME_FORMATTER.format(conversation.getDate());
 				case 1:
-					return client.getDuration() != null ? client.getDuration().toString() : "";
+					return conversation.getDuration() != null ? conversation.getDuration().toString() : "";
 				case 2:
-					return client.getDirection().getLabel();
+					return conversation.getDirection().getLabel();
 				case 3:
-					return client.getType().getLabel();
+					return conversation.getType().getLabel();
 				case 4:
-					return client.getContract().getNumber();
+					return conversation.getContract().getNumber();
 				case 5:
-					return client.getDescription();
+					return conversation.getSubject();
+				case 6:
+					return conversation.getDescription();
 			}
 			return null;
 		}

@@ -14,33 +14,36 @@ import com.siapri.broker.business.model.Company;
 
 @Data
 public class CompanyCustomizerModel extends AbstractCustomizerModel<Company> {
-	
+
+	@EntityProperty
+	private String number;
+
 	@EntityProperty
 	private String siret;
-	
+
 	@EntityProperty
 	private String name;
-	
+
 	@EntityProperty
 	private String activity;
-
+	
 	@EntityProperty
 	private String fax;
-
-	private Address address;
-
-	private String landPhone;
-
-	private String mobilePhone;
 	
+	private Address address;
+	
+	private String landPhone;
+	
+	private String mobilePhone;
+
 	protected CompanyCustomizerModel() {
 		super(null);
 	}
-
+	
 	public CompanyCustomizerModel(final Company target) {
 		super(target);
 	}
-	
+
 	@Override
 	public void synchronize() {
 		super.synchronize();
@@ -48,7 +51,7 @@ public class CompanyCustomizerModel extends AbstractCustomizerModel<Company> {
 		mobilePhone = target.getPhones().get(EPhoneType.MOBILE.name());
 		landPhone = target.getPhones().get(EPhoneType.LAND.name());
 	}
-
+	
 	@Override
 	public void validate() {
 		super.validate();
@@ -60,5 +63,5 @@ public class CompanyCustomizerModel extends AbstractCustomizerModel<Company> {
 			target.getPhones().put(EPhoneType.MOBILE.name(), mobilePhone);
 		}
 	}
-
+	
 }

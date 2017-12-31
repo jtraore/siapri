@@ -28,28 +28,29 @@ import com.siapri.broker.business.service.IBasicDaoService;
 import com.siapri.broker.business.service.impl.DaoCacheService;
 
 public class CompanyDataListModel extends DataListModel {
-	
+
 	private List<Company> companies;
-	
+
 	private final boolean isInsurer;
-	
+
 	public CompanyDataListModel(final Composite parent, final boolean isInsurer) {
 		this.isInsurer = isInsurer;
 		inititalize(parent);
 	}
-	
+
 	private void inititalize(final Composite parent) {
-		
+
 		labelProvider = new DataListLabelProvider();
-		
-		xPathExpressions = new String[] { "siret", "name", "phones[@name='MOBILE']", "phones[@name='LAND']" };
-		
-		columnDescriptors = new ColumnDescriptor[4];
-		columnDescriptors[0] = new ColumnDescriptor("siret", 0.15, 125);
-		columnDescriptors[1] = new ColumnDescriptor("name", 0.45, 125);
-		columnDescriptors[2] = new ColumnDescriptor("Téléphone", 0.10, 125);
-		columnDescriptors[3] = new ColumnDescriptor("Adresse", 0.30, 125);
-		
+
+		xPathExpressions = new String[] { "number", "siret", "name", "phones[@name='MOBILE']", "phones[@name='LAND']" };
+
+		columnDescriptors = new ColumnDescriptor[5];
+		columnDescriptors[0] = new ColumnDescriptor("Numéro", 0.15, 125);
+		columnDescriptors[1] = new ColumnDescriptor("siret", 0.15, 125);
+		columnDescriptors[2] = new ColumnDescriptor("name", 0.30, 125);
+		columnDescriptors[3] = new ColumnDescriptor("Téléphone", 0.10, 125);
+		columnDescriptors[4] = new ColumnDescriptor("Adresse", 0.30, 125);
+
 		final IAction createAction = (event) -> {
 			final Company company = new Company();
 			company.setInsurer(isInsurer);
@@ -64,7 +65,7 @@ public class CompanyDataListModel extends DataListModel {
 			}
 			return null;
 		};
-		
+
 		final IAction editAction = (event) -> {
 			final Company company = (Company) event.getTarget();
 			final String title = "Edition d'une société";
@@ -72,23 +73,23 @@ public class CompanyDataListModel extends DataListModel {
 			final CompanyCustomizer customizer = new CompanyCustomizer(company, title, description);
 			final DocumentList documentList = new DocumentList(company.getDocuments());
 			final CustomizerDialog dialog = new CustomizerDialog(parent.getShell(), customizer, documentList);
-			
+
 			if (dialog.open() == Window.OK) {
 				// Merge to DB
 				return BundleUtil.getService(IBasicDaoService.class).save(company);
 			}
 			return null;
 		};
-		
+
 		final IAction deleteAction = (event) -> {
 			final Client client = (Client) event.getTarget();
 			// Delete from DB
 			BundleUtil.getService(IBasicDaoService.class).delete(client);
 			return client;
 		};
-		
+
 		actionModel = new DataListActionModel(createAction, editAction, deleteAction);
-		
+
 		companies = retrieveElements();
 		dataList = new WritableList<Object>(new ArrayList<>(companies), Company.class) {
 			@Override
@@ -96,38 +97,40 @@ public class CompanyDataListModel extends DataListModel {
 				return super.add(element);
 			}
 		};
-		
+
 	}
-	
+
 	private List<Company> retrieveElements() {
 		if (isInsurer) {
 			return BundleUtil.getService(DaoCacheService.class).getInsurers();
 		}
 		return BundleUtil.getService(DaoCacheService.class).getEntreprises();
 	}
-	
+
 	public List<Company> getCompanies() {
 		return companies;
 	}
-	
+
 	private static final class DataListLabelProvider extends LabelProvider implements ITableLabelProvider {
-		
+
 		@Override
 		public Image getColumnImage(final Object arg0, final int arg1) {
 			return null;
 		}
-		
+
 		@Override
 		public String getColumnText(final Object object, final int column) {
 			final Company client = (Company) object;
 			switch (column) {
 				case 0:
-					return client.getSiret();
+					return client.getNumber();
 				case 1:
-					return client.getName();
+					return client.getSiret();
 				case 2:
-					return client.getPhones().get(EPhoneType.LAND.name());
+					return client.getName();
 				case 3:
+					return client.getPhones().get(EPhoneType.LAND.name());
+				case 4:
 					final Address address = client.getAddresses().get(EAddressType.WORK.name());
 					return Util.formatAddress(address);
 			}

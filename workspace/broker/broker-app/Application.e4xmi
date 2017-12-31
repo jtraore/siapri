@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <application:Application xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:application="http://www.eclipse.org/ui/2010/UIModel/application" xmlns:basic="http://www.eclipse.org/ui/2010/UIModel/application/ui/basic" xmlns:menu="http://www.eclipse.org/ui/2010/UIModel/application/ui/menu" xmi:id="_Cc_BgGU1EeS8lKRWVsNI-w" elementId="org.eclipse.e4.ide.application" bindingContexts="_Cc_BiWU1EeS8lKRWVsNI-w">
-  <children xsi:type="basic:TrimmedWindow" xmi:id="_Cc_BgWU1EeS8lKRWVsNI-w" selectedElement="_SRuWgGU-EeS8lKRWVsNI-w" label="Siapri broker" iconURI="platform:/plugin/broker-app/icons/court.png" width="500" height="400">
+  <children xsi:type="basic:TrimmedWindow" xmi:id="_Cc_BgWU1EeS8lKRWVsNI-w" selectedElement="_SRuWgGU-EeS8lKRWVsNI-w" label="Siapri broker" iconURI="platform:/plugin/broker-app/icons/app.png" width="500" height="400">
     <tags>shellMaximized</tags>
     <children xsi:type="basic:PartSashContainer" xmi:id="_SRuWgGU-EeS8lKRWVsNI-w" elementId="broker-app.partsashcontainer.main" selectedElement="_w6rpUJHfEeSgvvVqkSKOdQ" horizontal="true">
       <children xsi:type="basic:PartStack" xmi:id="_w6rpUJHfEeSgvvVqkSKOdQ" elementId="broker-app.partstack.overview" containerData="25">
@@ -23,19 +23,19 @@
         <children xsi:type="basic:PartStack" xmi:id="_5w1xkJhJEeSgvvVqkSKOdQ" elementId="broker-app.partstack.detail" containerData="35" selectedElement="_F-eyIJhVEeSgvvVqkSKOdQ">
           <tags>NoAutoCollapse</tags>
           <children xsi:type="basic:Part" xmi:id="_F-eyIJhVEeSgvvVqkSKOdQ" elementId="broker-app.partstack.detail.part.default" contributionURI="bundleclass://broker-app/com.siapri.broker.app.views.detail.DetailView" label="Détails" iconURI="platform:/plugin/broker-app/icons/detail.png"/>
-          <children xsi:type="basic:Part" xmi:id="_xMF0MOUBEee3gM-1DrgANA" elementId="broker-app.partstack.detail.part.document" contributionURI="bundleclass://broker-app/com.siapri.broker.app.views.detail.DocumentView" label="Documents" iconURI="platform:/plugin/broker-app/icons/detail.png"/>
-          <children xsi:type="basic:Part" xmi:id="_7oKuYOQ5EeeSwq0PfM53KQ" elementId="broker-app.partstack.detail.part.history" contributionURI="bundleclass://broker-app/com.siapri.broker.app.views.detail.HistoryView" label="Historique" iconURI="platform:/plugin/broker-app/icons/detail.png"/>
-          <children xsi:type="basic:Part" xmi:id="_cuKH4OyKEee8aM3UTUMKGA" elementId="broker-app.partstack.detail.part.conversation" contributionURI="bundleclass://broker-app/com.siapri.broker.app.views.detail.ConversationView" label="Conversation" iconURI="platform:/plugin/broker-app/icons/detail.png"/>
+          <children xsi:type="basic:Part" xmi:id="_xMF0MOUBEee3gM-1DrgANA" elementId="broker-app.partstack.detail.part.document" contributionURI="bundleclass://broker-app/com.siapri.broker.app.views.detail.DocumentView" label="Documents" iconURI="platform:/plugin/broker-app/icons/attachment.png"/>
+          <children xsi:type="basic:Part" xmi:id="_7oKuYOQ5EeeSwq0PfM53KQ" elementId="broker-app.partstack.detail.part.history" contributionURI="bundleclass://broker-app/com.siapri.broker.app.views.detail.HistoryView" label="Historique" iconURI="platform:/plugin/broker-app/icons/history.png"/>
+          <children xsi:type="basic:Part" xmi:id="_cuKH4OyKEee8aM3UTUMKGA" elementId="broker-app.partstack.detail.part.conversation" contributionURI="bundleclass://broker-app/com.siapri.broker.app.views.detail.ConversationView" label="Conversation" iconURI="platform:/plugin/broker-app/icons/conversation.png"/>
         </children>
       </children>
     </children>
     <trimBars xmi:id="_HbuvQGU8EeS8lKRWVsNI-w" elementId="broker-app.trimbar.0">
       <children xsi:type="menu:ToolBar" xmi:id="_KESs8GU8EeS8lKRWVsNI-w" elementId="broker-app.toolbar.main">
-        <children xsi:type="menu:DirectToolItem" xmi:id="_zmcIkOfnEeeNKKXBUyJoOQ" elementId="broker-app.toolbar.main.item.brokers" label="Agents" iconURI="platform:/plugin/broker-app/icons/clients.png" tooltip="Affiche la liste des agents" type="Check" contributionURI="bundleclass://broker-app/com.siapri.broker.app.ShowPart">
+        <children xsi:type="menu:DirectToolItem" xmi:id="_zmcIkOfnEeeNKKXBUyJoOQ" elementId="broker-app.toolbar.main.item.brokers" label="Agents" iconURI="platform:/plugin/broker-app/icons/broker.png" tooltip="Affiche la liste des agents" type="Check" contributionURI="bundleclass://broker-app/com.siapri.broker.app.ShowPart">
           <persistedState key="viewClass" value="com.siapri.broker.app.views.broker.BrokerView"/>
           <tags>FORCE_TEXT</tags>
         </children>
-        <children xsi:type="menu:DirectToolItem" xmi:id="_tnvKgMFQEee_XNBMVVCVqA" elementId="broker-app.toolbar.main.item.insurancetypes" label="Types d'assurance" iconURI="platform:/plugin/broker-app/icons/cases.png" tooltip="Affiche les types d'assurance" type="Check" contributionURI="bundleclass://broker-app/com.siapri.broker.app.ShowPart">
+        <children xsi:type="menu:DirectToolItem" xmi:id="_tnvKgMFQEee_XNBMVVCVqA" elementId="broker-app.toolbar.main.item.insurancetypes" label="Types d'assurance" iconURI="platform:/plugin/broker-app/icons/insurance_type.png" tooltip="Affiche les types d'assurance" type="Check" contributionURI="bundleclass://broker-app/com.siapri.broker.app.ShowPart">
           <persistedState key="viewClass" value="com.siapri.broker.app.views.insurancetype.InsuranceTypeView"/>
           <tags>FORCE_TEXT</tags>
         </children>
@@ -43,19 +43,19 @@
           <persistedState key="viewClass" value="com.siapri.broker.app.views.client.ClientView"/>
           <tags>FORCE_TEXT</tags>
         </children>
-        <children xsi:type="menu:DirectToolItem" xmi:id="_83hc0NhZEeeNzOPZwX1v-A" elementId="broker-app.toolbar.main.item.enterprises" accessibilityPhrase="" label="Entreprises" iconURI="platform:/plugin/broker-app/icons/clients.png" tooltip="Affiche la liste des entreprises" type="Check" contributionURI="bundleclass://broker-app/com.siapri.broker.app.ShowPart">
+        <children xsi:type="menu:DirectToolItem" xmi:id="_83hc0NhZEeeNzOPZwX1v-A" elementId="broker-app.toolbar.main.item.enterprises" accessibilityPhrase="" label="Entreprises" iconURI="platform:/plugin/broker-app/icons/enterprise.png" tooltip="Affiche la liste des entreprises" type="Check" contributionURI="bundleclass://broker-app/com.siapri.broker.app.ShowPart">
           <persistedState key="viewClass" value="com.siapri.broker.app.views.entreprise.EnterpriseView"/>
           <tags>FORCE_TEXT</tags>
         </children>
-        <children xsi:type="menu:DirectToolItem" xmi:id="_Z-9iwNe6EeeAg6h8ZaGLyg" elementId="broker-app.toolbar.main.item.insurers" label="Assureurs" iconURI="platform:/plugin/broker-app/icons/clients.png" tooltip="Affiche la liste des assureurs" type="Check" contributionURI="bundleclass://broker-app/com.siapri.broker.app.ShowPart">
+        <children xsi:type="menu:DirectToolItem" xmi:id="_Z-9iwNe6EeeAg6h8ZaGLyg" elementId="broker-app.toolbar.main.item.insurers" label="Assureurs" iconURI="platform:/plugin/broker-app/icons/insurer.png" tooltip="Affiche la liste des assureurs" type="Check" contributionURI="bundleclass://broker-app/com.siapri.broker.app.ShowPart">
           <persistedState key="viewClass" value="com.siapri.broker.app.views.insurer.InsurerView"/>
           <tags>FORCE_TEXT</tags>
         </children>
-        <children xsi:type="menu:DirectToolItem" xmi:id="_9QHaYGU8EeS8lKRWVsNI-w" elementId="broker-app.toolbar.main.item.contracts" label="Contrats" iconURI="platform:/plugin/broker-app/icons/cases.png" tooltip="Affiche les contrats" type="Check" contributionURI="bundleclass://broker-app/com.siapri.broker.app.ShowPart">
+        <children xsi:type="menu:DirectToolItem" xmi:id="_9QHaYGU8EeS8lKRWVsNI-w" elementId="broker-app.toolbar.main.item.contracts" label="Contrats" iconURI="platform:/plugin/broker-app/icons/contract.png" tooltip="Affiche les contrats" type="Check" contributionURI="bundleclass://broker-app/com.siapri.broker.app.ShowPart">
           <persistedState key="viewClass" value="com.siapri.broker.app.views.contract.ContractView"/>
           <tags>FORCE_TEXT</tags>
         </children>
-        <children xsi:type="menu:DirectToolItem" xmi:id="_4PvAkIGtEeeNpYTbXqKuzw" elementId="broker-app.toolbar.main.item.sinisters" label="Sinistres" iconURI="platform:/plugin/broker-app/icons/file.png" tooltip="Affiche les sinistres" type="Check" contributionURI="bundleclass://broker-app/com.siapri.broker.app.ShowPart">
+        <children xsi:type="menu:DirectToolItem" xmi:id="_4PvAkIGtEeeNpYTbXqKuzw" elementId="broker-app.toolbar.main.item.sinisters" label="Sinistres" iconURI="platform:/plugin/broker-app/icons/sinister.png" tooltip="Affiche les sinistres" type="Check" contributionURI="bundleclass://broker-app/com.siapri.broker.app.ShowPart">
           <persistedState key="viewClass" value="com.siapri.broker.app.views.sinister.SinisterView"/>
           <tags>FORCE_TEXT</tags>
         </children>

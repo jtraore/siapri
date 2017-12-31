@@ -10,7 +10,7 @@ import com.siapri.broker.app.Activator;
 
 public enum EImage {
 	
-	OK, NOK, CREATE, DELETE, EDIT, PRINT, FIND, DESKTOP, ARROW, ARROW_DOWN, SPLASH, FOLDER, FILE, COURT;
+	OK, NOK, CREATE, DELETE, EDIT, PRINT, FIND, DESKTOP, ARROW, ARROW_DOWN, SPLASH, FOLDER, FILE, SEARCH;
 	
 	// private static final Logger LOGGER =
 	// LoggerFactory.getLogger(EImage.class);

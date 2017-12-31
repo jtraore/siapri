@@ -19,41 +19,44 @@ import com.siapri.broker.business.model.Person;
 
 @Data
 public class ClientCustomizerModel extends AbstractCustomizerModel<Person> {
-	
+
+	@EntityProperty
+	private String number;
+
 	@EntityProperty
 	private String firstName;
-	
+
 	@EntityProperty
 	private String lastName;
-	
+
 	@EntityProperty
 	private Gender gender;
-	
+
 	@EntityProperty(converter = LocalDateToDateConverter.class)
 	private Date birthdate;
-
+	
 	@EntityProperty
 	private Broker broker;
-	
+
 	@EntityProperty
 	private String fax;
-
-	private Address homeAddress;
-
-	private Address workAddress;
-
-	private String landPhone;
-
-	private String mobilePhone;
 	
+	private Address homeAddress;
+	
+	private Address workAddress;
+	
+	private String landPhone;
+	
+	private String mobilePhone;
+
 	protected ClientCustomizerModel() {
 		super(null);
 	}
-	
+
 	public ClientCustomizerModel(final Person target) {
 		super(target);
 	}
-	
+
 	@Override
 	public void synchronize() {
 		super.synchronize();
@@ -62,7 +65,7 @@ public class ClientCustomizerModel extends AbstractCustomizerModel<Person> {
 		mobilePhone = target.getPhones().get(EPhoneType.MOBILE.name());
 		landPhone = target.getPhones().get(EPhoneType.LAND.name());
 	}
-	
+
 	@Override
 	public void validate() {
 		super.validate();
@@ -77,5 +80,5 @@ public class ClientCustomizerModel extends AbstractCustomizerModel<Person> {
 			target.getPhones().put(EPhoneType.LAND.name(), landPhone);
 		}
 	}
-
+	
 }

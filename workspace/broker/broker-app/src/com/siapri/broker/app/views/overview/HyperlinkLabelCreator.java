@@ -10,25 +10,25 @@ import org.eclipse.ui.forms.widgets.Hyperlink;
 import org.eclipse.ui.forms.widgets.ImageHyperlink;
 
 public final class HyperlinkLabelCreator {
-
+	
 	private HyperlinkLabelCreator() {
 	}
-
+	
 	@SuppressWarnings("rawtypes")
 	public static Control create(final Composite parent, final Image icon, final OverviewItem overviewItem, final IOverviewItemLocator itemLocator) {
 		final Hyperlink link;
 		if (icon != null) {
-			link = new ImageHyperlink(parent, SWT.NONE);
+			link = new ImageHyperlink(parent, SWT.CENTER);
 			((ImageHyperlink) link).setImage(icon);
 			link.setData("org.eclipse.e4.ui.css.id", "ImageHyperlinkLabelStyle");
 		} else {
-			link = new Hyperlink(parent, SWT.NONE);
+			link = new Hyperlink(parent, SWT.CENTER);
 			link.setData("org.eclipse.e4.ui.css.id", "HyperlinkLabelStyle");
 		}
-
+		
 		link.setUnderlined(false);
 		link.setText(overviewItem.getText());
-
+		
 		link.addHyperlinkListener(new HyperlinkAdapter() {
 			@SuppressWarnings("unchecked")
 			@Override
@@ -36,7 +36,7 @@ public final class HyperlinkLabelCreator {
 				itemLocator.locate(overviewItem);
 			}
 		});
-
+		
 		return link;
 	}
 }

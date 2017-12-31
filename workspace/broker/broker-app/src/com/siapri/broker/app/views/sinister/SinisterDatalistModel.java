@@ -1,7 +1,6 @@
 package com.siapri.broker.app.views.sinister;
 
 import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,6 +12,7 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 
 import com.siapri.broker.app.BundleUtil;
+import com.siapri.broker.app.views.common.Util;
 import com.siapri.broker.app.views.common.action.ContextualAction;
 import com.siapri.broker.app.views.common.action.IAction;
 import com.siapri.broker.app.views.common.customizer.CustomizerDialog;
@@ -22,7 +22,10 @@ import com.siapri.broker.app.views.common.datalist.ColumnDescriptor;
 import com.siapri.broker.app.views.common.datalist.DataListActionModel;
 import com.siapri.broker.app.views.common.datalist.DataListModel;
 import com.siapri.broker.business.model.Address;
+import com.siapri.broker.business.model.Client;
+import com.siapri.broker.business.model.Company;
 import com.siapri.broker.business.model.Contract;
+import com.siapri.broker.business.model.Person;
 import com.siapri.broker.business.model.Sinister;
 import com.siapri.broker.business.service.IBasicDaoService;
 import com.siapri.broker.business.service.impl.DaoCacheService;
@@ -38,13 +41,14 @@ public class SinisterDatalistModel extends DataListModel {
 	private void initialize(final Composite parent) {
 		labelProvider = new DataListLabelProvider();
 		
-		xPathExpressions = new String[] { "description" };
+		xPathExpressions = new String[] { "number", "description" };
 		
-		columnDescriptors = new ColumnDescriptor[4];
-		columnDescriptors[0] = new ColumnDescriptor("Client", 0.2, 125);
-		columnDescriptors[1] = new ColumnDescriptor("Contrat", 0.1, 125);
-		columnDescriptors[2] = new ColumnDescriptor("Date", 0.1, 125);
-		columnDescriptors[3] = new ColumnDescriptor("Description", 0.6, 125);
+		columnDescriptors = new ColumnDescriptor[5];
+		columnDescriptors[0] = new ColumnDescriptor("Numéro", 0.15, 125);
+		columnDescriptors[1] = new ColumnDescriptor("Client", 0.20, 125);
+		columnDescriptors[2] = new ColumnDescriptor("Contrat", 0.15, 125);
+		columnDescriptors[3] = new ColumnDescriptor("Date", 0.15, 125);
+		columnDescriptors[4] = new ColumnDescriptor("Description", 0.35, 125);
 		
 		final IAction createAction = (event) -> {
 			final Sinister sinister = new Sinister();
@@ -115,12 +119,18 @@ public class SinisterDatalistModel extends DataListModel {
 			final Contract contract = sinister.getContract();
 			switch (column) {
 				case 0:
-					return contract.getClient().getId().toString();
+					return sinister.getNumber();
 				case 1:
-					return contract.getNumber();
+					final Client client = contract.getClient();
+					if (client instanceof Person) {
+						return String.format("%s %s", ((Person) client).getFirstName(), ((Person) client).getLastName());
+					}
+					return ((Company) client).getName();
 				case 2:
-					return sinister.getOccuredDate().format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss"));
+					return contract.getNumber();
 				case 3:
+					return Util.DATE_FORMATTER.format(sinister.getOccuredDate());
+				case 4:
 					return sinister.getDescription();
 			}
 			return null;

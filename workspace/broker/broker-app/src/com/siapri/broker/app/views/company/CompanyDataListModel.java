@@ -1,12 +1,9 @@
 package com.siapri.broker.app.views.company;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.core.databinding.observable.list.WritableList;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
-import org.eclipse.jface.window.Window;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 
@@ -14,31 +11,27 @@ import com.siapri.broker.app.BundleUtil;
 import com.siapri.broker.app.views.common.EAddressType;
 import com.siapri.broker.app.views.common.EPhoneType;
 import com.siapri.broker.app.views.common.Util;
-import com.siapri.broker.app.views.common.action.IAction;
-import com.siapri.broker.app.views.common.customizer.CustomizerDialog;
-import com.siapri.broker.app.views.common.customizer.DialogBox;
-import com.siapri.broker.app.views.common.customizer.DocumentList;
+import com.siapri.broker.app.views.common.customizer.ICustomizer;
 import com.siapri.broker.app.views.common.datalist.ColumnDescriptor;
-import com.siapri.broker.app.views.common.datalist.DataListActionModel;
 import com.siapri.broker.app.views.common.datalist.DataListModel;
 import com.siapri.broker.business.model.Address;
-import com.siapri.broker.business.model.Client;
 import com.siapri.broker.business.model.Company;
-import com.siapri.broker.business.service.IBasicDaoService;
 import com.siapri.broker.business.service.impl.DaoCacheService;
 
-public class CompanyDataListModel extends DataListModel {
-
-	private List<Company> companies;
+public class CompanyDataListModel extends DataListModel<Company> {
 
 	private final boolean isInsurer;
 
 	public CompanyDataListModel(final Composite parent, final boolean isInsurer) {
+		super(false);
 		this.isInsurer = isInsurer;
-		inititalize(parent);
+		initialize();
 	}
 
-	private void inititalize(final Composite parent) {
+	@Override
+	protected void initialize() {
+		
+		super.initialize();
 
 		labelProvider = new DataListLabelProvider();
 
@@ -50,65 +43,26 @@ public class CompanyDataListModel extends DataListModel {
 		columnDescriptors[2] = new ColumnDescriptor("name", 0.30, 125);
 		columnDescriptors[3] = new ColumnDescriptor("Téléphone", 0.10, 125);
 		columnDescriptors[4] = new ColumnDescriptor("Adresse", 0.30, 125);
-
-		final IAction createAction = (event) -> {
-			final Company company = new Company();
-			company.setInsurer(isInsurer);
-			final String title = "Nouvelle société";
-			final String description = String.format("Cette fenêtre permet de créer une nouvelle société");
-			final CompanyCustomizer customizer = new CompanyCustomizer(company, title, description);
-			final DocumentList documentList = new DocumentList(company.getDocuments());
-			final DialogBox dialog = new CustomizerDialog(parent.getShell(), customizer, documentList);
-			if (dialog.open() == Window.OK) {
-				// Save to DB
-				return BundleUtil.getService(IBasicDaoService.class).save(company);
-			}
-			return null;
-		};
-
-		final IAction editAction = (event) -> {
-			final Company company = (Company) event.getTarget();
-			final String title = "Edition d'une société";
-			final String description = String.format("Cette fenêtre permet d'éditer une société");
-			final CompanyCustomizer customizer = new CompanyCustomizer(company, title, description);
-			final DocumentList documentList = new DocumentList(company.getDocuments());
-			final CustomizerDialog dialog = new CustomizerDialog(parent.getShell(), customizer, documentList);
-
-			if (dialog.open() == Window.OK) {
-				// Merge to DB
-				return BundleUtil.getService(IBasicDaoService.class).save(company);
-			}
-			return null;
-		};
-
-		final IAction deleteAction = (event) -> {
-			final Client client = (Client) event.getTarget();
-			// Delete from DB
-			BundleUtil.getService(IBasicDaoService.class).delete(client);
-			return client;
-		};
-
-		actionModel = new DataListActionModel(createAction, editAction, deleteAction);
-
-		companies = retrieveElements();
-		dataList = new WritableList<Object>(new ArrayList<>(companies), Company.class) {
-			@Override
-			public boolean add(final Object element) {
-				return super.add(element);
-			}
-		};
-
 	}
 
-	private List<Company> retrieveElements() {
+	@Override
+	protected List<Company> loadElements() {
 		if (isInsurer) {
 			return BundleUtil.getService(DaoCacheService.class).getInsurers();
 		}
 		return BundleUtil.getService(DaoCacheService.class).getEntreprises();
 	}
 
-	public List<Company> getCompanies() {
-		return companies;
+	@Override
+	protected ICustomizer<Company> createCustomizer(final Company element, final String title, final String description) {
+		return new CompanyCustomizer(element, title, description);
+	}
+	
+	@Override
+	protected Company createObject() {
+		final Company obj = super.createObject();
+		obj.setInsurer(isInsurer);
+		return obj;
 	}
 
 	private static final class DataListLabelProvider extends LabelProvider implements ITableLabelProvider {

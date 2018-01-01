@@ -35,43 +35,43 @@ import com.siapri.broker.business.model.AbstractEntity;
 
 @Singleton
 public class ShowPart {
-	
+
 	@Inject
 	private MApplication application;
-	
+
 	@Inject
 	private EModelService modelService;
-	
+
 	@Inject
 	private EPartService partService;
-	
+
 	@Inject
 	@Optional
 	private PartViewService partViewService;
-	
+
 	@Inject
 	@Preference
 	private IEclipsePreferences preferences;
-	
+
 	@Inject
 	@Optional
 	private Display currentDisplay;
-	
+
 	@Inject
 	private IEventBroker eventBroker;
-	
+
 	private boolean restoringParts = false;
-	
+
 	@Execute
 	public void execute(final MDirectToolItem directToolItem) {
 		Display.getCurrent().asyncExec(() -> showOrHidePart(directToolItem.isSelected(), directToolItem.getElementId(), partViewService.getContributionURI(directToolItem), directToolItem.getIconURI(), directToolItem.getLabel()));
 	}
-
+	
 	// @Execute
 	// public void execute(final MHandledMenuItem handledMenuItem) {
 	// Display.getCurrent().asyncExec(() -> showOrHidePart(false, handledMenuItem.isSelected(), handledMenuItem.getElementId(), handledMenuItem.getIconURI(), handledMenuItem.getLabel()));
 	// }
-	
+
 	private void showOrHidePart(final boolean itemSelected, final String elementId, final String contributionURI, final String iconURI, final String label) {
 		final MPartStack partStack = (MPartStack) modelService.find(Activator.MAIN_PART_STACK_ID, application);
 		final String partId = partStack.getElementId() + "." + elementId.substring(elementId.lastIndexOf(".") + 1);
@@ -87,28 +87,28 @@ public class ShowPart {
 			partService.hidePart(partService.findPart(partId));
 		}
 	}
-	
+
 	@Inject
 	@Optional
 	private void partActivated(@Active final MPart part) {
-
+		
 		final PartView<?> view = partViewService.getPartView(part.getElementId());
-
+		
 		if (view == null || restoringParts) {
 			return;
 		}
-
-		eventBroker.post(IApplicationEvent.ITEMS_COUNT, view.getDataListComposite().getDataListModel().getDataList().size());
-
-		eventBroker.post(IApplicationEvent.ITEM_SELECTED, view.getDataListComposite().getSelectedItem());
 		
+		eventBroker.post(IApplicationEvent.ITEMS_COUNT, view.getDataListComposite().getDataListModel().getDataList().size());
+		
+		eventBroker.post(IApplicationEvent.ITEM_SELECTED, view.getDataListComposite().getSelectedItem());
+
 		preferences.put("broker.parts.active", part.getElementId());
 		try {
 			preferences.flush();
 		} catch (final BackingStoreException e) {
 			// TODO LOGGER
 		}
-		
+
 		final NavigationManager navigationManager = partViewService.getNavigationManager();
 		navigationManager.addPart(part.getElementId());
 		final MDirectToolItem backwardToolItem = (MDirectToolItem) modelService.find(NavigationMenuUtil.BACKWARD_ITEM_ID, application);
@@ -116,7 +116,7 @@ public class ShowPart {
 		final MDirectToolItem forwardToolItem = (MDirectToolItem) modelService.find(NavigationMenuUtil.FORWARD_ITEM_ID, application);
 		Display.getCurrent().asyncExec(() -> forwardToolItem.setEnabled(navigationManager.canGoForward()));
 	}
-
+	
 	// @Inject
 	// @Optional
 	// public void appStarted(@UIEventTopic(UILifeCycle.APP_STARTUP_COMPLETE) final Event event) {
@@ -133,7 +133,7 @@ public class ShowPart {
 	// activeShell.addListener(SWT.Close, listener);
 	// }
 	// }
-	
+
 	@Inject
 	@Optional
 	public void itemSelected(@UIEventTopic(IApplicationEvent.ITEM_SELECTED) final AbstractEntity item) {
@@ -146,7 +146,8 @@ public class ShowPart {
 			}
 		}
 	}
-	
+
+	@SuppressWarnings("unchecked")
 	@Inject
 	@Optional
 	public void e4ServicesAvailable(@UIEventTopic(IApplicationEvent.E4_SERVICES_AVAILABLE) final Event event) {
@@ -165,11 +166,11 @@ public class ShowPart {
 				preferences.putBoolean(partId + ".displayed", false);
 			}
 		});
-		
+
 		for (final Entry<Integer, String> entry : partMapping.entrySet()) {
 			partViewService.showView(entry.getValue());
 		}
-		
+
 		final String activePartId = preferences.get("broker.parts.active", null);
 		if (activePartId != null) {
 			partViewService.showView(activePartId);
@@ -185,13 +186,13 @@ public class ShowPart {
 		}
 		restoringParts = false;
 	}
-	
+
 	@Inject
 	@Optional
 	public void appShutingdown(@UIEventTopic(UILifeCycle.APP_SHUTDOWN_STARTED) final Event event) {
 		savePreferences();
 	}
-	
+
 	private void savePreferences() {
 		final MPartStack partStack = (MPartStack) modelService.find(Activator.MAIN_PART_STACK_ID, application);
 		int index = 0;
@@ -199,12 +200,12 @@ public class ShowPart {
 			preferences.putBoolean(part.getElementId() + ".displayed", true);
 			preferences.putInt(part.getElementId() + ".index", index++);
 		}
-		
+
 		try {
 			preferences.flush();
 		} catch (final BackingStoreException e) {
 			// TODO LOGGER
 		}
 	}
-	
+
 }

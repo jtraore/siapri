@@ -28,7 +28,7 @@ public abstract class AbstractCustomizer<T> implements ICustomizer<T>, IChangeLi
 		validationStatus = ValidationStatus.ok();
 		bindingSupport = new BindingSupport();
 		bindingSupport.addChangeListener(this);
-		customizerStateListeners = new ArrayList<ICustomizerStateListener>();
+		customizerStateListeners = new ArrayList<>();
 	}
 
 	@Override

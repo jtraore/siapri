@@ -1,43 +1,34 @@
 package com.siapri.broker.app.views.contract;
 
-import java.time.ZonedDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.core.databinding.observable.list.WritableList;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
-import org.eclipse.jface.window.Window;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 
 import com.siapri.broker.app.BundleUtil;
 import com.siapri.broker.app.views.common.Util;
-import com.siapri.broker.app.views.common.action.ContextualAction;
-import com.siapri.broker.app.views.common.action.IAction;
-import com.siapri.broker.app.views.common.customizer.CustomizerDialog;
-import com.siapri.broker.app.views.common.customizer.DialogBox;
-import com.siapri.broker.app.views.common.customizer.DocumentList;
+import com.siapri.broker.app.views.common.customizer.ICustomizer;
 import com.siapri.broker.app.views.common.datalist.ColumnDescriptor;
-import com.siapri.broker.app.views.common.datalist.DataListActionModel;
 import com.siapri.broker.app.views.common.datalist.DataListModel;
 import com.siapri.broker.business.model.Client;
 import com.siapri.broker.business.model.Company;
 import com.siapri.broker.business.model.Contract;
 import com.siapri.broker.business.model.InsuranceType;
 import com.siapri.broker.business.model.Person;
-import com.siapri.broker.business.service.IBasicDaoService;
 import com.siapri.broker.business.service.impl.DaoCacheService;
 
-public class ContractDataListModel extends DataListModel {
+public class ContractDataListModel extends DataListModel<Contract> {
 
-	private List<Contract> contracts;
-	
 	public ContractDataListModel(final Composite parent) {
-		inititalize(parent);
+		super();
 	}
 	
-	private void inititalize(final Composite parent) {
+	@Override
+	protected void initialize() {
+		
+		super.initialize();
 		
 		labelProvider = new DataListLabelProvider();
 		
@@ -48,67 +39,16 @@ public class ContractDataListModel extends DataListModel {
 		columnDescriptors[1] = new ColumnDescriptor("Date", 0.15, 125);
 		columnDescriptors[2] = new ColumnDescriptor("Client", 0.30, 125);
 		columnDescriptors[3] = new ColumnDescriptor("Assurance", 0.40, 125);
-		
-		final IAction createAction = (event) -> {
-			final Contract contract = new Contract();
-			contract.setSubscriptionDate(ZonedDateTime.now());
-			final String title = "Nouveau contrat";
-			final String description = String.format("Cette fenêtre permet de créer un nouveau contrat");
-			final ContractCustomizer customizer = new ContractCustomizer(contract, retrieveInsurers(), retrieveInsuranceTypes(), title, description);
-			final DocumentList documentList = new DocumentList(contract.getDocuments());
-			final DialogBox dialog = new CustomizerDialog(parent.getShell(), customizer, documentList);
-			if (dialog.open() == Window.OK) {
-				// Save to DB
-				return BundleUtil.getService(IBasicDaoService.class).save(contract);
-			}
-			return null;
-		};
-		
-		final IAction editAction = (event) -> {
-			final Contract contract = (Contract) event.getTarget();
-			final String title = "Edition d'un contrat";
-			final String description = String.format("Cette fenêtre permet d'éditer un contrat");
-			final ContractCustomizer customizer = new ContractCustomizer(contract, retrieveInsurers(), retrieveInsuranceTypes(), title, description);
-			final DocumentList documentList = new DocumentList(contract.getDocuments());
-			final CustomizerDialog dialog = new CustomizerDialog(parent.getShell(), customizer, documentList);
-			
-			if (dialog.open() == Window.OK) {
-				// Merge to DB
-				return BundleUtil.getService(IBasicDaoService.class).save(contract);
-			}
-			// else {
-			// BundleUtil.getService(IBasicDaoService.class).find(InsuranceType.class, contract.getId()).ifPresent(entity -> {
-			// contract.getWarranties().clear();
-			// contract.getWarranties().addAll(entity.getWarranties());
-			// });
-			// }
-			
-			return null;
-		};
-		
-		final IAction deleteAction = (event) -> {
-			final Contract contract = (Contract) event.getTarget();
-			// Delete from DB
-			BundleUtil.getService(IBasicDaoService.class).delete(contract);
-			return contract;
-		};
-		
-		actionModel = new DataListActionModel(createAction, editAction, deleteAction, createDatalistMenuActions(parent));
-		
-		contracts = retrieveContracts();
-		dataList = new WritableList<>(new ArrayList<>(contracts), InsuranceType.class);
 	}
 	
-	protected ContextualAction[] createDatalistMenuActions(final Composite parent) {
-		return new ContextualAction[0];
-	}
-	
-	public List<Contract> getContracts() {
-		return contracts;
-	}
-	
-	protected List<Contract> retrieveContracts() {
+	@Override
+	protected List<Contract> loadElements() {
 		return BundleUtil.getService(DaoCacheService.class).getContracts();
+	}
+
+	@Override
+	protected ICustomizer<Contract> createCustomizer(final Contract element, final String title, final String description) {
+		return new ContractCustomizer(element, retrieveInsurers(), retrieveInsuranceTypes(), title, description);
 	}
 
 	private List<Company> retrieveInsurers() {

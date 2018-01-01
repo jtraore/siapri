@@ -11,17 +11,17 @@ import com.siapri.broker.app.views.detail.AbstractDetailCompositeProvider;
 import com.siapri.broker.business.model.Client;
 
 public class EnterpriseView extends ClientView {
-	
+
 	@Override
 	protected AbstractDetailCompositeProvider<? extends Client> getDetailCompositeProvider() {
 		return new EntrepriseDetailCompositeProvider(currentPart.getElementId(), clientDetails);
 	}
-	
+
 	@Override
 	protected List<? extends Client> getClients() {
-		return ((CompanyDataListModel) dataListModel).getCompanies();
+		return ((CompanyDataListModel) dataListModel).getElements();
 	}
-
+	
 	@Override
 	protected DataListModel getDataListModel(final Composite parent) {
 		return new CompanyDataListModel(parent, false);

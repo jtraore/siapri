@@ -26,19 +26,19 @@ import com.siapri.broker.business.model.Sinister;
 import com.siapri.broker.business.service.IBasicDaoService;
 
 public class ClientView extends PartView<Person> {
-	
+
 	protected Map<Client, ClientDetail> clientDetails;
-	
+
 	@Override
 	protected void createGui(final Composite parent) {
-		
+
 		parent.setLayout(new FillLayout());
-		
+
 		dataListModel = getDataListModel(parent);
-		
+
 		final Map<Client, List<Contract>> contractsByClient = getContractsByClient();
 		final Map<Client, List<Sinister>> sinisterByClient = getSinistersByClient();
-
+		
 		// @formatter:off
 		clientDetails = getClients()
 				.stream()
@@ -47,19 +47,19 @@ public class ClientView extends PartView<Person> {
 		// @formatter:on
 		partViewService.addDetailCompositeProvider(getDetailCompositeProvider());
 	}
-
+	
 	protected AbstractDetailCompositeProvider<? extends Client> getDetailCompositeProvider() {
 		return new ClientDetailCompositeProvider(currentPart.getElementId(), clientDetails);
 	}
-	
+
 	protected List<? extends Client> getClients() {
-		return ((ClientDataListModel) dataListModel).getClients();
+		return ((ClientDataListModel) dataListModel).getElements();
 	}
-	
+
 	protected DataListModel getDataListModel(final Composite parent) {
 		return new ClientDataListModel(parent);
 	}
-	
+
 	@Inject
 	@Optional
 	private void itemCreated(@UIEventTopic(IApplicationEvent.ITEM_CREATED) final Object item) {
@@ -74,7 +74,7 @@ public class ClientView extends PartView<Person> {
 			clientDetails.put(client, createClientDetail(client, new HashMap<>(), new HashMap<>()));
 		}
 	}
-	
+
 	@Inject
 	@Optional
 	private void itemEdited(@UIEventTopic(IApplicationEvent.ITEM_EDITED) final Object item) {
@@ -88,7 +88,7 @@ public class ClientView extends PartView<Person> {
 			Collections.replaceAll(sinisters, sinisters.get(sinisters.indexOf(sinister)), sinister);
 		}
 	}
-	
+
 	@Inject
 	@Optional
 	private void itemRemoved(@UIEventTopic(IApplicationEvent.ITEM_REMOVED) final Object item) {
@@ -102,7 +102,7 @@ public class ClientView extends PartView<Person> {
 			clientDetails.get(sinister.getContract().getClient()).getSinisters().remove(sinister);
 		}
 	}
-	
+
 	private ClientDetail createClientDetail(final Client client, final Map<Client, List<Contract>> contractsByClient, final Map<Client, List<Sinister>> sinisterByClient) {
 		final ClientDetail clientDetail = new ClientDetail(client);
 		final List<Contract> contracts = contractsByClient.get(client);
@@ -115,13 +115,13 @@ public class ClientView extends PartView<Person> {
 		}
 		return clientDetail;
 	}
-	
+
 	private Map<Client, List<Contract>> getContractsByClient() {
 		return BundleUtil.getService(IBasicDaoService.class).getAll(Contract.class).stream().collect(Collectors.groupingBy(Contract::getClient));
 	}
-	
+
 	private Map<Client, List<Sinister>> getSinistersByClient() {
 		return BundleUtil.getService(IBasicDaoService.class).getAll(Sinister.class).stream().collect(Collectors.groupingBy(s -> s.getContract().getClient()));
 	}
-	
+
 }

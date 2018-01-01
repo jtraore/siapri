@@ -1,13 +1,9 @@
 package com.siapri.broker.app.views.client;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.core.databinding.observable.list.WritableList;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
-import org.eclipse.jface.window.Window;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 
@@ -15,28 +11,23 @@ import com.siapri.broker.app.BundleUtil;
 import com.siapri.broker.app.views.common.EAddressType;
 import com.siapri.broker.app.views.common.EPhoneType;
 import com.siapri.broker.app.views.common.Util;
-import com.siapri.broker.app.views.common.action.IAction;
-import com.siapri.broker.app.views.common.customizer.CustomizerDialog;
-import com.siapri.broker.app.views.common.customizer.DialogBox;
-import com.siapri.broker.app.views.common.customizer.DocumentList;
+import com.siapri.broker.app.views.common.customizer.ICustomizer;
 import com.siapri.broker.app.views.common.datalist.ColumnDescriptor;
-import com.siapri.broker.app.views.common.datalist.DataListActionModel;
 import com.siapri.broker.app.views.common.datalist.DataListModel;
 import com.siapri.broker.business.model.Address;
-import com.siapri.broker.business.model.Client;
 import com.siapri.broker.business.model.Person;
-import com.siapri.broker.business.service.IBasicDaoService;
 import com.siapri.broker.business.service.impl.DaoCacheService;
 
-public class ClientDataListModel extends DataListModel {
-
-	private List<Person> clients;
+public class ClientDataListModel extends DataListModel<Person> {
 
 	public ClientDataListModel(final Composite parent) {
-		inititalize(parent);
+		super();
 	}
 
-	private void inititalize(final Composite parent) {
+	@Override
+	protected void initialize() {
+		
+		super.initialize();
 
 		labelProvider = new DataListLabelProvider();
 
@@ -48,62 +39,16 @@ public class ClientDataListModel extends DataListModel {
 		columnDescriptors[2] = new ColumnDescriptor("Prénom", 0.25, 125);
 		columnDescriptors[3] = new ColumnDescriptor("Téléphone", 0.10, 125);
 		columnDescriptors[4] = new ColumnDescriptor("Adresse", 0.25, 125);
-
-		final IAction createAction = (event) -> {
-			final Person client = new Person();
-			client.setBirthdate(LocalDate.now());
-			final String title = "Nouveau client";
-			final String description = String.format("Cette fenêtre permet de créer un nouveau client");
-			final ClientCustomizer customizer = new ClientCustomizer(client, title, description);
-			final DocumentList documentList = new DocumentList(client.getDocuments());
-			final DialogBox dialog = new CustomizerDialog(parent.getShell(), customizer, documentList);
-			if (dialog.open() == Window.OK) {
-				// Save to DB
-				return BundleUtil.getService(IBasicDaoService.class).save(client);
-			}
-			return null;
-		};
-
-		final IAction editAction = (event) -> {
-			final Person client = (Person) event.getTarget();
-			final String title = "Edition d'un client";
-			final String description = String.format("Cette fenêtre permet d'éditer un client");
-			final ClientCustomizer customizer = new ClientCustomizer(client, title, description);
-			final DocumentList documentList = new DocumentList(client.getDocuments());
-			final CustomizerDialog dialog = new CustomizerDialog(parent.getShell(), customizer, documentList);
-
-			if (dialog.open() == Window.OK) {
-				// Merge to DB
-				return BundleUtil.getService(IBasicDaoService.class).save(client);
-			}
-			return null;
-		};
-
-		final IAction deleteAction = (event) -> {
-			final Client client = (Client) event.getTarget();
-			// Delete from DB
-			BundleUtil.getService(IBasicDaoService.class).delete(client);
-			return client;
-		};
-
-		actionModel = new DataListActionModel(createAction, editAction, deleteAction);
-
-		clients = retrieveClients();
-		dataList = new WritableList<Object>(new ArrayList<>(clients), Person.class) {
-			@Override
-			public boolean add(final Object element) {
-				return super.add(element);
-			}
-		};
-
 	}
 
-	private List<Person> retrieveClients() {
+	@Override
+	protected List<Person> loadElements() {
 		return BundleUtil.getService(DaoCacheService.class).getPersons();
 	}
-
-	public List<Person> getClients() {
-		return clients;
+	
+	@Override
+	protected ICustomizer<Person> createCustomizer(final Person element, final String title, final String description) {
+		return new ClientCustomizer(element, title, description);
 	}
 
 	private static final class DataListLabelProvider extends LabelProvider implements ITableLabelProvider {

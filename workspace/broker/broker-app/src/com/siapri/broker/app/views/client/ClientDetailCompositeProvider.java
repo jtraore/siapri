@@ -19,31 +19,34 @@ import com.siapri.broker.business.model.Person;
 import com.siapri.broker.business.model.Sinister;
 
 public class ClientDetailCompositeProvider extends AbstractDetailCompositeProvider<Client> {
-
-	private final Map<Client, ClientDetail> clientDetails;
-
+	
+	private Map<Client, ClientDetail> clientDetails;
+	
 	private Client currentClient;
-
-	public ClientDetailCompositeProvider(final String id, final Map<Client, ClientDetail> clientDetails) {
+	
+	public ClientDetailCompositeProvider(final String id) {
 		super(id);
-		this.clientDetails = clientDetails;
 	}
-
+	
 	@Override
 	public boolean canProvide(final Object item) {
 		return item instanceof Person;
 	}
 
+	public void setClientDetails(final Map<Client, ClientDetail> clientDetails) {
+		this.clientDetails = clientDetails;
+	}
+	
 	@Override
 	public Composite createComposite(final Composite parent, final Client item) {
-
+		
 		currentClient = item;
-
+		
 		final Composite composite = new Composite(parent, SWT.NONE);
 		final GridLayout layout = new GridLayout(3, true);
 		layout.horizontalSpacing = 25;
 		composite.setLayout(layout);
-		
+
 		if (item instanceof Person) {
 			createGeneralComposite(composite, (Person) item);
 		} else {
@@ -51,43 +54,43 @@ public class ClientDetailCompositeProvider extends AbstractDetailCompositeProvid
 		}
 		createContractComposite(composite, item);
 		createSinisterComposite(composite, item);
-		
+
 		return composite;
 	}
-
+	
 	private void createGeneralComposite(final Composite parent, final Person item) {
 		createPersonComposite(parent, item, false);
 	}
-	
+
 	private void createGeneralComposite(final Composite parent, final Company item) {
 		createCompanyComposite(parent, item, false);
 	}
-	
+
 	private void createContractComposite(final Composite parent, final Client item) {
 		createContractListComposite(parent, new ContractDataListLabelProvider());
 	}
-
+	
 	private void createSinisterComposite(final Composite parent, final Client item) {
 		createSinisterListComposite(parent, new SinisterDataListLabelProvider());
 	}
-	
+
 	@Override
 	protected List<Contract> getContextContracts() {
 		return clientDetails.get(currentClient).getContracts();
 	}
-	
+
 	@Override
 	protected List<Sinister> getContextSinisters() {
 		return clientDetails.get(currentClient).getSinisters();
 	}
-	
-	private final class ContractDataListLabelProvider extends LabelProvider implements ITableLabelProvider {
 
+	private final class ContractDataListLabelProvider extends LabelProvider implements ITableLabelProvider {
+		
 		@Override
 		public Image getColumnImage(final Object arg0, final int arg1) {
 			return null;
 		}
-
+		
 		@Override
 		public String getColumnText(final Object object, final int column) {
 			final Contract contract = (Contract) object;
@@ -102,14 +105,14 @@ public class ClientDetailCompositeProvider extends AbstractDetailCompositeProvid
 			return null;
 		}
 	}
-
+	
 	private final class SinisterDataListLabelProvider extends LabelProvider implements ITableLabelProvider {
-
+		
 		@Override
 		public Image getColumnImage(final Object arg0, final int arg1) {
 			return null;
 		}
-
+		
 		@Override
 		public String getColumnText(final Object object, final int column) {
 			final Sinister sinister = (Sinister) object;
@@ -126,5 +129,5 @@ public class ClientDetailCompositeProvider extends AbstractDetailCompositeProvid
 			return null;
 		}
 	}
-
+	
 }

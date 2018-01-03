@@ -4,17 +4,17 @@ import java.util.List;
 
 import org.eclipse.swt.widgets.Composite;
 
+import com.siapri.broker.app.views.client.ClientDetailCompositeProvider;
 import com.siapri.broker.app.views.client.ClientView;
 import com.siapri.broker.app.views.common.datalist.DataListModel;
 import com.siapri.broker.app.views.company.CompanyDataListModel;
-import com.siapri.broker.app.views.detail.AbstractDetailCompositeProvider;
 import com.siapri.broker.business.model.Client;
 
 public class EnterpriseView extends ClientView {
 
 	@Override
-	protected AbstractDetailCompositeProvider<? extends Client> getDetailCompositeProvider() {
-		return new EntrepriseDetailCompositeProvider(currentPart.getElementId(), clientDetails);
+	protected ClientDetailCompositeProvider getDetailCompositeProvider() {
+		return new EntrepriseDetailCompositeProvider(currentPart.getElementId());
 	}
 
 	@Override
@@ -23,7 +23,7 @@ public class EnterpriseView extends ClientView {
 	}
 	
 	@Override
-	protected DataListModel getDataListModel(final Composite parent) {
+	protected DataListModel<?> getDataListModel(final Composite parent) {
 		return new CompanyDataListModel(parent, false);
 	}
 }

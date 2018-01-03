@@ -62,7 +62,7 @@ public class DataListComposite extends Composite {
 
 	private DataListFilter dataListFilter;
 
-	private DataListModel dataListModel = null;
+	private DataListModel<?> dataListModel = null;
 
 	private TableResizeController tableResizeController = null;
 
@@ -82,7 +82,7 @@ public class DataListComposite extends Composite {
 				BundleUtil.getService(E4Service.class).getEventBroker().post(IApplicationEvent.ITEM_CREATED, result);
 				tableViewer.setSelection(new StructuredSelection(result));
 			}
-			tableViewer.refresh();
+			refreshData();
 		}
 	};
 
@@ -110,7 +110,7 @@ public class DataListComposite extends Composite {
 			if (deleteAction != null) {
 				final Object deletedObject = deleteAction.execute(event);
 				dataListModel.getDataList().remove(deletedObject);
-				tableViewer.refresh();
+				refreshData();
 				BundleUtil.getService(E4Service.class).getEventBroker().post(IApplicationEvent.ITEM_REMOVED, selectedObject);
 			}
 		}
@@ -184,7 +184,7 @@ public class DataListComposite extends Composite {
 		tableViewer.refresh();
 	};
 
-	public DataListComposite(final Composite parent, final int style, final DataListModel dataListModel) {
+	public DataListComposite(final Composite parent, final int style, final DataListModel<?> dataListModel) {
 		super(parent, style);
 		this.dataListModel = dataListModel;
 		tableResizeController = new TableResizeController(dataListModel.getColumnDescriptors());
@@ -281,6 +281,10 @@ public class DataListComposite extends Composite {
 
 	public void select(final Object object) {
 		tableViewer.setSelection(new StructuredSelection(object));
+		refreshData();
+	}
+
+	public void refreshData() {
 		tableViewer.refresh();
 	}
 
@@ -288,7 +292,7 @@ public class DataListComposite extends Composite {
 		return selectedItem;
 	}
 
-	public DataListModel getDataListModel() {
+	public DataListModel<?> getDataListModel() {
 		return dataListModel;
 	}
 
@@ -302,13 +306,13 @@ public class DataListComposite extends Composite {
 		final IAction editAction = dataListModel.getActionModel().getEditAction();
 		if (editAction != null) {
 			final Object objEdited = editAction.execute(event);
-			tableViewer.refresh();
+			refreshData();
 			if (objEdited != null) {
-				final int index = dataListModel.getDataList().indexOf(selectedObject);
+				// final int index = dataListModel.getDataList().indexOf(selectedObject);
 				// dataListModel.getDataList().remove(index);
-				dataListModel.getDataList().set(index, objEdited);
-				tableViewer.setSelection(new StructuredSelection(objEdited));
-				BundleUtil.getService(E4Service.class).getEventBroker().post(IApplicationEvent.ITEM_EDITED, objEdited);
+				// dataListModel.getDataList().set(index, objEdited);
+				// tableViewer.setSelection(new StructuredSelection(selectedObject));
+				BundleUtil.getService(E4Service.class).getEventBroker().post(IApplicationEvent.ITEM_EDITED, selectedObject);
 			}
 		}
 	}

@@ -53,9 +53,12 @@ public class DaoCacheService {
 				break;
 			case UPDATE:
 				for (final AbstractEntity entity : event.getEntities()) {
-					data.removeMapping(entityClass, entity);
+					final AbstractEntity target = data.get(entityClass).stream().filter(e -> e.equals(entity)).findFirst().get();
+					// BeanUtils.copyProperties(entity, target);
+					// data.removeMapping(entityClass, entity);
+					System.out.println();
 				}
-				data.putAll(entityClass, Arrays.asList(event.getEntities()));
+				// data.putAll(entityClass, Arrays.asList(event.getEntities()));
 				break;
 			case DELETE:
 				for (final AbstractEntity entity : event.getEntities()) {

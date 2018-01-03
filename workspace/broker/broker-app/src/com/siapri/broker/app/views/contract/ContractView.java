@@ -1,8 +1,6 @@
 package com.siapri.broker.app.views.contract;
 
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -24,34 +22,39 @@ import com.siapri.broker.business.model.WarrantyFormula;
 import com.siapri.broker.business.service.IBasicDaoService;
 
 public class ContractView extends PartView<Contract> {
-	
-	private Map<Contract, ContractDetail> contractDetails;
-	
-	private Map<WarrantyFormula, InsuranceType> formulaMap;
-	
+
+	private ContractDetailCompositeProvider detailCompositeProvider;
+
 	@Override
 	protected void createGui(final Composite parent) {
-
-		parent.setLayout(new FillLayout());
 		
-		dataListModel = new ContractDataListModel(parent);
+		parent.setLayout(new FillLayout());
 
+		dataListModel = new ContractDataListModel(parent);
+		
+		detailCompositeProvider = new ContractDetailCompositeProvider(currentPart.getElementId());
+		refreshDetails();
+		partViewService.addDetailCompositeProvider(detailCompositeProvider);
+	}
+
+	private void refreshDetails() {
 		// @formatter:off
-		contractDetails = ((ContractDataListModel) dataListModel).getElements()
+		final Map<Contract, ContractDetail> contractDetails = ((ContractDataListModel) dataListModel).getElements()
 				.stream()
 				.map(c -> createContractDetail(c))
 				.collect(Collectors.toMap(ContractDetail::getContract, Function.identity()));
 		// @formatter:on
-
-		formulaMap = getWarrantyFormulas();
 		
-		partViewService.addDetailCompositeProvider(new ContractDetailCompositeProvider(currentPart.getElementId(), contractDetails, formulaMap));
-	}
+		final Map<WarrantyFormula, InsuranceType> formulaMap = getWarrantyFormulas();
 
+		detailCompositeProvider.setContractDetails(contractDetails);
+		detailCompositeProvider.setWarrantyFormulas(formulaMap);
+	}
+	
 	private ContractDetail createContractDetail(final Contract contract) {
 		return new ContractDetail(contract, BundleUtil.getService(IBasicDaoService.class).getSinistersByContract(contract));
 	}
-	
+
 	private Map<WarrantyFormula, InsuranceType> getWarrantyFormulas() {
 		final Map<WarrantyFormula, InsuranceType> formulaMap = new HashMap<>();
 		BundleUtil.getService(IBasicDaoService.class).getAll(InsuranceType.class).forEach(insuranceType -> {
@@ -59,7 +62,8 @@ public class ContractView extends PartView<Contract> {
 		});
 		return formulaMap;
 	}
-	
+
+	@SuppressWarnings("unchecked")
 	@Inject
 	@Optional
 	private void itemCreated(@UIEventTopic(IApplicationEvent.ITEM_CREATED) final Object item) {
@@ -70,34 +74,20 @@ public class ContractView extends PartView<Contract> {
 				dataListModel.getDataList().add(contract);
 			}
 			dataListModel.setSelectionEventActivated(true);
-		} else if (item instanceof InsuranceType) {
-			final InsuranceType insuranceType = (InsuranceType) item;
-			insuranceType.getFormulas().forEach(formula -> formulaMap.put(formula, insuranceType));
-		} else if (item instanceof Sinister) {
-			final Sinister sinister = (Sinister) item;
-			contractDetails.get(sinister.getContract()).getSinisters().add(sinister);
+		}
+		if (item instanceof Contract || item instanceof InsuranceType || item instanceof Sinister) {
+			refreshDetails();
 		}
 	}
-
+	
 	@Inject
 	@Optional
 	private void itemEdited(@UIEventTopic(IApplicationEvent.ITEM_EDITED) final Object item) {
 		if (item instanceof Contract) {
-			final Contract contract = (Contract) item;
-			final List<Object> contracts = dataListModel.getDataList();
-			dataListModel.setSelectionEventActivated(false);
-			Collections.replaceAll(contracts, contracts.get(contracts.indexOf(contract)), contract);
-			dataListModel.setSelectionEventActivated(true);
-		} else if (item instanceof InsuranceType) {
-			final InsuranceType insuranceType = (InsuranceType) item;
-			insuranceType.getFormulas().forEach(formula -> formulaMap.put(formula, insuranceType));
-		} else if (item instanceof Sinister) {
-			final Sinister sinister = (Sinister) item;
-			contractDetails.get(sinister.getContract()).getSinisters().remove(sinister);
-			contractDetails.get(sinister.getContract()).getSinisters().add(sinister);
+			dataListComposite.refreshData();
 		}
 	}
-
+	
 	@Inject
 	@Optional
 	private void itemRemoved(@UIEventTopic(IApplicationEvent.ITEM_REMOVED) final Object item) {
@@ -106,12 +96,9 @@ public class ContractView extends PartView<Contract> {
 			dataListModel.setSelectionEventActivated(false);
 			dataListModel.getDataList().remove(contract);
 			dataListModel.setSelectionEventActivated(true);
-		} else if (item instanceof InsuranceType) {
-			final InsuranceType insuranceType = (InsuranceType) item;
-			insuranceType.getFormulas().forEach(formula -> formulaMap.remove(formula));
-		} else if (item instanceof Sinister) {
-			final Sinister sinister = (Sinister) item;
-			contractDetails.get(sinister.getContract()).getSinisters().remove(sinister);
+		}
+		if (item instanceof Contract || item instanceof InsuranceType || item instanceof Sinister) {
+			refreshDetails();
 		}
 	}
 }

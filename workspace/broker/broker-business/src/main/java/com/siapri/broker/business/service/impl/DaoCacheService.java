@@ -3,6 +3,7 @@ package com.siapri.broker.business.service.impl;
 import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -29,126 +30,158 @@ import com.siapri.broker.business.model.Sinister;
 
 @Service
 public class DaoCacheService {
-	
+
 	@Autowired
 	private EventBus daoEventBus;
-
+	
 	@Autowired
 	private List<IBasicRepository<? extends AbstractEntity, ? extends Serializable>> repositories;
-
+	
 	private final ArrayListValuedHashMap<Class<?>, AbstractEntity> data = new ArrayListValuedHashMap<>();
 
+	private final ArrayListValuedHashMap<Client, Contract> contractsByClient = new ArrayListValuedHashMap<>();
+
+	private final ArrayListValuedHashMap<Client, Sinister> sinistersByClient = new ArrayListValuedHashMap<>();
+	
 	@PostConstruct
 	private void init() {
 		daoEventBus.register(this);
 		reload();
 	}
-	
+
 	@Subscribe
 	public void onDaoEvent(final DaoEvent event) {
 		final Class<? extends AbstractEntity> entityClass = event.getEntities()[0].getClass();
 		switch (event.getType()) {
 			case CREATE:
 				data.putAll(entityClass, Arrays.asList(event.getEntities()));
+
+				for (final Object entity : event.getEntities()) {
+					if (entity instanceof Contract) {
+						final Contract contract = (Contract) entity;
+						contractsByClient.put(contract.getClient(), contract);
+					} else if (entity instanceof Sinister) {
+						final Sinister sinister = (Sinister) entity;
+						sinistersByClient.put(sinister.getContract().getClient(), sinister);
+					}
+				}
 				break;
 			case UPDATE:
-				for (final AbstractEntity entity : event.getEntities()) {
-					final AbstractEntity target = data.get(entityClass).stream().filter(e -> e.equals(entity)).findFirst().get();
-					// BeanUtils.copyProperties(entity, target);
-					// data.removeMapping(entityClass, entity);
-					System.out.println();
-				}
-				// data.putAll(entityClass, Arrays.asList(event.getEntities()));
 				break;
 			case DELETE:
 				for (final AbstractEntity entity : event.getEntities()) {
 					data.removeMapping(entityClass, entity);
+					
+					if (entity instanceof Contract) {
+						final Contract contract = (Contract) entity;
+						contractsByClient.removeMapping(contract.getClient(), contract);
+					} else if (entity instanceof Sinister) {
+						final Sinister sinister = (Sinister) entity;
+						sinistersByClient.removeMapping(sinister.getContract().getClient(), sinister);
+					}
 				}
 				break;
 			default:
 				break;
 		}
 	}
-
+	
 	private void reload() {
+		
 		data.clear();
 		repositories.forEach(repository -> data.putAll(getEntityType(repository), repository.findAll()));
+
+		getContracts().stream().collect(Collectors.groupingBy(Contract::getClient)).forEach((client, contracts) -> {
+			contracts.forEach(contract -> contractsByClient.put(client, contract));
+		});
+		
+		getSinisters().stream().collect(Collectors.groupingBy(s -> s.getContract().getClient())).forEach((client, sinisters) -> {
+			sinisters.forEach(sinister -> sinistersByClient.put(client, sinister));
+		});
 	}
-	
+
 	public List<InsuranceType> getInsuranceTypes() {
 		return getAll(InsuranceType.class);
 	}
-
+	
 	public List<InsuranceType> getInsuranceTypes(final int limit) {
 		return getInsuranceTypes().stream().limit(limit).collect(Collectors.toList());
 	}
-	
+
 	public List<Person> getPersons() {
 		return getAll(Person.class);
 	}
-	
+
 	public List<Person> getPersons(final int limit) {
 		return getPersons().stream().limit(limit).collect(Collectors.toList());
 	}
-
+	
 	public List<Company> getCompanies() {
 		return getAll(Company.class);
 	}
-
+	
 	public List<Company> getInsurers() {
 		return getCompanies().stream().filter(Company::isInsurer).collect(Collectors.toList());
 	}
-
+	
 	public List<Company> getInsurers(final int limit) {
 		return getInsurers().stream().limit(limit).collect(Collectors.toList());
 	}
-
+	
 	public List<Company> getEntreprises() {
 		return getCompanies().stream().filter(c -> !c.isInsurer()).collect(Collectors.toList());
 	}
-
+	
 	public List<Company> getEntreprises(final int limit) {
 		return getEntreprises().stream().limit(limit).collect(Collectors.toList());
 	}
-
+	
 	public List<Contract> getContracts() {
 		return getAll(Contract.class);
 	}
-	
+
+	public List<Contract> getContracts(final Client client) {
+		return contractsByClient.containsKey(client) ? contractsByClient.get(client) : new ArrayList<>();
+	}
+
 	public List<Contract> getContracts(final int limit) {
 		return getContracts().stream().limit(limit).collect(Collectors.toList());
 	}
-
+	
 	public List<Sinister> getSinisters() {
 		return getAll(Sinister.class);
 	}
 
+	public List<Sinister> getSinisters(final Client client) {
+		return sinistersByClient.containsKey(client) ? sinistersByClient.get(client) : new ArrayList<>();
+	}
+	
 	public List<Sinister> getSinisters(final int limit) {
 		return getSinisters().stream().limit(limit).collect(Collectors.toList());
 	}
-
+	
 	public List<Broker> getBrokers() {
 		return getAll(Broker.class);
 	}
-
+	
 	public List<Broker> getBrokers(final int limit) {
 		return getBrokers().stream().limit(limit).collect(Collectors.toList());
 	}
-
+	
 	public List<Preference> getPreferences() {
 		return getAll(Preference.class);
 	}
-	
+
 	public List<Conversation> getConversations(final Client client) {
 		final List<Contract> contracts = getAll(Contract.class).stream().filter(c -> c.getClient().equals(client)).collect(Collectors.toList());
 		return getAll(Conversation.class).stream().filter(c -> contracts.contains(c.getContract())).collect(Collectors.toList());
 	}
-
+	
 	@SuppressWarnings("unchecked")
 	private <T extends AbstractEntity> List<T> getAll(final Class<T> clazz) {
 		return (List<T>) data.get(clazz);
 	}
-	
+
 	private Class<?> getEntityType(final IBasicRepository<? extends AbstractEntity, ? extends Serializable> interfaze) {
 		for (final Class<?> subInterface : interfaze.getClass().getInterfaces()) {
 			for (final Type type : subInterface.getGenericInterfaces()) {

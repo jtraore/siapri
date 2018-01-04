@@ -44,28 +44,28 @@ import com.siapri.broker.business.model.Warranty;
 import com.siapri.broker.business.model.WarrantyFormula;
 
 public abstract class AbstractDetailCompositeProvider<T> implements IDetailCompositeProvider<T> {
-
+	
 	private String id;
-
+	
 	public AbstractDetailCompositeProvider(final String id) {
 		this.id = id;
 	}
-
+	
 	@Override
 	public String getId() {
 		return id;
 	}
-
+	
 	public void setId(final String id) {
 		this.id = id;
 	}
-
+	
 	protected void createPersonComposite(final Composite parent, final Person item, final boolean navigationEnabled) {
 		final Composite composite = createColumnComposite(parent);
-		
+
 		final StyledText control = new StyledText(composite, SWT.WRAP);
 		control.setEditable(false);
-		
+
 		// @formatter:off
 		control.setText(String.format("%s %s %s, né(e) le %s\nAdresse domicile : %s,\nTél. : %s",
 						item.getGender().getLabel(),
@@ -76,7 +76,7 @@ public abstract class AbstractDetailCompositeProvider<T> implements IDetailCompo
 						item.getPhones().get(EPhoneType.MOBILE.name())));
 		// @formatter:on
 		control.setLayoutData(new GridData(GridData.FILL_BOTH));
-
+		
 		if (navigationEnabled) {
 			final String styleData = "Client";
 			control.setStyleRange(Util.createStyleRange(control.getText(), String.format("%s %s", item.getFirstName(), item.getLastName()), SWT.BOLD, styleData));
@@ -87,7 +87,7 @@ public abstract class AbstractDetailCompositeProvider<T> implements IDetailCompo
 		control.setStyleRange(Util.createStyleRange(control.getText(), "Adresse domicile", SWT.BOLD));
 		control.setStyleRange(Util.createStyleRange(control.getText(), "Tél.", SWT.BOLD));
 	}
-	
+
 	protected void createCompanyComposite(final Composite parent, final Company item, final boolean navigationEnabled) {
 		final Composite composite = createColumnComposite(parent);
 		final StyledText control = new StyledText(composite, SWT.WRAP | SWT.MULTI);
@@ -101,7 +101,7 @@ public abstract class AbstractDetailCompositeProvider<T> implements IDetailCompo
 						item.getPhones().get(EPhoneType.LAND.name())));
 		// @formatter:on
 		control.setLayoutData(new GridData(GridData.FILL_BOTH));
-		
+
 		if (navigationEnabled) {
 			final String styleData = "Client";
 			control.setStyleRange(Util.createStyleRange(control.getText(), String.format("%s - %s", item.getSiret(), item.getName()), SWT.BOLD | SWT.ITALIC, styleData));
@@ -113,18 +113,18 @@ public abstract class AbstractDetailCompositeProvider<T> implements IDetailCompo
 		control.setStyleRange(Util.createStyleRange(control.getText(), "Adresse", SWT.BOLD));
 		control.setStyleRange(Util.createStyleRange(control.getText(), "Tél.", SWT.BOLD));
 	}
-	
+
 	protected void createContractComposite(final Composite parent, final Contract item, final Map<WarrantyFormula, InsuranceType> warrantyFormulas, final boolean navigationEnabled) {
 		final Composite composite = createColumnComposite(parent);
-		
+
 		final StyledText control = new StyledText(composite, SWT.WRAP);
 		control.setEditable(false);
-		
+
 		final Map<String, Warranty> warranties = new HashMap<>();
 		warrantyFormulas.forEach((formula, insuranceType) -> {
 			insuranceType.getWarranties().forEach(warranty -> warranties.put(warranty.getCode(), warranty));
 		});
-		
+
 		// @formatter:off
 		final List<String> warrantiList = item.getWarrantyFormula().getWarrantyCodes()
 				.stream()
@@ -137,7 +137,7 @@ public abstract class AbstractDetailCompositeProvider<T> implements IDetailCompo
 						String.join("\n", warrantiList)));
 		// @formatter:on
 		control.setLayoutData(new GridData(GridData.FILL_BOTH));
-
+		
 		if (navigationEnabled) {
 			final String styleData = "contract";
 			control.setStyleRange(Util.createStyleRange(control.getText(), String.format("N°%s", item.getNumber()), SWT.BOLD, styleData));
@@ -148,10 +148,10 @@ public abstract class AbstractDetailCompositeProvider<T> implements IDetailCompo
 		final String insuranceTypeStyleData = "InsuranceType";
 		control.setStyleRange(Util.createStyleRange(control.getText(), warrantyFormulas.get(item.getWarrantyFormula()).getName(), SWT.BOLD, insuranceTypeStyleData));
 		control.setStyleRange(Util.createStyleRange(control.getText(), "Liste des garanties :\n", SWT.BOLD, Display.getCurrent().getSystemColor(SWT.COLOR_RED)));
-
+		
 		addLocationListener(new InsuranceTypeOverviewItemLocator(), warrantyFormulas.get(item.getWarrantyFormula()), control, insuranceTypeStyleData);
 	}
-	
+
 	protected void createSinisterComposite(final Composite parent, final Sinister item, final boolean navigationEnabled) {
 		final Composite composite = createColumnComposite(parent);
 		final StyledText control = new StyledText(composite, SWT.WRAP | SWT.MULTI);
@@ -164,7 +164,7 @@ public abstract class AbstractDetailCompositeProvider<T> implements IDetailCompo
 						Util.formatAddress(item.getAddress())));
 		// @formatter:on
 		control.setLayoutData(new GridData(GridData.FILL_BOTH));
-		
+
 		if (navigationEnabled) {
 			final String styleData = "Sinister";
 			control.setStyleRange(Util.createStyleRange(control.getText(), item.getNumber(), SWT.BOLD | SWT.ITALIC, styleData));
@@ -177,7 +177,7 @@ public abstract class AbstractDetailCompositeProvider<T> implements IDetailCompo
 		control.setStyleRange(Util.createStyleRange(control.getText(), "Description", SWT.BOLD));
 		control.setStyleRange(Util.createStyleRange(control.getText(), "Adresse", SWT.BOLD));
 	}
-	
+
 	protected <EntityType extends AbstractEntity> void addLocationListener(final DataListItemLocator<EntityType> locator, final EntityType item, final StyledText control, final String styleData) {
 		control.addListener(SWT.MouseDown, event -> {
 			try {
@@ -192,18 +192,18 @@ public abstract class AbstractDetailCompositeProvider<T> implements IDetailCompo
 			}
 		});
 	}
-
+	
 	protected Composite createColumnComposite(final Composite parent) {
 		final Composite columnComposite = new Composite(parent, SWT.NONE);
 		columnComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
 		columnComposite.setLayout(new GridLayout());
 		return columnComposite;
 	}
-	
+
 	protected void createContractListComposite(final Composite parent, final ITableLabelProvider labelProvider) {
 		final Composite composite = createColumnComposite(parent);
 		new TitledSeparator(composite, "Liste des contrats").setLayoutData(new GridData(SWT.FILL, SWT.DEFAULT, true, false));
-
+		
 		final ContractDataListModel dataListModel = new ContractDetailDataListModel(composite, labelProvider);
 		dataListModel.setFilterDisplayed(false);
 		dataListModel.setReportButtonDisplayed(false);
@@ -211,11 +211,11 @@ public abstract class AbstractDetailCompositeProvider<T> implements IDetailCompo
 		final GridData gridData = new GridData(GridData.FILL, GridData.FILL, true, true);
 		dataListComposite.setLayoutData(gridData);
 	}
-
+	
 	protected void createSinisterListComposite(final Composite parent, final ITableLabelProvider labelProvider) {
 		final Composite composite = createColumnComposite(parent);
 		new TitledSeparator(composite, "Liste des sinistres").setLayoutData(new GridData(SWT.FILL, SWT.DEFAULT, true, false));
-		
+
 		final SinisterDatalistModel dataListModel = new SinisterDetailDataListModel(composite, labelProvider);
 		dataListModel.setFilterDisplayed(false);
 		dataListModel.setReportButtonDisplayed(false);
@@ -223,65 +223,65 @@ public abstract class AbstractDetailCompositeProvider<T> implements IDetailCompo
 		final GridData gridData = new GridData(GridData.FILL, GridData.FILL, true, true);
 		dataListComposite.setLayoutData(gridData);
 	}
-	
+
 	protected List<Contract> getContextContracts() {
 		return new ArrayList<>();
 	}
-
+	
 	protected List<Sinister> getContextSinisters() {
 		return new ArrayList<>();
 	}
-	
-	private class ContractDetailDataListModel extends ContractDataListModel {
 
+	private class ContractDetailDataListModel extends ContractDataListModel {
+		
 		public ContractDetailDataListModel(final Composite parent, final ITableLabelProvider labelProvider) {
 			super(parent);
 			columnDescriptors = new ColumnDescriptor[] { new ColumnDescriptor("Number", 0.15, 125), new ColumnDescriptor("Date", 0.15, 125), new ColumnDescriptor("Assurance", 0.60, 125) };
 			this.labelProvider = labelProvider;
 			selectionEventActivated = false;
 		}
-		
+
 		@Override
 		public List<Contract> loadElements() {
 			return getContextContracts();
 		}
-
+		
 		@Override
 		protected ContextualAction[] createDatalistMenuActions() {
 			final IAction navigateToAction = event -> {
 				new ContractOverviewItemLocator().locate(new OverviewItem<>((Contract) event.getTarget(), ""));
 				return null;
 			};
-
+			
 			final ContextualActionPathElement[] navigateToPath = new ContextualActionPathElement[] { new ContextualActionPathElement("Afficher dans la vue Contrats", null) };
-
+			
 			return new ContextualAction[] { new ContextualAction(navigateToAction, navigateToPath) };
 		}
 	}
-	
+
 	private class SinisterDetailDataListModel extends SinisterDatalistModel {
-		
+
 		public SinisterDetailDataListModel(final Composite parent, final ITableLabelProvider labelProvider) {
 			super(parent);
 			columnDescriptors = new ColumnDescriptor[] { new ColumnDescriptor("Date", 0.15, 125), new ColumnDescriptor("Contrat", 0.15, 125), new ColumnDescriptor("Adresse", 0.35, 125), new ColumnDescriptor("Description", 0.35, 125) };
 			this.labelProvider = labelProvider;
 			selectionEventActivated = false;
 		}
-
+		
 		@Override
 		public List<Sinister> loadElements() {
 			return getContextSinisters();
 		}
-		
+
 		@Override
 		protected ContextualAction[] createDatalistMenuActions() {
 			final IAction navigateToAction = event -> {
 				new SinisterOverviewItemLocator().locate(new OverviewItem<>((Sinister) event.getTarget(), ""));
 				return null;
 			};
-			
+
 			final ContextualActionPathElement[] navigateToPath = new ContextualActionPathElement[] { new ContextualActionPathElement("Afficher dans la vue Sinistres", null) };
-			
+
 			return new ContextualAction[] { new ContextualAction(navigateToAction, navigateToPath) };
 		}
 	}

@@ -1,9 +1,12 @@
 package com.siapri.broker.app.views.client;
 
+import java.time.LocalDate;
 import java.util.List;
 
+import org.eclipse.jface.viewers.ITableColorProvider;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 
@@ -15,6 +18,7 @@ import com.siapri.broker.app.views.common.customizer.ICustomizer;
 import com.siapri.broker.app.views.common.datalist.ColumnDescriptor;
 import com.siapri.broker.app.views.common.datalist.DataListModel;
 import com.siapri.broker.business.model.Address;
+import com.siapri.broker.business.model.Client;
 import com.siapri.broker.business.model.Person;
 import com.siapri.broker.business.service.impl.DaoCacheService;
 
@@ -40,6 +44,13 @@ public class ClientDataListModel extends DataListModel<Person> {
 		columnDescriptors[3] = new ColumnDescriptor("Téléphone", 0.10, 125);
 		columnDescriptors[4] = new ColumnDescriptor("Adresse", 0.25, 125);
 	}
+	
+	@Override
+	protected Person createObject() {
+		final Person client = super.createObject();
+		client.setBirthdate(LocalDate.now());
+		return client;
+	}
 
 	@Override
 	protected List<Person> loadElements() {
@@ -51,13 +62,13 @@ public class ClientDataListModel extends DataListModel<Person> {
 		return new ClientCustomizer(element, title, description);
 	}
 
-	private static final class DataListLabelProvider extends LabelProvider implements ITableLabelProvider {
+	private static final class DataListLabelProvider extends LabelProvider implements ITableLabelProvider, ITableColorProvider {
 
 		@Override
 		public Image getColumnImage(final Object arg0, final int arg1) {
 			return null;
 		}
-
+		
 		@Override
 		public String getColumnText(final Object object, final int column) {
 			final Person client = (Person) object;
@@ -73,6 +84,20 @@ public class ClientDataListModel extends DataListModel<Person> {
 				case 4:
 					final Address homeAddress = client.getAddresses().get(EAddressType.HOME.name());
 					return Util.formatAddress(homeAddress);
+			}
+			return null;
+		}
+
+		@Override
+		public Color getBackground(final Object arg0, final int arg1) {
+			return null;
+		}
+
+		@Override
+		public Color getForeground(final Object object, final int column) {
+			final Client client = (Client) object;
+			if (BundleUtil.getService(DaoCacheService.class).getContracts(client).isEmpty()) {
+				return Util.NO_CONTRACT_COLOR;
 			}
 			return null;
 		}

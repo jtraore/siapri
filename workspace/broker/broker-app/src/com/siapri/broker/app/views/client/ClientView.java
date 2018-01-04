@@ -39,13 +39,10 @@ public class ClientView extends PartView<Person> {
 	}
 
 	private void refreshDetails() {
-		final Map<Client, List<Contract>> contractsByClient = getContractsByClient();
-		final Map<Client, List<Sinister>> sinisterByClient = getSinistersByClient();
-		
 		// @formatter:off
 		final Map<Client, ClientDetail> clientDetails = getClients()
 				.stream()
-				.map(c -> createClientDetail(c, contractsByClient, sinisterByClient))
+				.map(this::createClientDetail)
 				.collect(Collectors.toMap(ClientDetail::getClient, Function.identity()));
 		// @formatter:on
 		
@@ -67,7 +64,7 @@ public class ClientView extends PartView<Person> {
 	@Inject
 	@Optional
 	private void itemCreated(@UIEventTopic(IApplicationEvent.ITEM_CREATED) final Object item) {
-		if (item instanceof Contract || item instanceof Sinister || item instanceof Person) {
+		if (item instanceof Contract || item instanceof Sinister || item instanceof Client) {
 			refreshDetails();
 		}
 	}
@@ -80,30 +77,15 @@ public class ClientView extends PartView<Person> {
 	@Inject
 	@Optional
 	private void itemRemoved(@UIEventTopic(IApplicationEvent.ITEM_REMOVED) final Object item) {
-		if (item instanceof Contract || item instanceof Sinister || item instanceof Person) {
+		if (item instanceof Contract || item instanceof Sinister || item instanceof Client) {
 			refreshDetails();
 		}
 	}
 
-	private ClientDetail createClientDetail(final Client client, final Map<Client, List<Contract>> contractsByClient, final Map<Client, List<Sinister>> sinisterByClient) {
+	private ClientDetail createClientDetail(final Client client) {
 		final ClientDetail clientDetail = new ClientDetail(client);
-		final List<Contract> contracts = contractsByClient.get(client);
-		if (contracts != null) {
-			clientDetail.getContracts().addAll(contracts);
-		}
-		final List<Sinister> sinisters = sinisterByClient.get(client);
-		if (sinisters != null) {
-			clientDetail.getSinisters().addAll(sinisters);
-		}
+		clientDetail.getContracts().addAll(BundleUtil.getService(DaoCacheService.class).getContracts(client));
+		clientDetail.getSinisters().addAll(BundleUtil.getService(DaoCacheService.class).getSinisters(client));
 		return clientDetail;
 	}
-
-	private Map<Client, List<Contract>> getContractsByClient() {
-		return BundleUtil.getService(DaoCacheService.class).getContracts().stream().collect(Collectors.groupingBy(Contract::getClient));
-	}
-
-	private Map<Client, List<Sinister>> getSinistersByClient() {
-		return BundleUtil.getService(DaoCacheService.class).getSinisters().stream().collect(Collectors.groupingBy(s -> s.getContract().getClient()));
-	}
-
 }

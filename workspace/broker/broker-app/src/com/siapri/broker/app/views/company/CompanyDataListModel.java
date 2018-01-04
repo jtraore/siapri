@@ -2,8 +2,10 @@ package com.siapri.broker.app.views.company;
 
 import java.util.List;
 
+import org.eclipse.jface.viewers.ITableColorProvider;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 
@@ -65,7 +67,7 @@ public class CompanyDataListModel extends DataListModel<Company> {
 		return obj;
 	}
 
-	private static final class DataListLabelProvider extends LabelProvider implements ITableLabelProvider {
+	private static final class DataListLabelProvider extends LabelProvider implements ITableLabelProvider, ITableColorProvider {
 
 		@Override
 		public Image getColumnImage(final Object arg0, final int arg1) {
@@ -87,6 +89,20 @@ public class CompanyDataListModel extends DataListModel<Company> {
 				case 4:
 					final Address address = client.getAddresses().get(EAddressType.WORK.name());
 					return Util.formatAddress(address);
+			}
+			return null;
+		}
+
+		@Override
+		public Color getBackground(final Object arg0, final int arg1) {
+			return null;
+		}
+
+		@Override
+		public Color getForeground(final Object object, final int column) {
+			final Company company = (Company) object;
+			if (!company.isInsurer() && BundleUtil.getService(DaoCacheService.class).getContracts(company).isEmpty()) {
+				return Util.NO_CONTRACT_COLOR;
 			}
 			return null;
 		}
